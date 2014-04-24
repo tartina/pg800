@@ -1,9 +1,13 @@
 #ifndef MKS70_TONE_H
 #define MKS70_TONE_H
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string>
 
-class MKS70_tone
+class mks70_tone
 {
 private:
 	std::string name;
@@ -45,11 +49,19 @@ private:
 	unsigned short vca_env_mode; // Only 2 values
 
 public:
-	MKS70_tone();
-	virtual ~MKS70_tone();
+	mks70_tone();
+	virtual ~mks70_tone();
 	bool apr_send(unsigned short midi_channel, unsigned short tone);
-	std::string get_name() {return name;};
+
+	inline std::string get_name() {return name;};
 	void set_name(std::string newname);
+
+	void set_dco_range(unsigned short dco, unsigned short range, bool send = false);
+	void set_dco_wave(unsigned short dco, unsigned short wave, bool send = false);
+
+#ifdef HAVE_DEBUG
+	void dump_tone();
+#endif
 };
 
 #endif

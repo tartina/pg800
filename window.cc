@@ -3,14 +3,14 @@
 #include <iostream>
 #include "window.h"
 
-MKS70_Window::MKS70_Window()
+mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
 	m_Editor_Box(Gtk::ORIENTATION_HORIZONTAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
 
-	tone = new MKS70_tone();
+	tone = new mks70_tone();
 
 	set_default_size(640, 400);
 	set_title("Roland MKS-70 Super JX Tone Editor");
@@ -22,17 +22,17 @@ MKS70_Window::MKS70_Window()
 
 	m_refActionGroup->add( Gtk::Action::create("MenuFile", "_File") );
 	m_refActionGroup->add( Gtk::Action::create("New", "_New"),
-		sigc::mem_fun(*this, &MKS70_Window::on_action_file_new) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_new) );
 	m_refActionGroup->add( Gtk::Action::create("Open", "_Open"),
-		sigc::mem_fun(*this, &MKS70_Window::on_action_file_open) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_open) );
 	m_refActionGroup->add( Gtk::Action::create("Saveas", "_Save as"),
-		sigc::mem_fun(*this, &MKS70_Window::on_action_file_save) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_save) );
 	m_refActionGroup->add( Gtk::Action::create("Send", "S_end patch"),
-		sigc::mem_fun(*this, &MKS70_Window::on_action_file_send) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_send) );
 	m_refActionGroup->add( Gtk::Action::create("Preferences", "_Preferences"),
-		sigc::mem_fun(*this, &MKS70_Window::on_action_file_preferences) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_preferences) );
 	m_refActionGroup->add( Gtk::Action::create("Quit", "_Quit"),
-		sigc::mem_fun(*this, &MKS70_Window::on_action_file_quit) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_quit) );
 
 	m_refUIManager = Gtk::UIManager::create();
 	m_refUIManager->insert_action_group(m_refActionGroup);
@@ -80,13 +80,13 @@ MKS70_Window::MKS70_Window()
 		m_rb_dco_range4[i].set_label("4'");
 		m_rb_dco_range2[i].set_label("2'");
 		m_rb_dco_range16[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&MKS70_Window::on_dco_range_button_clicked));
+			&mks70_window::on_dco_range_button_clicked));
 		m_rb_dco_range8[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&MKS70_Window::on_dco_range_button_clicked));
+			&mks70_window::on_dco_range_button_clicked));
 		m_rb_dco_range4[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&MKS70_Window::on_dco_range_button_clicked));
+			&mks70_window::on_dco_range_button_clicked));
 		m_rb_dco_range2[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&MKS70_Window::on_dco_range_button_clicked));
+			&mks70_window::on_dco_range_button_clicked));
 
 		group = m_rb_dco_wave_noise[i].get_group();
 		m_rb_dco_wave_saw[i].set_group(group);
@@ -97,6 +97,14 @@ MKS70_Window::MKS70_Window()
 		m_rb_dco_wave_saw[i].set_label("Saw");
 		m_rb_dco_wave_pulse[i].set_label("Pulse");
 		m_rb_dco_wave_square[i].set_label("Square");
+		m_rb_dco_wave_noise[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_wave_button_clicked));
+		m_rb_dco_wave_saw[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_wave_button_clicked));
+		m_rb_dco_wave_pulse[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_wave_button_clicked));
+		m_rb_dco_wave_square[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_wave_button_clicked));
 
 		m_DCO_Box[i].set_orientation(Gtk::ORIENTATION_VERTICAL);
 		m_Range_Label[i].set_label("Range");
@@ -122,20 +130,36 @@ MKS70_Window::MKS70_Window()
 	show_all_children();
 }
 
-MKS70_Window::~MKS70_Window() {delete tone;}
+mks70_window::~mks70_window() {delete tone;}
 
-void MKS70_Window::on_dco_range_button_clicked()
+void mks70_window::on_dco_range_button_clicked()
 {
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
 		if (m_rb_dco_range16[i].get_active())
-			std::cerr << "DCO" << i + 1 << " range 16\n";
+			tone->set_dco_range(i, 0);
 		if (m_rb_dco_range8[i].get_active())
-			std::cerr << "DCO" << i + 1 << " range 8\n";
+			tone->set_dco_range(i, 1);
 		if (m_rb_dco_range4[i].get_active())
-			std::cerr << "DCO" << i + 1 << " range 4\n";
+			tone->set_dco_range(i, 2);
 		if (m_rb_dco_range2[i].get_active())
-			std::cerr << "DCO" << i +1 << " range 2\n";
+			tone->set_dco_range(i, 3);
+	}
+}
+
+void mks70_window::on_dco_wave_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++) {
+		if (m_rb_dco_wave_noise[i].get_active())
+			tone->set_dco_wave(i, 0);
+		if (m_rb_dco_wave_saw[i].get_active())
+			tone->set_dco_wave(i, 1);
+		if (m_rb_dco_wave_pulse[i].get_active())
+			tone->set_dco_wave(i, 2);
+		if (m_rb_dco_wave_square[i].get_active())
+			tone->set_dco_wave(i, 3);
 	}
 }

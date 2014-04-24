@@ -5,13 +5,13 @@
 
 #include "tone.h"
 
-class MKS70_Window : public Gtk::Window
+class mks70_window : public Gtk::Window
 {
 	public:
-		MKS70_Window();
-		virtual ~MKS70_Window();
+		mks70_window();
+		virtual ~mks70_window();
 
-	protected:
+	private:
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
 		Gtk::Box m_Application_Box;
@@ -33,9 +33,9 @@ class MKS70_Window : public Gtk::Window
 		void on_action_file_preferences() {};
 		void inline on_action_file_quit() {hide();};
 		void on_dco_range_button_clicked();
+		void on_dco_wave_button_clicked();
 
-	private:
-		MKS70_tone* tone;
+		mks70_tone* tone;
 };
 
 #endif

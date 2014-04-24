@@ -19,5 +19,9 @@ PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8.0])
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+AC_ARG_ENABLE([debug],
+	      AS_HELP_STRING([--enable-debug], [enable debug]),
+	      AC_DEFINE([HAVE_DEBUG], [1], [Enable debugging code]))
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

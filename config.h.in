@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Enable debugging code */
+#undef HAVE_DEBUG
+
 /* Name of package */
 #undef PACKAGE
 
