@@ -1,11 +1,7 @@
 #ifndef MKS70_WINDOW_H
 #define MKS70_WINDOW_H
 
-#include <gtkmm/window.h>
-#include <gtkmm/box.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/uimanager.h>
-#include <gtkmm/widget.h>
+#include <gtkmm.h>
 
 #include "tone.h"
 
@@ -20,8 +16,15 @@ class MKS70_Window : public Gtk::Window
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
 		Gtk::Box m_Application_Box;
 		Gtk::Box m_Editor_Box;
-		Gtk::Frame m_DCO1_Frame;
-		Gtk::Frame m_DCO2_Frame;
+		Gtk::Frame m_DCO_Frame[2];
+		Gtk::Box m_DCO_Box[2];
+		Gtk::Label m_Range_Label[2];
+		Gtk::RadioButton m_rb_dco_range16[2], m_rb_dco_range8[2],
+			m_rb_dco_range4[2], m_rb_dco_range2[2];
+		Gtk::Label m_Wave_Label[2];
+		Gtk::RadioButton m_rb_dco_wave_noise[2], m_rb_dco_wave_saw[2],
+			m_rb_dco_wave_pulse[2], m_rb_dco_wave_square[2];
+		Gtk::Separator m_separator[2];
 
 		void on_action_file_open() {};
 		void on_action_file_new() {};
@@ -29,7 +32,8 @@ class MKS70_Window : public Gtk::Window
 		void on_action_file_send() {};
 		void on_action_file_preferences() {};
 		void inline on_action_file_quit() {hide();};
-	
+		void on_dco_range_button_clicked();
+
 	private:
 		MKS70_tone* tone;
 };

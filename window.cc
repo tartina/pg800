@@ -1,10 +1,15 @@
 #include <new>
+#include <string>
+#include <iostream>
 #include "window.h"
 
 MKS70_Window::MKS70_Window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
 	m_Editor_Box(Gtk::ORIENTATION_HORIZONTAL)
 {
+	unsigned short i;
+	Gtk::RadioButton::Group group;
+
 	tone = new MKS70_tone();
 
 	set_default_size(640, 400);
@@ -59,18 +64,78 @@ MKS70_Window::MKS70_Window()
 
 	m_Application_Box.pack_start(m_Editor_Box);
 
-	m_DCO1_Frame.set_label("DCO 1");
-	m_DCO1_Frame.set_size_request(40, 40);
-	m_DCO1_Frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+	// DCO range and waveform radio buttons
+	for (i = 0; i < 2; i++) {
+		m_DCO_Frame[i].set_label("DCO" + std::to_string(i + 1));
+		m_DCO_Frame[i].set_size_request(40, 40);
+		m_DCO_Frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
-	m_DCO2_Frame.set_label("DCO 2");
-	m_DCO2_Frame.set_size_request(40, 40);
-	m_DCO2_Frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+		group = m_rb_dco_range16[i].get_group();
+		m_rb_dco_range8[i].set_group(group);
+		m_rb_dco_range4[i].set_group(group);
+		m_rb_dco_range2[i].set_group(group);
+		m_rb_dco_range8[i].set_active();
+		m_rb_dco_range16[i].set_label("16'");
+		m_rb_dco_range8[i].set_label("8'");
+		m_rb_dco_range4[i].set_label("4'");
+		m_rb_dco_range2[i].set_label("2'");
+		m_rb_dco_range16[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&MKS70_Window::on_dco_range_button_clicked));
+		m_rb_dco_range8[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&MKS70_Window::on_dco_range_button_clicked));
+		m_rb_dco_range4[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&MKS70_Window::on_dco_range_button_clicked));
+		m_rb_dco_range2[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&MKS70_Window::on_dco_range_button_clicked));
 
-	m_Editor_Box.pack_start(m_DCO1_Frame);
-	m_Editor_Box.pack_start(m_DCO2_Frame);
+		group = m_rb_dco_wave_noise[i].get_group();
+		m_rb_dco_wave_saw[i].set_group(group);
+		m_rb_dco_wave_pulse[i].set_group(group);
+		m_rb_dco_wave_square[i].set_group(group);
+		m_rb_dco_wave_saw[i].set_active();
+		m_rb_dco_wave_noise[i].set_label("Noise");
+		m_rb_dco_wave_saw[i].set_label("Saw");
+		m_rb_dco_wave_pulse[i].set_label("Pulse");
+		m_rb_dco_wave_square[i].set_label("Square");
+
+		m_DCO_Box[i].set_orientation(Gtk::ORIENTATION_VERTICAL);
+		m_Range_Label[i].set_label("Range");
+		m_DCO_Box[i].pack_start(m_Range_Label[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_range16[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_range8[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_range4[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_range2[i], Gtk::PACK_SHRINK);
+
+		m_DCO_Box[i].pack_start(m_separator[i], Gtk::PACK_SHRINK);
+
+		m_Wave_Label[i].set_label("Waveform");
+		m_DCO_Box[i].pack_start(m_Wave_Label[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_wave_noise[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_wave_saw[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_wave_pulse[i], Gtk::PACK_SHRINK);
+		m_DCO_Box[i].pack_start(m_rb_dco_wave_square[i], Gtk::PACK_SHRINK);
+
+		m_DCO_Frame[i].add(m_DCO_Box[i]);
+		m_Editor_Box.pack_start(m_DCO_Frame[i], Gtk::PACK_SHRINK);
+	}
 
 	show_all_children();
 }
 
 MKS70_Window::~MKS70_Window() {delete tone;}
+
+void MKS70_Window::on_dco_range_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++) {
+		if (m_rb_dco_range16[i].get_active())
+			std::cerr << "DCO" << i + 1 << " range 16\n";
+		if (m_rb_dco_range8[i].get_active())
+			std::cerr << "DCO" << i + 1 << " range 8\n";
+		if (m_rb_dco_range4[i].get_active())
+			std::cerr << "DCO" << i + 1 << " range 4\n";
+		if (m_rb_dco_range2[i].get_active())
+			std::cerr << "DCO" << i +1 << " range 2\n";
+	}
+}
