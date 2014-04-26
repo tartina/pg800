@@ -4,6 +4,7 @@
 #include <gtkmm.h>
 
 #include "tone.h"
+#include "midi.h"
 
 class mks70_window : public Gtk::Window
 {
@@ -35,7 +36,8 @@ class mks70_window : public Gtk::Window
 		void on_dco_range_button_clicked();
 		void on_dco_wave_button_clicked();
 
-		mks70_tone* tone;
+		mks70_tone* tone = 0;
+		midi* midiout = 0;
 };
 
 #endif

@@ -58,6 +58,7 @@ public:
 
 	void set_dco_range(unsigned short dco, unsigned short range, bool send = false);
 	void set_dco_wave(unsigned short dco, unsigned short wave, bool send = false);
+	void set_name(const std::string& name);
 
 #ifdef HAVE_DEBUG
 	void dump_tone();

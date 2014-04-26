@@ -11,6 +11,7 @@ mks70_window::mks70_window()
 	Gtk::RadioButton::Group group;
 
 	tone = new mks70_tone();
+	midiout = new midi();
 
 	set_default_size(640, 400);
 	set_title("Roland MKS-70 Super JX Tone Editor");
@@ -130,7 +131,7 @@ mks70_window::mks70_window()
 	show_all_children();
 }
 
-mks70_window::~mks70_window() {delete tone;}
+mks70_window::~mks70_window() {delete tone; delete midiout;}
 
 void mks70_window::on_dco_range_button_clicked()
 {

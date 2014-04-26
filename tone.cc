@@ -57,6 +57,11 @@ void mks70_tone::set_dco_wave(unsigned short dco, unsigned short wave, bool send
 	}
 }
 
+void mks70_tone::set_name(const std::string& name)
+{
+	this->name = name.substr(0 ,9);
+}
+
 #ifdef HAVE_DEBUG
 void mks70_tone::dump_tone()
 {
