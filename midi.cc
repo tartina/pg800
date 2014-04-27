@@ -30,21 +30,30 @@
 midi::midi()
 {
 	try {
-		midiout = new RtMidiOut();
+		midiout = new RtMidiOut("pg800");
 	}
 	catch ( const RtError &error ) {
 		// TODO handle error
 #ifdef HAVE_DEBUG
 		error.printMessage();
+		throw error;
 #endif
 	}
 	number_of_ports = midiout->getPortCount();
 #ifdef HAVE_DEBUG
-		std::cout << "Number of MIDI ports: " << number_of_ports << "\n";
+	std::cout << "Number of MIDI ports: " << number_of_ports << "\n";
 #endif
 }
 
 midi::~midi()
 {
 	delete midiout;
+}
+
+void midi::get_ports(std::vector<std::string>& port_name)
+{
+	unsigned int i;
+
+	for (i = 0; i < number_of_ports; i++)
+		port_name.push_back (midiout->getPortName(i));
 }

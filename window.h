@@ -3,10 +3,10 @@
 
 #include <gtkmm.h>
 
+#include "RtMidi.h"
 #include "tone.h"
-#include "midi.h"
 
-class mks70_window : public Gtk::Window
+class mks70_window : public Gtk::ApplicationWindow
 {
 	public:
 		mks70_window();
@@ -37,7 +37,10 @@ class mks70_window : public Gtk::Window
 		void on_dco_wave_button_clicked();
 
 		mks70_tone* tone = 0;
-		midi* midiout = 0;
+		RtMidiOut* midiout = 0;
+		unsigned int number_of_ports = 0;
+		unsigned int midi_port = 0;
+		unsigned short midi_channel = 0;
 };
 
 #endif

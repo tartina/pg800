@@ -11,7 +11,24 @@ mks70_window::mks70_window()
 	Gtk::RadioButton::Group group;
 
 	tone = new mks70_tone();
-	midiout = new midi();
+
+	try {
+		midiout = new RtMidiOut("pg800");
+	}
+	catch ( const RtError &error ) {
+		// TODO handle error
+#ifdef HAVE_DEBUG
+		error.printMessage();
+		throw error;
+#endif
+	}
+
+	number_of_ports = midiout->getPortCount();
+#ifdef HAVE_DEBUG
+	std::cout << "Number of MIDI ports: " << number_of_ports << "\n";
+#endif
+
+	if (number_of_ports > midi_port) midiout->openPort(midi_port);
 
 	set_default_size(640, 400);
 	set_title("Roland MKS-70 Super JX Tone Editor");

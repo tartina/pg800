@@ -20,6 +20,7 @@
 #ifndef _MIDI_H_
 #define _MIDI_H_
 
+#include <vector>
 #include "RtMidi.h"
 
 class midi
@@ -27,6 +28,7 @@ class midi
 public:
 	midi();
 	virtual ~midi();
+	void get_ports(std::vector<std::string>& port_name);
 protected:
 
 private:
