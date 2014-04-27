@@ -153,13 +153,13 @@ void mks70_window::on_dco_range_button_clicked()
 
 	for (i = 0; i < 2; i++) {
 		if (m_rb_dco_range16[i].get_active())
-			tone->set_dco_range(i, 0, midi_channel, midiout);
+			tone->set_dco_range(i, 0, midi_channel, midiout, true);
 		if (m_rb_dco_range8[i].get_active())
-			tone->set_dco_range(i, 1, midi_channel, midiout);
+			tone->set_dco_range(i, 1, midi_channel, midiout, true);
 		if (m_rb_dco_range4[i].get_active())
-			tone->set_dco_range(i, 2, midi_channel, midiout);
+			tone->set_dco_range(i, 2, midi_channel, midiout, true);
 		if (m_rb_dco_range2[i].get_active())
-			tone->set_dco_range(i, 3, midi_channel, midiout);
+			tone->set_dco_range(i, 3, midi_channel, midiout, true);
 	}
 }
 
