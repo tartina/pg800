@@ -49,6 +49,8 @@ private:
 
 	unsigned short vca_env_mode; // Only 2 values
 
+	std::vector<unsigned char> message;
+
 public:
 	mks70_tone();
 	virtual ~mks70_tone();

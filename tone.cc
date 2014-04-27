@@ -37,7 +37,32 @@ void mks70_tone::set_dco_range(unsigned short dco, unsigned short range,
 	if (range != dco_range[dco]) {
 		dco_range[dco] = range;
 		if (send) {
-			// TODO send dco_range via MIDI
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(0x01);
+			switch(dco) {
+				case 0:
+					message.push_back(11);
+					break;
+				case 1:
+					message.push_back(16);
+					break;
+			}
+			message.push_back(range * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI DCO range: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
 		}
 #ifdef HAVE_DEBUG
 		dump_tone();
@@ -48,13 +73,12 @@ void mks70_tone::set_dco_range(unsigned short dco, unsigned short range,
 void mks70_tone::set_dco_wave(unsigned short dco, unsigned short wave,
                               unsigned short midi_channel, RtMidiOut* midi_out, bool send)
 {
-	std::vector<unsigned char> message;
-
 	if (dco > 1 || wave > 3) return;
 
 	if (wave != dco_wave[dco]) {
 		dco_wave[dco] = wave;
 		if (send) {
+			message.clear();
 			message.push_back(0xF0);
 			message.push_back(0x41);
 			message.push_back(0x36);
