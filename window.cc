@@ -153,13 +153,13 @@ void mks70_window::on_dco_range_button_clicked()
 
 	for (i = 0; i < 2; i++) {
 		if (m_rb_dco_range16[i].get_active())
-			tone->set_dco_range(i, 0);
+			tone->set_dco_range(i, 0, midi_channel, midiout);
 		if (m_rb_dco_range8[i].get_active())
-			tone->set_dco_range(i, 1);
+			tone->set_dco_range(i, 1, midi_channel, midiout);
 		if (m_rb_dco_range4[i].get_active())
-			tone->set_dco_range(i, 2);
+			tone->set_dco_range(i, 2, midi_channel, midiout);
 		if (m_rb_dco_range2[i].get_active())
-			tone->set_dco_range(i, 3);
+			tone->set_dco_range(i, 3, midi_channel, midiout);
 	}
 }
 
@@ -169,23 +169,33 @@ void mks70_window::on_dco_wave_button_clicked()
 
 	for (i = 0; i < 2; i++) {
 		if (m_rb_dco_wave_noise[i].get_active())
-			tone->set_dco_wave(i, 0);
+			tone->set_dco_wave(i, 0, midi_channel, midiout, true);
 		if (m_rb_dco_wave_saw[i].get_active())
-			tone->set_dco_wave(i, 1);
+			tone->set_dco_wave(i, 1, midi_channel, midiout, true);
 		if (m_rb_dco_wave_pulse[i].get_active())
-			tone->set_dco_wave(i, 2);
+			tone->set_dco_wave(i, 2, midi_channel, midiout, true);
 		if (m_rb_dco_wave_square[i].get_active())
-			tone->set_dco_wave(i, 3);
+			tone->set_dco_wave(i, 3, midi_channel, midiout, true);
 	}
 }
 
 void mks70_window::on_action_file_preferences()
 {
 	int result;
+	unsigned int old_midi_port = midi_port;
 
 	preferences* pref = new preferences(midi_port_name);
 	result = pref->run();
+	if (result == Gtk::ResponseType::RESPONSE_OK) {
+		midi_port = pref->get_midi_port_number ();
+		midi_channel = pref->get_midi_channel();
+	}
 	delete pref;
+
+	if (midi_port != old_midi_port) {
+		midiout->closePort();
+		if (midi_port < number_of_ports) midiout->openPort(midi_port);
+	}
 }
 
 void mks70_window::get_midi_port_names()

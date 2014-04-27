@@ -34,7 +34,6 @@ preferences::preferences(const std::vector<std::string>& midi_port_name)
 	lb_midi_channel("MIDI channel"),
 	lb_midi_port("MIDI port")
 {
-	set_default_size(320, 200);
 	set_border_width(6);
 	add_button("Ok", Gtk::ResponseType::RESPONSE_OK);
 	add_button("Cancel", Gtk::ResponseType::RESPONSE_CANCEL);

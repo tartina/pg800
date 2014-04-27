@@ -6,6 +6,7 @@
 #endif
 
 #include <string>
+#include "RtMidi.h"
 
 class mks70_tone
 {
@@ -56,8 +57,10 @@ public:
 	inline std::string get_name() {return name;};
 	void set_name(std::string newname);
 
-	void set_dco_range(unsigned short dco, unsigned short range, bool send = false);
-	void set_dco_wave(unsigned short dco, unsigned short wave, bool send = false);
+	void set_dco_range(unsigned short dco, unsigned short range,
+	                   unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	void set_dco_wave(unsigned short dco, unsigned short wave,
+	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
 	void set_name(const std::string& name);
 
 #ifdef HAVE_DEBUG
