@@ -60,6 +60,7 @@ void mks70_tone::set_dco_wave(unsigned short dco, unsigned short wave,
 			message.push_back(0x36);
 			message.push_back(midi_channel);
 			message.push_back(0x24);
+			message.push_back(0x20);
 			message.push_back(0x01);
 			switch(dco) {
 				case 0:
