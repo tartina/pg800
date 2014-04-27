@@ -31,16 +31,19 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_action_file_new() {};
 		void on_action_file_save() {};
 		void on_action_file_send() {};
-		void on_action_file_preferences() {};
+		void on_action_file_preferences();
 		void inline on_action_file_quit() {hide();};
 		void on_dco_range_button_clicked();
 		void on_dco_wave_button_clicked();
+
+		void get_midi_port_names();
 
 		mks70_tone* tone = 0;
 		RtMidiOut* midiout = 0;
 		unsigned int number_of_ports = 0;
 		unsigned int midi_port = 0;
 		unsigned short midi_channel = 0;
+		std::vector<std::string> midi_port_name;
 };
 
 #endif

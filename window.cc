@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "window.h"
+#include "preferences.h"
 
 mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
@@ -23,12 +24,8 @@ mks70_window::mks70_window()
 #endif
 	}
 
-	number_of_ports = midiout->getPortCount();
-#ifdef HAVE_DEBUG
-	std::cout << "Number of MIDI ports: " << number_of_ports << "\n";
-#endif
-
-	if (number_of_ports > midi_port) midiout->openPort(midi_port);
+	get_midi_port_names();
+	if (midi_port < number_of_ports) midiout->openPort(midi_port);
 
 	set_default_size(640, 400);
 	set_title("Roland MKS-70 Super JX Tone Editor");
@@ -180,4 +177,28 @@ void mks70_window::on_dco_wave_button_clicked()
 		if (m_rb_dco_wave_square[i].get_active())
 			tone->set_dco_wave(i, 3);
 	}
+}
+
+void mks70_window::on_action_file_preferences()
+{
+	int result;
+
+	preferences* pref = new preferences(midi_port_name);
+	result = pref->run();
+	delete pref;
+}
+
+void mks70_window::get_midi_port_names()
+{
+	unsigned i;
+
+	number_of_ports = midiout->getPortCount();
+#ifdef HAVE_DEBUG
+	std::cout << "Number of MIDI ports: " << number_of_ports << "\n";
+#endif
+
+	midi_port_name.clear();
+	for (i = 0; i < number_of_ports; i++)
+		midi_port_name.push_back (midiout->getPortName());
+
 }
