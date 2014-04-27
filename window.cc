@@ -209,6 +209,6 @@ void mks70_window::get_midi_port_names()
 
 	midi_port_name.clear();
 	for (i = 0; i < number_of_ports; i++)
-		midi_port_name.push_back (midiout->getPortName());
+		midi_port_name.push_back (midiout->getPortName(i));
 
 }
