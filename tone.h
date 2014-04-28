@@ -64,6 +64,8 @@ public:
 	                   unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
 	void set_dco_wave(unsigned short dco, unsigned short wave,
 	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	void set_dco2_crossmod(unsigned short crossmod, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
 	void set_name(const std::string& name);
 
 #ifdef HAVE_DEBUG

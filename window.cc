@@ -6,7 +6,8 @@
 
 mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
-	m_Editor_Box(Gtk::ORIENTATION_HORIZONTAL)
+	m_Editor_Box(Gtk::ORIENTATION_HORIZONTAL),
+	crossmod_label("CROSS MOD")
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -142,6 +143,23 @@ mks70_window::mks70_window()
 		m_Editor_Box.pack_start(m_DCO_Frame[i], Gtk::PACK_SHRINK);
 	}
 
+	// DCO2 Cross mod
+	m_DCO_Box[1].pack_start(sep_crossmod, Gtk::PACK_SHRINK);
+	m_DCO_Box[1].pack_start(crossmod_label, Gtk::PACK_SHRINK);
+	group = rb_crossmod[0].get_group();
+	rb_crossmod[0].set_label("OFF");
+	rb_crossmod[0].set_active();
+	rb_crossmod[0].signal_clicked().connect(sigc::mem_fun(*this,
+		&mks70_window::on_dco2_crossmod_button_clicked));
+	m_DCO_Box[1].pack_start(rb_crossmod[0], Gtk::PACK_SHRINK);
+	for (i = 1; i < 4; i++) {
+		rb_crossmod[i].set_group(group);
+		rb_crossmod[i].set_label(std::to_string(i));
+		rb_crossmod[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco2_crossmod_button_clicked));
+		m_DCO_Box[1].pack_start(rb_crossmod[i], Gtk::PACK_SHRINK);
+	}
+
 	show_all_children();
 }
 
@@ -211,6 +229,10 @@ void mks70_window::get_midi_port_names()
 	for (i = 0; i < number_of_ports; i++)
 		midi_port_name.push_back (midiout->getPortName(i));
 
+}
+
+void mks70_window::on_dco2_crossmod_button_clicked()
+{
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

@@ -111,6 +111,12 @@ void mks70_tone::set_dco_wave(unsigned short dco, unsigned short wave,
 	}
 }
 
+void mks70_tone::set_dco2_crossmod(unsigned short crossmod, unsigned short midi_channel,
+                                   RtMidiOut* midi_out, bool send)
+{
+	if (crossmod > 3) return;
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,9);
