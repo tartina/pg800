@@ -28,7 +28,7 @@ mks70_window::mks70_window()
 	if (midi_port < number_of_ports) midiout->openPort(midi_port);
 
 	set_default_size(640, 400);
-	set_title("Roland MKS-70 Super JX Tone Editor");
+	set_title(mks70_tone::init_tone_name + " - " + window_title);
 	set_border_width(6);
 
 	add(m_Application_Box);
@@ -212,3 +212,5 @@ void mks70_window::get_midi_port_names()
 		midi_port_name.push_back (midiout->getPortName(i));
 
 }
+
+const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

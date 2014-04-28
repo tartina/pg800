@@ -11,6 +11,7 @@ class mks70_window : public Gtk::ApplicationWindow
 	public:
 		mks70_window();
 		virtual ~mks70_window();
+		static const std::string window_title;
 
 	private:
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;

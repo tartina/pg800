@@ -52,6 +52,7 @@ private:
 	std::vector<unsigned char> message;
 
 public:
+	static const std::string init_tone_name;
 	mks70_tone();
 	virtual ~mks70_tone();
 	bool apr_send(unsigned short midi_channel, unsigned short tone);

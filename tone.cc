@@ -129,3 +129,5 @@ void mks70_tone::dump_tone()
 	}
 }
 #endif
+
+const std::string mks70_tone::init_tone_name = "INIT TONE";
