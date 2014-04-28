@@ -1,4 +1,3 @@
-#include <new>
 #include <string>
 #include <iostream>
 #include "window.h"
@@ -21,8 +20,8 @@ mks70_window::mks70_window()
 		// TODO handle error
 #ifdef HAVE_DEBUG
 		error.printMessage();
-		throw error;
 #endif
+		throw error;
 	}
 
 	get_midi_port_names();
@@ -122,30 +121,26 @@ mks70_window::mks70_window()
 		m_rb_dco_wave_square[i].signal_clicked().connect(sigc::mem_fun(*this,
 			&mks70_window::on_dco_wave_button_clicked));
 
-		m_DCO_Box[i].set_orientation(Gtk::ORIENTATION_VERTICAL);
 		m_Range_Label[i].set_label("Range");
-		m_DCO_Box[i].pack_start(m_Range_Label[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_range16[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_range8[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_range4[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_range2[i], Gtk::PACK_SHRINK);
-
-		m_DCO_Box[i].pack_start(m_separator[i], Gtk::PACK_SHRINK);
+		dco_grid[i].attach(m_Range_Label[i], 0, 0, 1, 1);
+		dco_grid[i].attach(m_rb_dco_range16[i], 0, 1, 1, 1);
+		dco_grid[i].attach(m_rb_dco_range8[i], 0, 2, 1, 1);
+		dco_grid[i].attach(m_rb_dco_range4[i], 0, 3, 1, 1);
+		dco_grid[i].attach(m_rb_dco_range2[i], 0, 4, 1, 1);
 
 		m_Wave_Label[i].set_label("Waveform");
-		m_DCO_Box[i].pack_start(m_Wave_Label[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_wave_noise[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_wave_saw[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_wave_pulse[i], Gtk::PACK_SHRINK);
-		m_DCO_Box[i].pack_start(m_rb_dco_wave_square[i], Gtk::PACK_SHRINK);
+		dco_grid[i].attach(m_Wave_Label[i], 1, 0, 1 ,1);
+		dco_grid[i].attach(m_rb_dco_wave_noise[i], 1, 1, 1,1);
+		dco_grid[i].attach(m_rb_dco_wave_saw[i], 1, 2, 1 ,1);
+		dco_grid[i].attach(m_rb_dco_wave_pulse[i], 1, 3, 1 ,1);
+		dco_grid[i].attach(m_rb_dco_wave_square[i], 1, 4, 1 ,1);
 
-		m_DCO_Frame[i].add(m_DCO_Box[i]);
+		m_DCO_Frame[i].add(dco_grid[i]);
 		m_Editor_Box.pack_start(m_DCO_Frame[i], Gtk::PACK_SHRINK);
 	}
 
 	// DCO2 Cross mod
-	m_DCO_Box[1].pack_start(sep_crossmod, Gtk::PACK_SHRINK);
-	m_DCO_Box[1].pack_start(crossmod_label, Gtk::PACK_SHRINK);
+	dco_grid[1].attach(crossmod_label, 2, 0, 1, 1);
 	group = rb_crossmod[0].get_group();
 	rb_crossmod[0].set_label("Off");
 	rb_crossmod[1].set_label("Sync1");
@@ -154,12 +149,12 @@ mks70_window::mks70_window()
 	rb_crossmod[0].set_active();
 	rb_crossmod[0].signal_clicked().connect(sigc::mem_fun(*this,
 		&mks70_window::on_dco2_crossmod_button_clicked));
-	m_DCO_Box[1].pack_start(rb_crossmod[0], Gtk::PACK_SHRINK);
+	dco_grid[1].attach(rb_crossmod[0], 2, 1, 1, 1);
 	for (i = 1; i < 4; i++) {
 		rb_crossmod[i].set_group(group);
 		rb_crossmod[i].signal_clicked().connect(sigc::mem_fun(*this,
 			&mks70_window::on_dco2_crossmod_button_clicked));
-		m_DCO_Box[1].pack_start(rb_crossmod[i], Gtk::PACK_SHRINK);
+		dco_grid[1].attach(rb_crossmod[i], 2, i + 1, 1, 1);
 	}
 
 	show_all_children();
@@ -235,6 +230,13 @@ void mks70_window::get_midi_port_names()
 
 void mks70_window::on_dco2_crossmod_button_clicked()
 {
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_crossmod[i].get_active()) {
+			tone->set_dco2_crossmod(i, midi_channel, midiout, true);
+			break;
+		}
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

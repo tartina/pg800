@@ -20,7 +20,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Box m_Application_Box;
 		Gtk::Box m_Editor_Box;
 		Gtk::Frame m_DCO_Frame[2];
-		Gtk::Box m_DCO_Box[2];
+		Gtk::Grid dco_grid[2];
 
 		Gtk::Label m_Range_Label[2];
 		Gtk::RadioButton m_rb_dco_range16[2], m_rb_dco_range8[2],
