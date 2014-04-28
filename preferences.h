@@ -30,7 +30,9 @@
 class preferences: public Gtk::Dialog 
 {
 public:
-	preferences(const std::vector<std::string>& midi_port_name);
+	preferences(const std::vector<std::string>& midi_port_name,
+                         unsigned int midi_port_number = 0,
+                         unsigned short midi_channel = 0);
 	virtual ~preferences();
 	unsigned int get_midi_port_number() {return midi_port_number;};
 	unsigned short get_midi_channel() {return midi_channel;};

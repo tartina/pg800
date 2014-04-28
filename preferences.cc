@@ -27,13 +27,18 @@
 
 #include "preferences.h"
 
-preferences::preferences(const std::vector<std::string>& midi_port_name)
+preferences::preferences(const std::vector<std::string>& midi_port_name,
+                         unsigned int midi_port_number,
+                         unsigned short midi_channel)
 	: Gtk::Dialog("Preferences", true),
-	adj_midi_channel(Gtk::Adjustment::create(1.0, 1.0, 16.0, 1.0, 1.0, 0.0)),
+	adj_midi_channel(Gtk::Adjustment::create(midi_channel + 1, 1.0, 16.0, 1.0, 1.0, 0.0)),
 	sb_midi_channel(adj_midi_channel),
 	lb_midi_channel("MIDI channel"),
 	lb_midi_port("MIDI port")
 {
+	if (midi_channel < 16) this->midi_channel = midi_channel;
+	this->midi_port_number = midi_port_number;
+
 	set_border_width(6);
 	add_button("Ok", Gtk::ResponseType::RESPONSE_OK);
 	add_button("Cancel", Gtk::ResponseType::RESPONSE_CANCEL);
@@ -44,6 +49,7 @@ preferences::preferences(const std::vector<std::string>& midi_port_name)
 	for (std::vector<std::string>::const_iterator it = midi_port_name.begin();
 			it != midi_port_name.end(); ++it)
 		cb_midi_port.append(*it);
+	cb_midi_port.set_active(midi_port_number);
 
 	cb_midi_port.signal_changed().connect( sigc::mem_fun(*this,
 		&preferences::on_midi_port_changed) );

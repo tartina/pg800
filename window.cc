@@ -184,7 +184,7 @@ void mks70_window::on_action_file_preferences()
 	int result;
 	unsigned int old_midi_port = midi_port;
 
-	preferences* pref = new preferences(midi_port_name);
+	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel);
 	result = pref->run();
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
 		midi_port = pref->get_midi_port_number ();
