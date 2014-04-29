@@ -111,7 +111,7 @@ mks70_window::mks70_window()
 	for (i = 0; i < 2; i++) {
 		dco_grid[i].set_border_width(4);
 
-		m_DCO_Frame[i].set_label("DCO" + std::to_string(i + 1));
+		m_DCO_Frame[i].set_label("DCO " + std::to_string(i + 1));
 		m_DCO_Frame[i].set_border_width(1);
 		m_DCO_Frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
@@ -216,6 +216,35 @@ mks70_window::mks70_window()
 			&mks70_window::on_dco2_ftune_value_changed));
 	dco_grid[1].attach(dco2_ftune_label, 1, 5, 1, 1);
 	dco_grid[1].attach(sc_dco2_ftune, 1, 6, 1, 1);
+
+	// DCO lfo and envelope
+	for (i = 0; i < 2; i++) {
+		dco_lfo_label[i].set_label("LFO");
+		adj_dco_lfo[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_dco_lfo[i] = new Gtk::Scale(adj_dco_lfo[i], Gtk::ORIENTATION_VERTICAL);
+		sc_dco_lfo[i]->set_digits(0);
+		sc_dco_lfo[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_dco_lfo[i]->set_draw_value();
+		sc_dco_lfo[i]->set_inverted(); // highest value at top
+		sc_dco_lfo[i]->set_size_request(-1, range_height);
+/*		sc_dco_lfo[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_lfo_value_changed)); */
+		dco_grid[i].attach(dco_lfo_label[i], 0, 7, 1, 1);
+		dco_grid[i].attach(*sc_dco_lfo[i], 0, 8, 1, 1);
+
+		dco_envelope_label[i].set_label("Envelope");
+		adj_dco_envelope[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_dco_envelope[i] = new Gtk::Scale(adj_dco_envelope[i], Gtk::ORIENTATION_VERTICAL);
+		sc_dco_envelope[i]->set_digits(0);
+		sc_dco_envelope[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_dco_envelope[i]->set_draw_value();
+		sc_dco_envelope[i]->set_inverted(); // highest value at top
+		sc_dco_envelope[i]->set_size_request(-1, range_height);
+/*		sc_dco_envelope[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_envelope_value_changed)); */
+		dco_grid[i].attach(dco_envelope_label[i], 1, 7, 1, 1);
+		dco_grid[i].attach(*sc_dco_envelope[i], 1, 8, 1, 1);
+	}
 	
 	show_all_children();
 }
@@ -225,6 +254,8 @@ mks70_window::~mks70_window()
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
+		delete sc_dco_envelope[i];
+		delete sc_dco_lfo[i];
 		delete sc_dco_tune[i];
 	}
 	

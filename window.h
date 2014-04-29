@@ -33,7 +33,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		static const std::string window_title;
 
 	private:
-		static const unsigned int range_height = 120;
+		static const unsigned int range_height = 100;
 
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
@@ -63,6 +63,13 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label dco2_ftune_label;
 		Gtk::Scale sc_dco2_ftune;
 		Glib::RefPtr<Gtk::Adjustment> adj_dco2_ftune;
+
+		Gtk::Label dco_lfo_label[2];
+		Gtk::Scale* sc_dco_lfo[2];
+		Glib::RefPtr<Gtk::Adjustment> adj_dco_lfo[2];
+		Gtk::Label dco_envelope_label[2];
+		Gtk::Scale* sc_dco_envelope[2];
+		Glib::RefPtr<Gtk::Adjustment> adj_dco_envelope[2];
 
 		// Signal handlers
 		void on_action_file_open() {};

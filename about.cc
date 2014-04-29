@@ -22,7 +22,6 @@
 #endif
 
 #include <vector>
-#include <string>
 #include "about.h"
 
 about::about()
