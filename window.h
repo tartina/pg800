@@ -33,7 +33,12 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Separator sep_crossmod;
 		Gtk::Label crossmod_label;
 		Gtk::RadioButton rb_crossmod[4];
-		
+
+		Gtk::Label dco_tune_label[2];
+		Gtk::Scale* sc_dco_tune[2];
+		Glib::RefPtr<Gtk::Adjustment> adj_dco_tune[2];
+
+		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new() {};
 		void on_action_file_save() {};
@@ -43,6 +48,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco_range_button_clicked();
 		void on_dco_wave_button_clicked();
 		void on_dco2_crossmod_button_clicked();
+		void on_adj_dco_tune_value_changed();
 
 		void get_midi_port_names();
 

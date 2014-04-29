@@ -148,6 +148,49 @@ void mks70_tone::set_dco2_crossmod(unsigned short crossmod, unsigned short midi_
 	}
 }
 
+void mks70_tone::set_dco_tune(unsigned short dco, unsigned short tune,
+                              unsigned short midi_channel, RtMidiOut* midi_out,
+                              bool send)
+{
+	if (dco > 1 || tune > 127) return;
+
+	if (tune != dco_tune[dco]) {
+		dco_tune[dco] = tune;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(0x01);
+			switch(dco) {
+				case 0:
+					message.push_back(13);
+					break;
+				case 1:
+					message.push_back(19);
+					break;
+			}
+			message.push_back(tune);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI DCO tune: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,9);
@@ -163,6 +206,7 @@ void mks70_tone::dump_tone()
 	for (i = 0; i < 2; i++) {
 		std::cout << "DCO" << (i + 1) << " Range: " << dco_range[i] << std::endl;
 		std::cout << "DCO" << (i + 1) << " Waveform: " << dco_wave[i] << std::endl;
+		std::cout << "DCO" << (i + 1) << " Tune: " << dco_tune[i] << std::endl;
 	}
 	std::cout << "DCO2 XMod: " << dco2_xmod << std::endl;
 }

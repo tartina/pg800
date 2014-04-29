@@ -81,6 +81,8 @@ mks70_window::mks70_window()
 
 	// DCO range and waveform radio buttons
 	for (i = 0; i < 2; i++) {
+		dco_grid[i].set_border_width(4);
+
 		m_DCO_Frame[i].set_label("DCO" + std::to_string(i + 1));
 		m_DCO_Frame[i].set_size_request(40, 40);
 		m_DCO_Frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
@@ -157,10 +159,37 @@ mks70_window::mks70_window()
 		dco_grid[1].attach(rb_crossmod[i], 2, i + 1, 1, 1);
 	}
 
+	// DCO tune
+	for (i = 0; i < 2; i++) {
+		dco_tune_label[i].set_label("Tune");
+		adj_dco_tune[i] = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 1.0, 0.0);
+		sc_dco_tune[i] = new Gtk::Scale(adj_dco_tune[i], Gtk::ORIENTATION_VERTICAL);
+		sc_dco_tune[i]->set_digits(0);
+		sc_dco_tune[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_dco_tune[i]->set_draw_value();
+		sc_dco_tune[i]->set_inverted(); // highest value at top
+		sc_dco_tune[i]->set_size_request(-1, 100);
+
+		adj_dco_tune[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_adj_dco_tune_value_changed));
+
+		dco_grid[i].attach(dco_tune_label[i], 0, 5, 1, 1);
+		dco_grid[i].attach(*sc_dco_tune[i], 0, 6, 1, 1);
+	}
+
 	show_all_children();
 }
 
-mks70_window::~mks70_window() {delete tone; delete midiout;}
+mks70_window::~mks70_window()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++) {
+		delete sc_dco_tune[i];
+	}
+	
+	delete tone; delete midiout;
+}
 
 void mks70_window::on_dco_range_button_clicked()
 {
@@ -237,6 +266,14 @@ void mks70_window::on_dco2_crossmod_button_clicked()
 			tone->set_dco2_crossmod(i, midi_channel, midiout, true);
 			break;
 		}
+}
+
+void mks70_window::on_adj_dco_tune_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_dco_tune(i, adj_dco_tune[i]->get_value(), midi_channel, midiout, true);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";
