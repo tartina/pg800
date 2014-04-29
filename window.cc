@@ -21,6 +21,7 @@
 #include <iostream>
 #include "window.h"
 #include "preferences.h"
+#include "about.h"
 
 mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
@@ -68,6 +69,9 @@ mks70_window::mks70_window()
 		sigc::mem_fun(*this, &mks70_window::on_action_file_preferences) );
 	m_refActionGroup->add( Gtk::Action::create("Quit", "_Quit"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_quit) );
+	m_refActionGroup->add( Gtk::Action::create("MenuHelp", "_Help") );
+	m_refActionGroup->add( Gtk::Action::create("About", "_About"),
+		sigc::mem_fun(*this, &mks70_window::on_action_help_about) );
 
 	m_refUIManager = Gtk::UIManager::create();
 	m_refUIManager->insert_action_group(m_refActionGroup);
@@ -84,6 +88,9 @@ mks70_window::mks70_window()
 		"      <separator/>"
 		"      <menuitem action='Preferences'/>"
 		"      <menuitem action='Quit'/>"
+		"    </menu>"
+		"    <menu action='MenuHelp'>"
+		"      <menuitem action='About'/>"
 		"    </menu>"
 		"  </menubar>"
 		"  <toolbar  name='ToolBar'>"
@@ -280,6 +287,13 @@ void mks70_window::on_action_file_preferences()
 		midiout->closePort();
 		if (midi_port < number_of_ports) midiout->openPort(midi_port);
 	}
+}
+
+void mks70_window::on_action_help_about()
+{
+	about* dialog = new about();
+	dialog->run();
+	delete dialog;
 }
 
 void mks70_window::get_midi_port_names()

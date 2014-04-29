@@ -71,6 +71,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_action_file_send() {};
 		void on_action_file_preferences();
 		void inline on_action_file_quit() {hide();};
+		void on_action_help_about();
 		void on_dco_range_button_clicked();
 		void on_dco_wave_button_clicked();
 		void on_dco2_crossmod_button_clicked();
