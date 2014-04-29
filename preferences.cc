@@ -29,15 +29,18 @@
 
 preferences::preferences(const std::vector<std::string>& midi_port_name,
                          unsigned int midi_port_number,
-                         unsigned short midi_channel)
+                         unsigned short midi_channel,
+                         unsigned short tone_number)
 	: Gtk::Dialog("Preferences", true),
 	adj_midi_channel(Gtk::Adjustment::create(midi_channel + 1, 1.0, 16.0, 1.0, 1.0, 0.0)),
 	sb_midi_channel(adj_midi_channel),
 	lb_midi_channel("MIDI channel"),
-	lb_midi_port("MIDI port")
+	lb_midi_port("MIDI port"),
+	lb_tone_number("Tone")
 {
 	if (midi_channel < 16) this->midi_channel = midi_channel;
 	this->midi_port_number = midi_port_number;
+	if (tone_number < 2) this->tone_number = tone_number;
 
 	set_border_width(6);
 	add_button("Ok", Gtk::ResponseType::RESPONSE_OK);
@@ -52,13 +55,21 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 	cb_midi_port.set_active(midi_port_number);
 
 	cb_midi_port.signal_changed().connect( sigc::mem_fun(*this,
-		&preferences::on_midi_port_changed) );
+		&preferences::on_midi_port_changed));
+
+	cb_tone_number.append("Tone A");
+	cb_tone_number.append("Tone B");
+	cb_tone_number.set_active(tone_number);
+	cb_tone_number.signal_changed().connect( sigc::mem_fun(*this,
+		&preferences::on_tone_number_changed));
 
 	area = get_content_area();
 	area->pack_start(lb_midi_channel, Gtk::PACK_SHRINK);
 	area->pack_start(sb_midi_channel, Gtk::PACK_SHRINK);
 	area->pack_start(lb_midi_port, Gtk::PACK_SHRINK);
 	area->pack_start(cb_midi_port, Gtk::PACK_SHRINK);
+	area->pack_start(lb_tone_number, Gtk::PACK_SHRINK);
+	area->pack_start(cb_tone_number, Gtk::PACK_SHRINK);
 
 	show_all_children();
 }
@@ -70,7 +81,7 @@ void preferences::on_midi_channel_value_changed()
 	midi_channel = sb_midi_channel.get_value() - 1;
 	if (midi_channel > 15) midi_channel = 0;
 #ifdef HAVE_DEBUG
-	std::cout << "MIDI channel: " << midi_channel << "\n";
+	std::cout << "MIDI channel: " << midi_channel << std::endl;
 #endif
 }
 
@@ -78,6 +89,14 @@ void preferences::on_midi_port_changed()
 {
 	midi_port_number = cb_midi_port.get_active_row_number();
 #ifdef HAVE_DEBUG
-	std::cout << "MIDI port: " << midi_port_number << "\n";
+	std::cout << "MIDI port: " << midi_port_number << std::endl;
+#endif
+}
+
+void preferences::on_tone_number_changed()
+{
+	tone_number = cb_tone_number.get_active_row_number();
+#ifdef HAVE_DEBUG
+	std::cout << "Tone number: " << tone_number << std::endl;
 #endif
 }

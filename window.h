@@ -14,6 +14,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		static const std::string window_title;
 
 	private:
+		static const unsigned int range_height = 120;
+
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
 
@@ -38,6 +40,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Scale* sc_dco_tune[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_tune[2];
 
+		Gtk::Label dco2_ftune_label;
+		Gtk::Scale sc_dco2_ftune;
+		Glib::RefPtr<Gtk::Adjustment> adj_dco2_ftune;
+
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new() {};
@@ -48,7 +54,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco_range_button_clicked();
 		void on_dco_wave_button_clicked();
 		void on_dco2_crossmod_button_clicked();
-		void on_adj_dco_tune_value_changed();
+		void on_dco_tune_value_changed();
+		void on_dco2_ftune_value_changed();
 
 		void get_midi_port_names();
 

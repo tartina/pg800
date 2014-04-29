@@ -12,6 +12,7 @@ class mks70_tone
 {
 private:
 	std::string name;
+	unsigned short tone_number = 0; // Tone A = 0, tone B = 1
 
 	unsigned short dco_range[2]; // 4 values
 	unsigned short dco_wave[2]; // 4 values
@@ -68,7 +69,11 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_dco_tune(unsigned short dco, unsigned short tune,
 	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	void set_dco2_ftune(unsigned short ftune, unsigned short midi_channel,
+	                    RtMidiOut* midi_out, bool send = false);
 	void set_name(const std::string& name);
+	void set_tone_number(const unsigned short tone);
+	unsigned short get_tone_number() {return tone_number;};
 
 #ifdef HAVE_DEBUG
 	void dump_tone();

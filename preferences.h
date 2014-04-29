@@ -31,23 +31,27 @@ class preferences: public Gtk::Dialog
 {
 public:
 	preferences(const std::vector<std::string>& midi_port_name,
-                         unsigned int midi_port_number = 0,
-                         unsigned short midi_channel = 0);
+                unsigned int midi_port_number = 0,
+                unsigned short midi_channel = 0,
+	            unsigned short tone_number = 0);
 	virtual ~preferences();
 	unsigned int get_midi_port_number() {return midi_port_number;};
 	unsigned short get_midi_channel() {return midi_channel;};
+	unsigned short get_tone_number() {return tone_number;};
 
 private:
 	unsigned int midi_port_number = 0;
 	unsigned short midi_channel = 0;
+	unsigned short tone_number = 0;
 	Glib::RefPtr<Gtk::Adjustment> adj_midi_channel;
 	Gtk::SpinButton sb_midi_channel;
-	Gtk::Label lb_midi_channel, lb_midi_port;
+	Gtk::Label lb_midi_channel, lb_midi_port, lb_tone_number;
 	Gtk::Box *area = 0;
-	Gtk::ComboBoxText cb_midi_port;
+	Gtk::ComboBoxText cb_midi_port, cb_tone_number;
 
 	void on_midi_channel_value_changed();
 	void on_midi_port_changed();
+	void on_tone_number_changed();
 };
 
 #endif // _PREFERENCES_H_

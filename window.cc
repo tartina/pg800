@@ -6,7 +6,8 @@
 mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
 	m_Editor_Box(Gtk::ORIENTATION_HORIZONTAL),
-	crossmod_label("Crossmod")
+	crossmod_label("Crossmod"),
+	sc_dco2_ftune(Gtk::ORIENTATION_VERTICAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -162,21 +163,33 @@ mks70_window::mks70_window()
 	// DCO tune
 	for (i = 0; i < 2; i++) {
 		dco_tune_label[i].set_label("Tune");
-		adj_dco_tune[i] = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 1.0, 0.0);
+		adj_dco_tune[i] = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 10.0, 0.0);
 		sc_dco_tune[i] = new Gtk::Scale(adj_dco_tune[i], Gtk::ORIENTATION_VERTICAL);
 		sc_dco_tune[i]->set_digits(0);
 		sc_dco_tune[i]->set_value_pos(Gtk::POS_BOTTOM);
 		sc_dco_tune[i]->set_draw_value();
 		sc_dco_tune[i]->set_inverted(); // highest value at top
-		sc_dco_tune[i]->set_size_request(-1, 100);
-
-		adj_dco_tune[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_adj_dco_tune_value_changed));
-
+		sc_dco_tune[i]->set_size_request(-1, range_height);
+		sc_dco_tune[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_tune_value_changed));
 		dco_grid[i].attach(dco_tune_label[i], 0, 5, 1, 1);
 		dco_grid[i].attach(*sc_dco_tune[i], 0, 6, 1, 1);
 	}
 
+	// DCO2 fine tune
+	dco2_ftune_label.set_label("Fine tune");
+	adj_dco2_ftune = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_dco2_ftune.set_adjustment(adj_dco2_ftune);
+	sc_dco2_ftune.set_digits(0);
+	sc_dco2_ftune.set_value_pos(Gtk::POS_BOTTOM);
+	sc_dco2_ftune.set_draw_value();
+	sc_dco2_ftune.set_inverted(); // highest value at top
+	sc_dco2_ftune.set_size_request(-1, range_height);
+	sc_dco2_ftune.signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco2_ftune_value_changed));
+	dco_grid[1].attach(dco2_ftune_label, 1, 5, 1, 1);
+	dco_grid[1].attach(sc_dco2_ftune, 1, 6, 1, 1);
+	
 	show_all_children();
 }
 
@@ -228,11 +241,13 @@ void mks70_window::on_action_file_preferences()
 	int result;
 	unsigned int old_midi_port = midi_port;
 
-	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel);
+	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel,
+	                                    tone->get_tone_number());
 	result = pref->run();
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
 		midi_port = pref->get_midi_port_number ();
 		midi_channel = pref->get_midi_channel();
+		tone->set_tone_number(pref->get_tone_number());
 	}
 	delete pref;
 
@@ -268,12 +283,17 @@ void mks70_window::on_dco2_crossmod_button_clicked()
 		}
 }
 
-void mks70_window::on_adj_dco_tune_value_changed()
+void mks70_window::on_dco_tune_value_changed()
 {
 	unsigned short i;
 
 	for (i = 0; i < 2; i++)
 		tone->set_dco_tune(i, adj_dco_tune[i]->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_dco2_ftune_value_changed()
+{
+	tone->set_dco2_ftune(adj_dco2_ftune->get_value(), midi_channel, midiout, true);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

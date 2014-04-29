@@ -20,8 +20,10 @@ mks70_tone::mks70_tone()
 	for (i = 0; i < 2; i++) {
 		dco_range[i] = 1; // dco range = 8'
 		dco_wave[i] = 1; // dco wave = saw
+		dco_tune[i] = 64;
 	}
 	dco2_xmod = 0;
+	dco2_ftune = 64;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
@@ -191,9 +193,49 @@ void mks70_tone::set_dco_tune(unsigned short dco, unsigned short tune,
 	}
 }
 
+void mks70_tone::set_dco2_ftune(unsigned short ftune, unsigned short midi_channel,
+                                RtMidiOut* midi_out, bool send)
+{
+	if (ftune > 127) return;
+
+	if (ftune != dco2_ftune) {
+		dco2_ftune = ftune;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(0x01);
+			message.push_back(20);
+			message.push_back(ftune);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI DCO2 ftune: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,9);
+}
+
+void mks70_tone::set_tone_number(const unsigned short tone)
+{
+	if (tone < 2) tone_number = tone;
 }
 
 #ifdef HAVE_DEBUG
@@ -204,11 +246,12 @@ void mks70_tone::dump_tone()
 	std::cout << "Name: " << name << std::endl;
 
 	for (i = 0; i < 2; i++) {
-		std::cout << "DCO" << (i + 1) << " Range: " << dco_range[i] << std::endl;
-		std::cout << "DCO" << (i + 1) << " Waveform: " << dco_wave[i] << std::endl;
-		std::cout << "DCO" << (i + 1) << " Tune: " << dco_tune[i] << std::endl;
+		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Range: " << dco_range[i] << std::endl;
+		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Waveform: " << dco_wave[i] << std::endl;
+		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Tune: " << dco_tune[i] << std::endl;
 	}
-	std::cout << "DCO2 XMod: " << dco2_xmod << std::endl;
+	std::cout << std::setbase(10) << "DCO2 XMod: " << dco2_xmod << std::endl;
+	std::cout << std::setbase(10) << "DCO2 FTune: " << dco2_ftune << std::endl;
 }
 #endif
 
