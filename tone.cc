@@ -47,7 +47,7 @@ void mks70_tone::set_dco_range(unsigned short dco, unsigned short range,
 			message.push_back(midi_channel);
 			message.push_back(0x24);
 			message.push_back(0x20);
-			message.push_back(0x01);
+			message.push_back(tone_number + 1);
 			switch(dco) {
 				case 0:
 					message.push_back(11);
@@ -89,7 +89,7 @@ void mks70_tone::set_dco_wave(unsigned short dco, unsigned short wave,
 			message.push_back(midi_channel);
 			message.push_back(0x24);
 			message.push_back(0x20);
-			message.push_back(0x01);
+			message.push_back(tone_number + 1);
 			switch(dco) {
 				case 0:
 					message.push_back(12);
@@ -130,7 +130,7 @@ void mks70_tone::set_dco2_crossmod(unsigned short crossmod, unsigned short midi_
 			message.push_back(midi_channel);
 			message.push_back(0x24);
 			message.push_back(0x20);
-			message.push_back(0x01);
+			message.push_back(tone_number + 1);
 			message.push_back(18);
 			message.push_back(crossmod * 32);
 			message.push_back(0xF7);
@@ -166,7 +166,7 @@ void mks70_tone::set_dco_tune(unsigned short dco, unsigned short tune,
 			message.push_back(midi_channel);
 			message.push_back(0x24);
 			message.push_back(0x20);
-			message.push_back(0x01);
+			message.push_back(tone_number + 1);
 			switch(dco) {
 				case 0:
 					message.push_back(13);
@@ -208,7 +208,7 @@ void mks70_tone::set_dco2_ftune(unsigned short ftune, unsigned short midi_channe
 			message.push_back(midi_channel);
 			message.push_back(0x24);
 			message.push_back(0x20);
-			message.push_back(0x01);
+			message.push_back(tone_number + 1);
 			message.push_back(20);
 			message.push_back(ftune);
 			message.push_back(0xF7);
@@ -230,7 +230,7 @@ void mks70_tone::set_dco2_ftune(unsigned short ftune, unsigned short midi_channe
 
 void mks70_tone::set_name(const std::string& name)
 {
-	this->name = name.substr(0 ,9);
+	this->name = name.substr(0 ,10);
 }
 
 void mks70_tone::set_tone_number(const unsigned short tone)
