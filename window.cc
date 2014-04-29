@@ -96,15 +96,16 @@ mks70_window::mks70_window()
 
 	Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
 	m_Application_Box.pack_start(*pMenubar, Gtk::PACK_SHRINK);
-
 	m_Application_Box.pack_start(m_Editor_Box);
+	status_bar.push("Tone A");
+	m_Application_Box.pack_end(status_bar, Gtk::PACK_SHRINK);
 
 	// DCO range and waveform radio buttons
 	for (i = 0; i < 2; i++) {
 		dco_grid[i].set_border_width(4);
 
 		m_DCO_Frame[i].set_label("DCO" + std::to_string(i + 1));
-		m_DCO_Frame[i].set_size_request(40, 40);
+		m_DCO_Frame[i].set_border_width(1);
 		m_DCO_Frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
 		group = m_rb_dco_range16[i].get_group();
@@ -259,6 +260,7 @@ void mks70_window::on_action_file_preferences()
 {
 	int result;
 	unsigned int old_midi_port = midi_port;
+	unsigned short tone_number;
 
 	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel,
 	                                    tone->get_tone_number());
@@ -266,7 +268,11 @@ void mks70_window::on_action_file_preferences()
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
 		midi_port = pref->get_midi_port_number ();
 		midi_channel = pref->get_midi_channel();
-		tone->set_tone_number(pref->get_tone_number());
+		tone_number = pref->get_tone_number();
+		tone->set_tone_number(tone_number);
+		status_bar.remove_all_messages();
+		if (tone_number == 0) status_bar.push("Tone A");
+		else status_bar.push("Tone B");
 	}
 	delete pref;
 

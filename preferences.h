@@ -20,7 +20,7 @@
 #ifndef _PREFERENCES_H_
 #define _PREFERENCES_H_
 
-#include <gtkmm/gtkmm.h>
+#include <gtkmm.h>
 #include <vector>
 #include <string>
 

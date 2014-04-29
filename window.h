@@ -39,6 +39,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;
 
 		Gtk::Box m_Application_Box;
+		Gtk::Statusbar status_bar;
 		Gtk::Box m_Editor_Box;
 		Gtk::Frame m_DCO_Frame[2];
 		Gtk::Grid dco_grid[2];
