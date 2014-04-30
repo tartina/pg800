@@ -330,7 +330,6 @@ mks70_window::~mks70_window()
 		delete sc_dco_lfo[i];
 		delete sc_dco_tune[i];
 	}
-	midiout->closePort();
 	delete tone; delete midiout;
 }
 
