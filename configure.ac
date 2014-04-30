@@ -12,7 +12,7 @@ AC_PROG_CXX
 AC_PROG_CC
 
 # Checks for libraries.
-PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.10])
+PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
 PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
 
 # Checks for header files.

@@ -41,6 +41,7 @@ private:
 	unsigned short dco2_xmod; // 4 values
 	unsigned short dco2_ftune;
 	unsigned short dco_dynamics; // 4 values
+	unsigned short dco_mode; // 4 values
 
 	unsigned short mix_dco[2];
 	unsigned short mix_env;
@@ -90,6 +91,15 @@ public:
 	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
 	void set_dco2_ftune(unsigned short ftune, unsigned short midi_channel,
 	                    RtMidiOut* midi_out, bool send = false);
+	void set_dco_lfo(unsigned short dco, unsigned short lfo,
+	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	void set_dco_envelope(unsigned short dco, unsigned short envelope,
+	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	void set_dco_dyna(unsigned short dyna, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_dco_mode(unsigned short mode, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);
 	unsigned short get_tone_number() {return tone_number;};

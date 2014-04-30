@@ -50,9 +50,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label m_Wave_Label[2];
 		Gtk::RadioButton m_rb_dco_wave_noise[2], m_rb_dco_wave_saw[2],
 			m_rb_dco_wave_pulse[2], m_rb_dco_wave_square[2];
-		Gtk::Separator m_separator[2];
 
-		Gtk::Separator sep_crossmod;
 		Gtk::Label crossmod_label;
 		Gtk::RadioButton rb_crossmod[4];
 
@@ -71,6 +69,26 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Scale* sc_dco_envelope[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_envelope[2];
 
+		Gtk::Label dco_dyna_label;
+		Gtk::Box dco_dyna_box;
+		Gtk::RadioButton rb_dco_dyna[4];
+		Gtk::Box dco_mode_box;
+		Gtk::Label dco_mode_label;
+		Gtk::RadioButton rb_dco_mode[4];
+
+		// Mixer frame
+		Gtk::Frame mixer_frame;
+		Gtk::Grid mixer_grid;
+		Gtk::Label mixer_dco_label[2];
+		Gtk::Scale* sc_mixer_dco[2];
+		Glib::RefPtr<Gtk::Adjustment> adj_mixer_dco[2];
+
+		// VCF frame
+		Gtk::Frame vcf_frame;
+		
+		// VCA frame
+		Gtk::Frame vca_frame;
+		
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new() {};
@@ -84,6 +102,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco2_crossmod_button_clicked();
 		void on_dco_tune_value_changed();
 		void on_dco2_ftune_value_changed();
+		void on_dco_lfo_value_changed();
+		void on_dco_envelope_value_changed();
+		void on_dco_dyna_button_clicked();
+		void on_dco_mode_button_clicked();
 
 		void get_midi_port_names();
 

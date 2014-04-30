@@ -27,7 +27,12 @@ mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
 	m_Editor_Box(Gtk::ORIENTATION_HORIZONTAL),
 	crossmod_label("Crossmod"),
-	sc_dco2_ftune(Gtk::ORIENTATION_VERTICAL)
+	sc_dco2_ftune(Gtk::ORIENTATION_VERTICAL),
+	dco_dyna_label("Dynamics"),
+	dco_mode_label("Env Mode"),
+	dco_dyna_box(Gtk::ORIENTATION_VERTICAL),
+	dco_mode_box(Gtk::ORIENTATION_VERTICAL),
+	mixer_frame("Mixer"), vcf_frame("VCF"), vca_frame("VCA")
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -176,7 +181,6 @@ mks70_window::mks70_window()
 	rb_crossmod[1].set_label("Sync1");
 	rb_crossmod[2].set_label("Sync2");
 	rb_crossmod[3].set_label("Xmod");
-	rb_crossmod[0].set_active();
 	rb_crossmod[0].signal_clicked().connect(sigc::mem_fun(*this,
 		&mks70_window::on_dco2_crossmod_button_clicked));
 	dco_grid[1].attach(rb_crossmod[0], 2, 1, 1, 1);
@@ -186,6 +190,7 @@ mks70_window::mks70_window()
 			&mks70_window::on_dco2_crossmod_button_clicked));
 		dco_grid[1].attach(rb_crossmod[i], 2, i + 1, 1, 1);
 	}
+	rb_crossmod[0].set_active();
 
 	// DCO tune
 	for (i = 0; i < 2; i++) {
@@ -227,8 +232,8 @@ mks70_window::mks70_window()
 		sc_dco_lfo[i]->set_draw_value();
 		sc_dco_lfo[i]->set_inverted(); // highest value at top
 		sc_dco_lfo[i]->set_size_request(-1, range_height);
-/*		sc_dco_lfo[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_lfo_value_changed)); */
+		sc_dco_lfo[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_lfo_value_changed));
 		dco_grid[i].attach(dco_lfo_label[i], 0, 7, 1, 1);
 		dco_grid[i].attach(*sc_dco_lfo[i], 0, 8, 1, 1);
 
@@ -240,12 +245,78 @@ mks70_window::mks70_window()
 		sc_dco_envelope[i]->set_draw_value();
 		sc_dco_envelope[i]->set_inverted(); // highest value at top
 		sc_dco_envelope[i]->set_size_request(-1, range_height);
-/*		sc_dco_envelope[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_envelope_value_changed)); */
+		sc_dco_envelope[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_envelope_value_changed));
 		dco_grid[i].attach(dco_envelope_label[i], 1, 7, 1, 1);
 		dco_grid[i].attach(*sc_dco_envelope[i], 1, 8, 1, 1);
 	}
+
+	// DCO Dyna
+	dco_grid[1].attach(dco_dyna_label, 2, 5, 1, 1);
+	dco_grid[1].attach(dco_dyna_box, 2, 6, 1, 1);
+	group = rb_dco_dyna[0].get_group();
+	for (i = 1; i < 4; i++) rb_dco_dyna[i].set_group(group);
+	rb_dco_dyna[0].set_label("Off");
+	rb_dco_dyna[1].set_label("1");
+	rb_dco_dyna[2].set_label("2");
+	rb_dco_dyna[3].set_label("3");
+	rb_dco_dyna[0].set_active();
+	for (i = 0; i < 4; i++) {
+		rb_dco_dyna[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_dyna_button_clicked));
+		dco_dyna_box.pack_start(rb_dco_dyna[i], Gtk::PACK_SHRINK);
+	}
+
+	// DCO Mode
+	dco_grid[1].attach(dco_mode_label, 2, 7, 1, 1);
+	group = rb_dco_mode[0].get_group();
+	rb_dco_mode[0].set_label("\\/2");
+	rb_dco_mode[1].set_label("/\\2");
+	rb_dco_mode[2].set_label("\\/1");
+	rb_dco_mode[3].set_label("/\\1");
+	rb_dco_mode[0].signal_clicked().connect(sigc::mem_fun(*this,
+		&mks70_window::on_dco_mode_button_clicked));
+	dco_grid[1].attach(dco_mode_box, 2, 8, 1, 1);
+	dco_mode_box.pack_start(rb_dco_mode[0], Gtk::PACK_SHRINK);
+	for (i = 1; i < 4; i++) {
+		rb_dco_mode[i].set_group(group);
+		rb_dco_mode[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_dco_mode_button_clicked));
+		dco_mode_box.pack_start(rb_dco_mode[i], Gtk::PACK_SHRINK);
+	}
+	rb_dco_mode[3].set_active(true);
+
+	// Mixer frame
+	mixer_frame.set_border_width(1);
+	mixer_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+	m_Editor_Box.pack_start(mixer_frame, Gtk::PACK_SHRINK);
+
+	for (i = 0; i < 2; i++) {
+		mixer_dco_label[i].set_label("DCO " + std::to_string(i + 1));
+		adj_mixer_dco[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_mixer_dco[i] = new Gtk::Scale(adj_mixer_dco[i], Gtk::ORIENTATION_VERTICAL);
+		sc_mixer_dco[i]->set_digits(0);
+		sc_mixer_dco[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_mixer_dco[i]->set_draw_value();
+		sc_mixer_dco[i]->set_inverted(); // highest value at top
+		sc_mixer_dco[i]->set_size_request(-1, range_height);
+/*		sc_mixer_dco[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_mixer_dco_value_changed)); */
+		mixer_grid.attach(mixer_dco_label[i], i, 0, 1, 1);
+		mixer_grid.attach(*sc_mixer_dco[i], i, 1, 1, 1);
+	}
+	mixer_frame.add(mixer_grid);
 	
+	// VCF frame
+	vcf_frame.set_border_width(1);
+	vcf_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+	m_Editor_Box.pack_start(vcf_frame, Gtk::PACK_SHRINK);
+
+	// VCA frame
+	vca_frame.set_border_width(1);
+	vca_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+	m_Editor_Box.pack_start(vca_frame, Gtk::PACK_SHRINK);
+
 	show_all_children();
 }
 
@@ -254,11 +325,12 @@ mks70_window::~mks70_window()
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
+		delete sc_mixer_dco[i];
 		delete sc_dco_envelope[i];
 		delete sc_dco_lfo[i];
 		delete sc_dco_tune[i];
 	}
-	
+	midiout->closePort();
 	delete tone; delete midiout;
 }
 
@@ -315,8 +387,13 @@ void mks70_window::on_action_file_preferences()
 	delete pref;
 
 	if (midi_port != old_midi_port) {
-		midiout->closePort();
-		if (midi_port < number_of_ports) midiout->openPort(midi_port);
+		try {
+			midiout->closePort();
+			if (midi_port < number_of_ports) midiout->openPort(midi_port);
+		}
+		catch(const RtError& error) {
+			// TODO: handle error
+		}
 	}
 }
 
@@ -364,6 +441,44 @@ void mks70_window::on_dco_tune_value_changed()
 void mks70_window::on_dco2_ftune_value_changed()
 {
 	tone->set_dco2_ftune(adj_dco2_ftune->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_dco_lfo_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_dco_lfo(i, adj_dco_lfo[i]->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_dco_envelope_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_dco_envelope(i, adj_dco_envelope[i]->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_dco_dyna_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_dco_dyna[i].get_active()) {
+			tone->set_dco_dyna(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
+void mks70_window::on_dco_mode_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_dco_mode[i].get_active()) {
+			tone->set_dco_mode(i, midi_channel, midiout, true);
+			break;
+		}
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";
