@@ -36,7 +36,9 @@ mks70_window::mks70_window()
 	dco_mode_label("Env Mode"),
 	dco_dyna_box(Gtk::ORIENTATION_VERTICAL),
 	dco_mode_box(Gtk::ORIENTATION_VERTICAL),
-	mixer_frame("Mixer"), vcf_frame("VCF"), vca_frame("VCA")
+	mixer_frame("Mixer"), vcf_frame("VCF"), vca_frame("VCA"),
+	mixer_envelope_label("Envelope"),
+	sc_mixer_envelope(Gtk::ORIENTATION_VERTICAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -324,6 +326,18 @@ mks70_window::mks70_window()
 	}
 	mixer_frame.add(mixer_grid);
 
+	adj_mixer_envelope = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_mixer_envelope.set_adjustment(adj_mixer_envelope);
+	sc_mixer_envelope.set_digits(0);
+	sc_mixer_envelope.set_value_pos(Gtk::POS_BOTTOM);
+	sc_mixer_envelope.set_draw_value();
+	sc_mixer_envelope.set_inverted(); // highest value at top
+	sc_mixer_envelope.set_size_request(-1, range_height);
+	sc_mixer_envelope.signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_mixer_envelope_value_changed));
+	mixer_grid.attach(mixer_envelope_label, 0, 2, 1, 1);
+	mixer_grid.attach(sc_mixer_envelope, 0, 3, 1, 1);
+
 	// VCF frame
 	vcf_frame.set_border_width(1);
 	vcf_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
@@ -380,6 +394,24 @@ void mks70_window::on_dco_wave_button_clicked()
 		if (m_rb_dco_wave_square[i].get_active())
 			tone->set_dco_wave(i, 3, midi_channel, midiout, true);
 	}
+}
+
+void mks70_window::on_action_file_new()
+{
+	Gtk::MessageDialog* dialog;
+	int result;
+
+	dialog = new Gtk::MessageDialog("Reset all controls?", false,
+	                               Gtk::MessageType::MESSAGE_QUESTION,
+	                               Gtk::ButtonsType::BUTTONS_OK_CANCEL,
+	                               true);
+	result = dialog->run();
+	if (result == Gtk::ResponseType::RESPONSE_OK) {
+		delete tone;
+		tone = new mks70_tone();
+		reset_controllers();
+	}
+	delete dialog;
 }
 
 void mks70_window::on_action_file_preferences()
@@ -503,6 +535,30 @@ void mks70_window::on_mixer_dco_value_changed()
 
 	for (i = 0; i < 2; i++)
 		tone->set_mixer_dco(i, adj_mixer_dco[i]->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_mixer_envelope_value_changed()
+{
+	// tone->set_mixer_envelope(adj_mixer_envelope->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::reset_controllers()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++) {
+		m_rb_dco_range8[i].set_active();
+		m_rb_dco_wave_saw[i].set_active();
+		adj_dco_tune[i]->set_value(64.0);
+		adj_dco_lfo[i]->set_value(0.0);
+		adj_dco_envelope[i]->set_value(0.0);
+		adj_mixer_dco[i]->set_value(0.0);
+	}
+	rb_crossmod[0].set_active();
+	adj_dco2_ftune->set_value(64.0);
+	rb_dco_dyna[0].set_active();
+	rb_dco_mode[3].set_active();
+	adj_mixer_envelope->set_value(0.0);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

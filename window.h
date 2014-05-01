@@ -33,7 +33,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		static const std::string window_title;
 
 	private:
-		static const unsigned int range_height = 100;
+		static const unsigned int range_height = 108;
 		Glib::RefPtr<Gtk::IconTheme> icon_theme;
 
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
@@ -83,6 +83,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label mixer_dco_label[2];
 		Gtk::Scale* sc_mixer_dco[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_mixer_dco[2];
+		Gtk::Label mixer_envelope_label;
+		Gtk::Scale sc_mixer_envelope;
+		Glib::RefPtr<Gtk::Adjustment> adj_mixer_envelope;
 
 		// VCF frame
 		Gtk::Frame vcf_frame;
@@ -92,7 +95,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		
 		// Signal handlers
 		void on_action_file_open() {};
-		void on_action_file_new() {};
+		void on_action_file_new();
 		void on_action_file_save() {};
 		void on_action_file_send() {};
 		void on_action_file_preferences();
@@ -108,8 +111,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco_dyna_button_clicked();
 		void on_dco_mode_button_clicked();
 		void on_mixer_dco_value_changed();
+		void on_mixer_envelope_value_changed();
 
 		void get_midi_port_names();
+		void reset_controllers();
 
 		mks70_tone* tone = 0;
 		RtMidiOut* midiout = 0;
