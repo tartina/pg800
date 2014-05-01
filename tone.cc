@@ -45,11 +45,13 @@ mks70_tone::mks70_tone()
 		dco_tune[i] = 64; // dco tune
 		dco_lfo[i] = 0;
 		dco_env[i] = 0;
+		mix_dco[i] = 0;
 	}
 	dco2_xmod = 0;
 	dco2_ftune = 64;
 	dco_dynamics = 0;
 	dco_mode = 3;
+	mix_env = 0;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
@@ -463,6 +465,41 @@ void mks70_tone::set_mixer_dco(unsigned short dco, unsigned short value,
 	}
 }
 
+void mks70_tone::set_mixer_envelope(unsigned short envelope, unsigned short midi_channel,
+                                    RtMidiOut* midi_out, bool send)
+{
+	if (envelope > 127) return;
+
+	if (envelope != mix_env) {
+		mix_env = envelope;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(30);
+			message.push_back(envelope);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Mixer env: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);
@@ -486,11 +523,13 @@ void mks70_tone::dump_tone()
 		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Tune: " << dco_tune[i] << std::endl;
 		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Lfo: " << dco_lfo[i] << std::endl;
 		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Envelope: " << dco_env[i] << std::endl;
+		std::cout << std::setbase(10) << "Mixer DCO" << (i + 1) << ": " << mix_dco[i] << std::endl;
 	}
 	std::cout << std::setbase(10) << "DCO2 XMod: " << dco2_xmod << std::endl;
 	std::cout << std::setbase(10) << "DCO2 FTune: " << dco2_ftune << std::endl;
 	std::cout << std::setbase(10) << "DCO Dyna: " << dco_dynamics << std::endl;
 	std::cout << std::setbase(10) << "DCO Mode: " << dco_mode << std::endl;
+	std::cout << std::setbase(10) << "Mixer envelope: " << mix_env << std::endl;
 }
 #endif
 

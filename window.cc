@@ -539,7 +539,7 @@ void mks70_window::on_mixer_dco_value_changed()
 
 void mks70_window::on_mixer_envelope_value_changed()
 {
-	// tone->set_mixer_envelope(adj_mixer_envelope->get_value(), midi_channel, midiout, true);
+	tone->set_mixer_envelope(adj_mixer_envelope->get_value(), midi_channel, midiout, true);
 }
 
 void mks70_window::reset_controllers()
