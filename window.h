@@ -34,6 +34,7 @@ class mks70_window : public Gtk::ApplicationWindow
 
 	private:
 		static const unsigned int range_height = 100;
+		Glib::RefPtr<Gtk::IconTheme> icon_theme;
 
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 		Glib::RefPtr<Gtk::UIManager> m_refUIManager;

@@ -17,6 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string>
 #include <iostream>
 #include "window.h"
@@ -36,6 +40,19 @@ mks70_window::mks70_window()
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
+	Gtk::IconInfo icon_info;
+
+	try {
+		icon_theme = Gtk::IconTheme::get_default();
+		icon_info = icon_theme->lookup_icon("pg800", 32, Gtk::IconLookupFlags::ICON_LOOKUP_NO_SVG);
+#ifdef HAVE_DEBUG
+		if (icon_info) std::cout << "Icon path: " << icon_info.get_filename() << std::endl;
+#endif
+		if (icon_info) set_default_icon_from_file(icon_info.get_filename());
+	}
+	catch (const Gdk::PixbufError& pixbuf_error) {
+		std::cerr << pixbuf_error.what() << std::endl;
+	}
 
 	tone = new mks70_tone();
 

@@ -45,6 +45,8 @@ Makefile
 *.app
 
 *~
+*.png
 /.anjuta*
 /*.anjuta
 /pg800
+/pg800-*.tar.gz
