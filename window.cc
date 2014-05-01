@@ -317,13 +317,13 @@ mks70_window::mks70_window()
 		sc_mixer_dco[i]->set_draw_value();
 		sc_mixer_dco[i]->set_inverted(); // highest value at top
 		sc_mixer_dco[i]->set_size_request(-1, range_height);
-/*		sc_mixer_dco[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_mixer_dco_value_changed)); */
+		sc_mixer_dco[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_mixer_dco_value_changed));
 		mixer_grid.attach(mixer_dco_label[i], i, 0, 1, 1);
 		mixer_grid.attach(*sc_mixer_dco[i], i, 1, 1, 1);
 	}
 	mixer_frame.add(mixer_grid);
-	
+
 	// VCF frame
 	vcf_frame.set_border_width(1);
 	vcf_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
@@ -495,6 +495,14 @@ void mks70_window::on_dco_mode_button_clicked()
 			tone->set_dco_mode(i, midi_channel, midiout, true);
 			break;
 		}
+}
+
+void mks70_window::on_mixer_dco_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_mixer_dco(i, adj_mixer_dco[i]->get_value(), midi_channel, midiout, true);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

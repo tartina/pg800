@@ -99,6 +99,8 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_dco_mode(unsigned short mode, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
+	void set_mixer_dco(unsigned short dco, unsigned short value,
+	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);

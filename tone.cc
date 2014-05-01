@@ -416,6 +416,53 @@ void mks70_tone::set_dco_mode(unsigned short mode, unsigned short midi_channel,
 	}
 }
 
+void mks70_tone::set_mixer_dco(unsigned short dco, unsigned short value,
+                              unsigned short midi_channel, RtMidiOut* midi_out,
+                              bool send)
+{
+	if (dco > 1 || value > 127) return;
+
+	if (value != mix_dco[dco]) {
+		mix_dco[dco] = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			switch(dco) {
+				case 0:
+					message.push_back(28);
+					break;
+				case 1:
+					message.push_back(29);
+					break;
+				default:
+					// Error if here
+					assert(0);
+					break;
+			}
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Mixer DCO: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);

@@ -107,6 +107,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco_envelope_value_changed();
 		void on_dco_dyna_button_clicked();
 		void on_dco_mode_button_clicked();
+		void on_mixer_dco_value_changed();
 
 		void get_midi_port_names();
 
