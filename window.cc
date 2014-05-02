@@ -46,7 +46,13 @@ mks70_window::mks70_window()
 
 	try {
 		icon_theme = Gtk::IconTheme::get_default();
-		icon_info = icon_theme->lookup_icon("pg800", 32, Gtk::IconLookupFlags::ICON_LOOKUP_NO_SVG);
+#ifdef HAVE_DEBUG
+		std::vector<Glib::ustring> paths = icon_theme->get_search_path();
+		for (std::vector<Glib::ustring>::const_iterator it = paths.begin();
+		     it < paths.end(); ++it)
+				std::cout << "Icon search path: " << *it << std::endl;
+#endif
+		icon_info = icon_theme->lookup_icon(PACKAGE_NAME, 48, Gtk::IconLookupFlags::ICON_LOOKUP_NO_SVG);
 #ifdef HAVE_DEBUG
 		if (icon_info) std::cout << "Icon path: " << icon_info.get_filename() << std::endl;
 #endif
