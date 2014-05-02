@@ -52,6 +52,8 @@ mks70_tone::mks70_tone()
 	dco_dynamics = 0;
 	dco_mode = 3;
 	mix_env = 0;
+	mix_dynamics = 0;
+	mix_env_mode = 3;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
@@ -500,6 +502,74 @@ void mks70_tone::set_mixer_envelope(unsigned short envelope, unsigned short midi
 	}
 }
 
+void mks70_tone::set_mixer_dyna(unsigned short dyna, unsigned short midi_channel,
+                                   RtMidiOut* midi_out, bool send)
+{
+	if (dyna > 3) return;
+	if (dyna != mix_dynamics) {
+		mix_dynamics = dyna;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(31);
+			message.push_back(dyna * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Mixer DYNA: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_mixer_mode(unsigned short mode, unsigned short midi_channel,
+                                   RtMidiOut* midi_out, bool send)
+{
+	if (mode > 3) return;
+	if (mode != mix_env_mode) {
+		mix_env_mode = mode;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(32);
+			message.push_back(mode * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Mixer MODE: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);
@@ -530,6 +600,8 @@ void mks70_tone::dump_tone()
 	std::cout << std::setbase(10) << "DCO Dyna: " << dco_dynamics << std::endl;
 	std::cout << std::setbase(10) << "DCO Mode: " << dco_mode << std::endl;
 	std::cout << std::setbase(10) << "Mixer envelope: " << mix_env << std::endl;
+	std::cout << std::setbase(10) << "Mixer Dyna: " << mix_dynamics << std::endl;
+	std::cout << std::setbase(10) << "Mixer Mode: " << mix_env_mode << std::endl;
 }
 #endif
 

@@ -86,6 +86,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label mixer_envelope_label;
 		Gtk::Scale sc_mixer_envelope;
 		Glib::RefPtr<Gtk::Adjustment> adj_mixer_envelope;
+		Gtk::Label mixer_dyna_label;
+		Gtk::RadioButton rb_mixer_dyna[4];
+		Gtk::Label mixer_mode_label;
+		Gtk::RadioButton rb_mixer_mode[4];
 
 		// VCF frame
 		Gtk::Frame vcf_frame;
@@ -112,6 +116,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco_mode_button_clicked();
 		void on_mixer_dco_value_changed();
 		void on_mixer_envelope_value_changed();
+		void on_mixer_dyna_button_clicked();
+		void on_mixer_mode_button_clicked();
 
 		void get_midi_port_names();
 		void reset_controllers();

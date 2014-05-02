@@ -38,7 +38,9 @@ mks70_window::mks70_window()
 	dco_mode_box(Gtk::ORIENTATION_VERTICAL),
 	mixer_frame("Mixer"), vcf_frame("VCF"), vca_frame("VCA"),
 	mixer_envelope_label("Envelope"),
-	sc_mixer_envelope(Gtk::ORIENTATION_VERTICAL)
+	sc_mixer_envelope(Gtk::ORIENTATION_VERTICAL),
+	mixer_dyna_label("Dynamics"),
+	mixer_mode_label("Env Mode")
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -139,7 +141,7 @@ mks70_window::mks70_window()
 
 	// DCO range and waveform radio buttons
 	for (i = 0; i < 2; i++) {
-		dco_grid[i].set_border_width(4);
+		dco_grid[i].set_border_width(2);
 
 		m_DCO_Frame[i].set_label("DCO " + std::to_string(i + 1));
 		m_DCO_Frame[i].set_border_width(1);
@@ -315,6 +317,8 @@ mks70_window::mks70_window()
 	mixer_frame.set_border_width(1);
 	mixer_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 	m_Editor_Box.pack_start(mixer_frame, Gtk::PACK_SHRINK);
+	mixer_grid.set_border_width(2);
+	mixer_frame.add(mixer_grid);
 
 	for (i = 0; i < 2; i++) {
 		mixer_dco_label[i].set_label("DCO " + std::to_string(i + 1));
@@ -330,7 +334,6 @@ mks70_window::mks70_window()
 		mixer_grid.attach(mixer_dco_label[i], i, 0, 1, 1);
 		mixer_grid.attach(*sc_mixer_dco[i], i, 1, 1, 1);
 	}
-	mixer_frame.add(mixer_grid);
 
 	adj_mixer_envelope = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
 	sc_mixer_envelope.set_adjustment(adj_mixer_envelope);
@@ -343,6 +346,36 @@ mks70_window::mks70_window()
 			&mks70_window::on_mixer_envelope_value_changed));
 	mixer_grid.attach(mixer_envelope_label, 0, 2, 1, 1);
 	mixer_grid.attach(sc_mixer_envelope, 0, 3, 1, 1);
+
+	// Mixer Dyna
+	mixer_grid.attach(mixer_dyna_label, 0, 4, 1, 1);
+	group = rb_mixer_dyna[0].get_group();
+	for (i = 1; i < 4; i++) rb_mixer_dyna[i].set_group(group);
+	rb_mixer_dyna[0].set_label("Off");
+	rb_mixer_dyna[1].set_label("1");
+	rb_mixer_dyna[2].set_label("2");
+	rb_mixer_dyna[3].set_label("3");
+	rb_mixer_dyna[0].set_active();
+	for (i = 0; i < 4; i++) {
+		rb_mixer_dyna[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_mixer_dyna_button_clicked));
+		mixer_grid.attach(rb_mixer_dyna[i], 0, 5 + i, 1, 1);
+	}
+
+	// Mixer Mode
+	mixer_grid.attach(mixer_mode_label, 1, 4, 1, 1);
+	group = rb_mixer_mode[0].get_group();
+	for (i = 1; i < 4; i++) rb_mixer_mode[i].set_group(group);
+	rb_mixer_mode[0].set_label("\\/2");
+	rb_mixer_mode[1].set_label("/\\2");
+	rb_mixer_mode[2].set_label("\\/1");
+	rb_mixer_mode[3].set_label("/\\1");
+	rb_mixer_mode[3].set_active();
+	for (i = 0; i < 4; i++) {
+		rb_mixer_mode[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_mixer_mode_button_clicked));
+		mixer_grid.attach(rb_mixer_mode[i], 1, 5 + i, 1, 1);
+	}
 
 	// VCF frame
 	vcf_frame.set_border_width(1);
@@ -548,6 +581,28 @@ void mks70_window::on_mixer_envelope_value_changed()
 	tone->set_mixer_envelope(adj_mixer_envelope->get_value(), midi_channel, midiout, true);
 }
 
+void mks70_window::on_mixer_dyna_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_mixer_dyna[i].get_active()) {
+			tone->set_mixer_dyna(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
+void mks70_window::on_mixer_mode_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_mixer_mode[i].get_active()) {
+			tone->set_mixer_mode(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;
@@ -565,6 +620,8 @@ void mks70_window::reset_controllers()
 	rb_dco_dyna[0].set_active();
 	rb_dco_mode[3].set_active();
 	adj_mixer_envelope->set_value(0.0);
+	rb_mixer_dyna[0].set_active();
+	rb_mixer_mode[3].set_active();
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

@@ -103,6 +103,10 @@ public:
 	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
 	void set_mixer_envelope(unsigned short envelope, unsigned short midi_channel,
 	                        RtMidiOut* midi_out, bool send = false);
+	void set_mixer_dyna(unsigned short dyna, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_mixer_mode(unsigned short mode, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);
