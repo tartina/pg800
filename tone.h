@@ -48,7 +48,7 @@ private:
 	unsigned short mix_dynamics; // 4 values
 	unsigned short mix_env_mode; // 4 values
 
-	unsigned short hpf_cutoff_freq; // 4 values
+	unsigned short vcf_hpf; // 4 values
 	unsigned short vcf_cutoff_freq;
 	unsigned short vcf_resonance;
 	unsigned short vcf_lfo_mod_depth;
@@ -106,6 +106,8 @@ public:
 	void set_mixer_dyna(unsigned short dyna, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_mixer_mode(unsigned short mode, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_vcf_hpf(unsigned short value, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);

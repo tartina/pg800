@@ -99,6 +99,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label vcf_cutoff_label;
 		Gtk::Scale sc_vcf_cutoff;
 		Glib::RefPtr<Gtk::Adjustment> adj_vcf_cutoff;
+		Gtk::Label vcf_resonance_label;
+		Gtk::Scale sc_vcf_resonance;
+		Glib::RefPtr<Gtk::Adjustment> adj_vcf_resonance;
 
 		// VCA frame
 		Gtk::Frame vca_frame;
@@ -124,8 +127,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_mixer_envelope_value_changed();
 		void on_mixer_dyna_button_clicked();
 		void on_mixer_mode_button_clicked();
-		void on_vcf_hpf_button_clicked() {};
+		void on_vcf_hpf_button_clicked();
 		void on_vcf_cutoff_value_changed() {};
+		void on_vcf_resonance_value_changed() {};
 
 		void get_midi_port_names();
 		void reset_controllers();

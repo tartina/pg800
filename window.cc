@@ -43,7 +43,9 @@ mks70_window::mks70_window()
 	mixer_mode_label("Env Mode"),
 	vcf_hpf_label("HPF"),
 	vcf_cutoff_label("Cutoff"),
-	sc_vcf_cutoff(Gtk::ORIENTATION_VERTICAL)
+	sc_vcf_cutoff(Gtk::ORIENTATION_VERTICAL),
+	vcf_resonance_label("Resonance"),
+	sc_vcf_resonance(Gtk::ORIENTATION_VERTICAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -145,6 +147,7 @@ mks70_window::mks70_window()
 	// DCO range and waveform radio buttons
 	for (i = 0; i < 2; i++) {
 		dco_grid[i].set_border_width(2);
+		dco_grid[i].set_column_spacing(1);
 
 		m_DCO_Frame[i].set_label("DCO " + std::to_string(i + 1));
 		m_DCO_Frame[i].set_border_width(1);
@@ -321,6 +324,7 @@ mks70_window::mks70_window()
 	mixer_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 	m_Editor_Box.pack_start(mixer_frame, Gtk::PACK_SHRINK);
 	mixer_grid.set_border_width(2);
+	mixer_grid.set_column_spacing(1);
 	mixer_frame.add(mixer_grid);
 
 	for (i = 0; i < 2; i++) {
@@ -385,6 +389,7 @@ mks70_window::mks70_window()
 	vcf_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 	m_Editor_Box.pack_start(vcf_frame, Gtk::PACK_SHRINK);
 	vcf_grid.set_border_width(2);
+	vcf_grid.set_column_spacing(1);
 	vcf_frame.add(vcf_grid);
 
 	// VCF HPF
@@ -409,8 +414,21 @@ mks70_window::mks70_window()
 	sc_vcf_cutoff.set_inverted(); // highest value at top
 	sc_vcf_cutoff.set_size_request(-1, range_height);
 	sc_vcf_cutoff.signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_vcf_cutoff_value_changed));
+		&mks70_window::on_vcf_cutoff_value_changed));
 	vcf_grid.attach(sc_vcf_cutoff, 1, 1, 1, 4);
+
+	// VCF Resonance
+	vcf_grid.attach(vcf_resonance_label, 2, 0, 1, 1);
+	adj_vcf_resonance = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_vcf_resonance.set_adjustment(adj_vcf_resonance);
+	sc_vcf_resonance.set_digits(0);
+	sc_vcf_resonance.set_value_pos(Gtk::POS_BOTTOM);
+	sc_vcf_resonance.set_draw_value();
+	sc_vcf_resonance.set_inverted(); // highest value at top
+	sc_vcf_resonance.set_size_request(-1, range_height);
+	sc_vcf_resonance.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_vcf_resonance_value_changed));
+	vcf_grid.attach(sc_vcf_resonance, 2, 1, 1, 4);
 
 	// VCA frame
 	vca_frame.set_border_width(1);
@@ -633,6 +651,17 @@ void mks70_window::on_mixer_mode_button_clicked()
 		}
 }
 
+void mks70_window::on_vcf_hpf_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_vcf_hpf[i].get_active()) {
+			tone->set_vcf_hpf(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;
@@ -652,6 +681,7 @@ void mks70_window::reset_controllers()
 	adj_mixer_envelope->set_value(0.0);
 	rb_mixer_dyna[0].set_active();
 	rb_mixer_mode[3].set_active();
+	rb_vcf_hpf[0].set_active();
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";
