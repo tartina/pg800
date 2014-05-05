@@ -40,7 +40,10 @@ mks70_window::mks70_window()
 	mixer_envelope_label("Envelope"),
 	sc_mixer_envelope(Gtk::ORIENTATION_VERTICAL),
 	mixer_dyna_label("Dynamics"),
-	mixer_mode_label("Env Mode")
+	mixer_mode_label("Env Mode"),
+	vcf_hpf_label("HPF"),
+	vcf_cutoff_label("Cutoff"),
+	sc_vcf_cutoff(Gtk::ORIENTATION_VERTICAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -381,6 +384,33 @@ mks70_window::mks70_window()
 	vcf_frame.set_border_width(1);
 	vcf_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 	m_Editor_Box.pack_start(vcf_frame, Gtk::PACK_SHRINK);
+	vcf_grid.set_border_width(2);
+	vcf_frame.add(vcf_grid);
+
+	// VCF HPF
+	vcf_grid.attach(vcf_hpf_label, 0, 0, 1, 1);
+	group = rb_vcf_hpf[0].get_group();
+	for (i = 1; i < 4; i++) rb_vcf_hpf[i].set_group(group);
+	rb_vcf_hpf[0].set_active();
+	for (i = 0; i < 4; i++) {
+		rb_vcf_hpf[i].set_label(std::to_string(i));
+		rb_vcf_hpf[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_vcf_hpf_button_clicked));
+		vcf_grid.attach(rb_vcf_hpf[i], 0, 1 + i, 1, 1);
+	}
+
+	// VCF Cutoff Freq
+	vcf_grid.attach(vcf_cutoff_label, 1, 0, 1, 1);
+	adj_vcf_cutoff = Gtk::Adjustment::create(127.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_vcf_cutoff.set_adjustment(adj_vcf_cutoff);
+	sc_vcf_cutoff.set_digits(0);
+	sc_vcf_cutoff.set_value_pos(Gtk::POS_BOTTOM);
+	sc_vcf_cutoff.set_draw_value();
+	sc_vcf_cutoff.set_inverted(); // highest value at top
+	sc_vcf_cutoff.set_size_request(-1, range_height);
+	sc_vcf_cutoff.signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_vcf_cutoff_value_changed));
+	vcf_grid.attach(sc_vcf_cutoff, 1, 1, 1, 4);
 
 	// VCA frame
 	vca_frame.set_border_width(1);
