@@ -53,7 +53,7 @@ private:
 	unsigned short vcf_resonance;
 	unsigned short vcf_lfo_mod_depth;
 	unsigned short vcf_env_mod_depth;
-	unsigned short vcf_key_follow; // 4 values
+	unsigned short vcf_key_follow;
 	unsigned short vcf_dynamics; // 4 values
 
 	unsigned short chorus; // 3 values

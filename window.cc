@@ -45,7 +45,13 @@ mks70_window::mks70_window()
 	vcf_cutoff_label("Cutoff"),
 	sc_vcf_cutoff(Gtk::ORIENTATION_VERTICAL),
 	vcf_resonance_label("Resonance"),
-	sc_vcf_resonance(Gtk::ORIENTATION_VERTICAL)
+	sc_vcf_resonance(Gtk::ORIENTATION_VERTICAL),
+	vcf_lfo_label("LFO"),
+	sc_vcf_lfo(Gtk::ORIENTATION_VERTICAL),
+	vcf_env_label("Envelope"),
+	sc_vcf_env(Gtk::ORIENTATION_VERTICAL),
+	vcf_key_label("Key"),
+	sc_vcf_key(Gtk::ORIENTATION_VERTICAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -429,6 +435,45 @@ mks70_window::mks70_window()
 	sc_vcf_resonance.signal_value_changed().connect(sigc::mem_fun(*this,
 		&mks70_window::on_vcf_resonance_value_changed));
 	vcf_grid.attach(sc_vcf_resonance, 2, 1, 1, 4);
+
+	// VCF LFO
+	vcf_grid.attach(vcf_lfo_label, 0, 5, 1, 1);
+	adj_vcf_lfo = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_vcf_lfo.set_adjustment(adj_vcf_lfo);
+	sc_vcf_lfo.set_digits(0);
+	sc_vcf_lfo.set_value_pos(Gtk::POS_BOTTOM);
+	sc_vcf_lfo.set_draw_value();
+	sc_vcf_lfo.set_inverted(); // highest value at top
+	sc_vcf_lfo.set_size_request(-1, range_height);
+	sc_vcf_lfo.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_vcf_lfo_value_changed));
+	vcf_grid.attach(sc_vcf_lfo, 0, 6, 1, 1);
+
+	// VCF Envelope
+	vcf_grid.attach(vcf_env_label, 1, 5, 1, 1);
+	adj_vcf_env = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_vcf_env.set_adjustment(adj_vcf_env);
+	sc_vcf_env.set_digits(0);
+	sc_vcf_env.set_value_pos(Gtk::POS_BOTTOM);
+	sc_vcf_env.set_draw_value();
+	sc_vcf_env.set_inverted(); // highest value at top
+	sc_vcf_env.set_size_request(-1, range_height);
+	sc_vcf_env.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_vcf_env_value_changed));
+	vcf_grid.attach(sc_vcf_env, 1, 6, 1, 1);
+
+	// VCF Key Follow
+	vcf_grid.attach(vcf_key_label, 2, 5, 1, 1);
+	adj_vcf_key = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_vcf_key.set_adjustment(adj_vcf_key);
+	sc_vcf_key.set_digits(0);
+	sc_vcf_key.set_value_pos(Gtk::POS_BOTTOM);
+	sc_vcf_key.set_draw_value();
+	sc_vcf_key.set_inverted(); // highest value at top
+	sc_vcf_key.set_size_request(-1, range_height);
+	sc_vcf_key.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_vcf_key_value_changed));
+	vcf_grid.attach(sc_vcf_key, 2, 6, 1, 1);
 
 	// VCA frame
 	vca_frame.set_border_width(1);

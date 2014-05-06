@@ -102,6 +102,15 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label vcf_resonance_label;
 		Gtk::Scale sc_vcf_resonance;
 		Glib::RefPtr<Gtk::Adjustment> adj_vcf_resonance;
+		Gtk::Label vcf_lfo_label;
+		Gtk::Scale sc_vcf_lfo;
+		Glib::RefPtr<Gtk::Adjustment> adj_vcf_lfo;
+		Gtk::Label vcf_env_label;
+		Gtk::Scale sc_vcf_env;
+		Glib::RefPtr<Gtk::Adjustment> adj_vcf_env;
+		Gtk::Label vcf_key_label;
+		Gtk::Scale sc_vcf_key;
+		Glib::RefPtr<Gtk::Adjustment> adj_vcf_key;
 
 		// VCA frame
 		Gtk::Frame vca_frame;
@@ -130,6 +139,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_vcf_hpf_button_clicked();
 		void on_vcf_cutoff_value_changed();
 		void on_vcf_resonance_value_changed();
+		void on_vcf_lfo_value_changed() {};
+		void on_vcf_env_value_changed() {};
+		void on_vcf_key_value_changed() {};
 
 		void get_midi_port_names();
 		void reset_controllers();

@@ -57,6 +57,9 @@ mks70_tone::mks70_tone()
 	vcf_hpf = 0;
 	vcf_cutoff_freq = 127;
 	vcf_resonance = 0;
+	vcf_lfo_mod_depth = 0;
+	vcf_env_mod_depth = 0;
+	vcf_key_follow = 0;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
