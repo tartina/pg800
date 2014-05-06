@@ -53,7 +53,13 @@ mks70_window::mks70_window()
 	vcf_key_label("Key"),
 	sc_vcf_key(Gtk::ORIENTATION_VERTICAL),
 	vcf_dyna_label("Dynamics"),
-	vcf_env_mode_label("Env Mode")
+	vcf_env_mode_label("Env Mode"),
+	vca_box(Gtk::ORIENTATION_VERTICAL),
+	vca_level_label("Level"),
+	sc_vca_level(Gtk::ORIENTATION_VERTICAL),
+	vca_env_mode_label("Env Mode"),
+	vca_dyna_label("Dynamics"),
+	vca_separator(Gtk::ORIENTATION_HORIZONTAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -511,6 +517,51 @@ mks70_window::mks70_window()
 	vca_frame.set_border_width(1);
 	vca_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 	m_Editor_Box.pack_start(vca_frame, Gtk::PACK_SHRINK);
+	vca_box.set_border_width(2);
+	vca_box.set_spacing(1);
+	vca_frame.add(vca_box);
+
+	// VCA Level
+	vca_box.pack_start(vca_level_label, Gtk::PACK_SHRINK);
+	adj_vca_level = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_vca_level.set_adjustment(adj_vca_level);
+	sc_vca_level.set_digits(0);
+	sc_vca_level.set_value_pos(Gtk::POS_BOTTOM);
+	sc_vca_level.set_draw_value();
+	sc_vca_level.set_inverted(); // highest value at top
+	sc_vca_level.set_size_request(-1, range_height);
+	sc_vca_level.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_vca_level_value_changed));
+	vca_box.pack_start(sc_vca_level, Gtk::PACK_SHRINK);
+
+	// VCA Env Mode
+	vca_box.pack_start(vca_env_mode_label, Gtk::PACK_SHRINK);
+	group = rb_vca_env_mode[0].get_group();
+	rb_vca_env_mode[1].set_group(group);
+	rb_vca_env_mode[0].set_label("Gate");
+	rb_vca_env_mode[1].set_label("Env 2");
+	rb_vca_env_mode[1].set_active();
+	for (i = 0; i < 2; i++) {
+		rb_vca_env_mode[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_vca_env_mode_button_clicked));
+		vca_box.pack_start(rb_vca_env_mode[i], Gtk::PACK_SHRINK);
+	}
+
+	// VCA Dynamics
+	vca_box.pack_start(vca_separator);
+	vca_box.pack_start(vca_dyna_label, Gtk::PACK_SHRINK);
+	group = rb_vca_dyna[0].get_group();
+	for (i = 1; i < 4; i++) rb_vca_dyna[i].set_group(group);
+	rb_vca_dyna[0].set_active();
+	rb_vca_dyna[0].set_label("Off");
+	rb_vca_dyna[1].set_label("1");
+	rb_vca_dyna[2].set_label("2");
+	rb_vca_dyna[3].set_label("3");
+	for (i = 0; i < 4; i++) {
+		rb_vca_dyna[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_vca_dyna_button_clicked));
+		vca_box.pack_start(rb_vca_dyna[i], Gtk::PACK_SHRINK);
+	}
 
 	show_all_children();
 }
@@ -786,6 +837,11 @@ void mks70_window::on_vcf_env_mode_button_clicked()
 		}
 }
 
+void mks70_window::on_vca_level_value_changed()
+{
+	tone->set_vca_level(adj_vca_level->get_value(), midi_channel, midiout, true);
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;
@@ -813,6 +869,7 @@ void mks70_window::reset_controllers()
 	adj_vcf_key->set_value(0.0);
 	rb_vcf_dyna[0].set_active();
 	rb_vcf_env_mode[3].set_active();
+	adj_vca_level->set_value(0.0);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

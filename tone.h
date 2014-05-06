@@ -57,6 +57,10 @@ private:
 	unsigned short vcf_dynamics; // 4 values
 	unsigned short vcf_env_mode; // 4 values
 
+	unsigned short vca_level;
+	unsigned short vca_dynamics; // 4 values
+	unsigned short vca_env_mode; // 2 values
+
 	unsigned short chorus; // 3 values
 
 	unsigned short lfo_waveform; // 3 values
@@ -69,7 +73,6 @@ private:
 	unsigned short env_release_time[2];
 	unsigned short env_key_follow[2]; // 4 values
 
-	unsigned short vca_env_mode; // Only 2 values
 
 	std::vector<unsigned char> message;
 
@@ -124,6 +127,8 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_vcf_env_mode(unsigned short mode, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
+	void set_vca_level(unsigned short value, unsigned short midi_channel,
+	                        RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);
