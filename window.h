@@ -128,6 +128,11 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::RadioButton rb_vca_dyna[4];
 		Gtk::Separator vca_separator;
 
+		Gtk::Box editor_box2;
+
+		// LFO Frame
+		Gtk::Frame lfo_frame;
+
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new();
@@ -158,8 +163,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_vcf_dyna_button_clicked();
 		void on_vcf_env_mode_button_clicked();
 		void on_vca_level_value_changed();
-		void on_vca_env_mode_button_clicked() {};
-		void on_vca_dyna_button_clicked() {};
+		void on_vca_env_mode_button_clicked();
+		void on_vca_dyna_button_clicked();
 
 		void get_midi_port_names();
 		void reset_controllers();

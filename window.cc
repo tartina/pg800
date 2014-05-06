@@ -59,7 +59,9 @@ mks70_window::mks70_window()
 	sc_vca_level(Gtk::ORIENTATION_VERTICAL),
 	vca_env_mode_label("Env Mode"),
 	vca_dyna_label("Dynamics"),
-	vca_separator(Gtk::ORIENTATION_HORIZONTAL)
+	vca_separator(Gtk::ORIENTATION_HORIZONTAL),
+	editor_box2(Gtk::ORIENTATION_HORIZONTAL),
+	lfo_frame("LFO")
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -154,7 +156,8 @@ mks70_window::mks70_window()
 
 	Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
 	m_Application_Box.pack_start(*pMenubar, Gtk::PACK_SHRINK);
-	m_Application_Box.pack_start(m_Editor_Box);
+	m_Application_Box.pack_start(m_Editor_Box, Gtk::PACK_SHRINK);
+	m_Application_Box.pack_start(editor_box2, Gtk::PACK_SHRINK);
 	status_bar.push("Tone A");
 	m_Application_Box.pack_end(status_bar, Gtk::PACK_SHRINK);
 
@@ -548,7 +551,7 @@ mks70_window::mks70_window()
 	}
 
 	// VCA Dynamics
-	vca_box.pack_start(vca_separator);
+	vca_box.pack_start(vca_separator, Gtk::PACK_SHRINK);
 	vca_box.pack_start(vca_dyna_label, Gtk::PACK_SHRINK);
 	group = rb_vca_dyna[0].get_group();
 	for (i = 1; i < 4; i++) rb_vca_dyna[i].set_group(group);
@@ -562,6 +565,11 @@ mks70_window::mks70_window()
 			&mks70_window::on_vca_dyna_button_clicked));
 		vca_box.pack_start(rb_vca_dyna[i], Gtk::PACK_SHRINK);
 	}
+
+	// LFO Frame
+	lfo_frame.set_border_width(1);
+	lfo_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+	editor_box2.pack_start(lfo_frame, Gtk::PACK_SHRINK);
 
 	show_all_children();
 }
@@ -842,6 +850,28 @@ void mks70_window::on_vca_level_value_changed()
 	tone->set_vca_level(adj_vca_level->get_value(), midi_channel, midiout, true);
 }
 
+void mks70_window::on_vca_env_mode_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		if (rb_vca_env_mode[i].get_active()) {
+			tone->set_vca_env_mode(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
+void mks70_window::on_vca_dyna_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_vca_dyna[i].get_active()) {
+			tone->set_vca_dyna(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;
@@ -870,6 +900,8 @@ void mks70_window::reset_controllers()
 	rb_vcf_dyna[0].set_active();
 	rb_vcf_env_mode[3].set_active();
 	adj_vca_level->set_value(0.0);
+	rb_vca_env_mode[1].set_active();
+	rb_vca_dyna[0].set_active();
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

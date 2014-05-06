@@ -129,6 +129,10 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_vca_level(unsigned short value, unsigned short midi_channel,
 	                        RtMidiOut* midi_out, bool send = false);
+	void set_vca_dyna(unsigned short dyna, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_vca_env_mode(unsigned short mode, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);

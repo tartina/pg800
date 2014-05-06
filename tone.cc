@@ -67,7 +67,7 @@ mks70_tone::mks70_tone()
 	vcf_env_mode = 3;
 	vca_level = 0;
 	vca_dynamics = 0;
-	vca_env_mode = 64;
+	vca_env_mode = 1;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
@@ -896,6 +896,74 @@ void mks70_tone::set_vca_level(unsigned short value, unsigned short midi_channel
 	}
 }
 
+void mks70_tone::set_vca_dyna(unsigned short dyna, unsigned short midi_channel,
+                              RtMidiOut* midi_out, bool send)
+{
+	if (dyna > 3) return;
+	if (dyna != vca_dynamics) {
+		vca_dynamics = dyna;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(42);
+			message.push_back(dyna * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI VCA DYNA: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_vca_env_mode(unsigned short mode, unsigned short midi_channel,
+                                   RtMidiOut* midi_out, bool send)
+{
+	if (mode > 1) return;
+	if (mode != vca_env_mode) {
+		vca_env_mode = mode;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(58);
+			message.push_back(mode * 64);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI VCA Envelope MODE: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);
@@ -935,6 +1003,8 @@ void mks70_tone::dump_tone()
 	std::cout << std::setbase(10) << "VCF Envelope: " << vcf_env_mod_depth << std::endl;
 	std::cout << std::setbase(10) << "VCF Key Follow: " << vcf_key_follow << std::endl;
 	std::cout << std::setbase(10) << "VCA Level: " << vca_level << std::endl;
+	std::cout << std::setbase(10) << "VCA Dynamics: " << vca_dynamics << std::endl;
+	std::cout << std::setbase(10) << "VCA Envelope Mode: " << vca_env_mode << std::endl;
 }
 #endif
 
