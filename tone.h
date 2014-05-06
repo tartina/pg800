@@ -109,6 +109,10 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_vcf_hpf(unsigned short value, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
+	void set_vcf_cutoff(unsigned short value, unsigned short midi_channel,
+	                        RtMidiOut* midi_out, bool send = false);
+	void set_vcf_resonance(unsigned short value, unsigned short midi_channel,
+	                        RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);

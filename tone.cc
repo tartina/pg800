@@ -55,6 +55,8 @@ mks70_tone::mks70_tone()
 	mix_dynamics = 0;
 	mix_env_mode = 3;
 	vcf_hpf = 0;
+	vcf_cutoff_freq = 127;
+	vcf_resonance = 0;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
@@ -605,6 +607,76 @@ void mks70_tone::set_vcf_hpf(unsigned short value, unsigned short midi_channel,
 	}
 }
 
+void mks70_tone::set_vcf_cutoff(unsigned short value, unsigned short midi_channel,
+                                    RtMidiOut* midi_out, bool send)
+{
+	if (value > 127) return;
+
+	if (value != vcf_cutoff_freq) {
+		vcf_cutoff_freq = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(34);
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI VCF Cutoff: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_vcf_resonance(unsigned short value, unsigned short midi_channel,
+                                    RtMidiOut* midi_out, bool send)
+{
+	if (value > 127) return;
+
+	if (value != vcf_resonance) {
+		vcf_resonance = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(35);
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI VCF Cutoff: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);
@@ -638,6 +710,8 @@ void mks70_tone::dump_tone()
 	std::cout << std::setbase(10) << "Mixer Dyna: " << mix_dynamics << std::endl;
 	std::cout << std::setbase(10) << "Mixer Mode: " << mix_env_mode << std::endl;
 	std::cout << std::setbase(10) << "VCF HPF: " << vcf_hpf << std::endl;
+	std::cout << std::setbase(10) << "VCF Cutoff: " << vcf_cutoff_freq << std::endl;
+	std::cout << std::setbase(10) << "VCF Resonance: " << vcf_resonance << std::endl;
 }
 #endif
 

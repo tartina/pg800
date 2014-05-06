@@ -662,6 +662,16 @@ void mks70_window::on_vcf_hpf_button_clicked()
 		}
 }
 
+void mks70_window::on_vcf_cutoff_value_changed()
+{
+	tone->set_vcf_cutoff(adj_vcf_cutoff->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_vcf_resonance_value_changed()
+{
+	tone->set_vcf_resonance(adj_vcf_resonance->get_value(), midi_channel, midiout, true);
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;
