@@ -51,7 +51,9 @@ mks70_window::mks70_window()
 	vcf_env_label("Envelope"),
 	sc_vcf_env(Gtk::ORIENTATION_VERTICAL),
 	vcf_key_label("Key"),
-	sc_vcf_key(Gtk::ORIENTATION_VERTICAL)
+	sc_vcf_key(Gtk::ORIENTATION_VERTICAL),
+	vcf_dyna_label("Dynamics"),
+	vcf_env_mode_label("Env Mode")
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -475,6 +477,36 @@ mks70_window::mks70_window()
 		&mks70_window::on_vcf_key_value_changed));
 	vcf_grid.attach(sc_vcf_key, 2, 6, 1, 1);
 
+	// VCF Envelope Dynamics
+	vcf_grid.attach(vcf_dyna_label, 0, 7, 1, 1);
+	group = rb_vcf_dyna[0].get_group();
+	for (i = 1; i < 4; i++) rb_vcf_dyna[i].set_group(group);
+	rb_vcf_dyna[0].set_active();
+	rb_vcf_dyna[0].set_label("Off");
+	rb_vcf_dyna[1].set_label("1");
+	rb_vcf_dyna[2].set_label("2");
+	rb_vcf_dyna[3].set_label("3");
+	for (i = 0; i < 4; i++) {
+		rb_vcf_dyna[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_vcf_dyna_button_clicked));
+		vcf_grid.attach(rb_vcf_dyna[i], 0, 8 + i, 1, 1);
+	}
+
+	// VCF Envelope Mode
+	vcf_grid.attach(vcf_env_mode_label, 1, 7, 1, 1);
+	group = rb_vcf_env_mode[0].get_group();
+	for (i = 1; i < 4; i++) rb_vcf_env_mode[i].set_group(group);
+	rb_vcf_env_mode[0].set_label("\\/2");
+	rb_vcf_env_mode[1].set_label("/\\2");
+	rb_vcf_env_mode[2].set_label("\\/1");
+	rb_vcf_env_mode[3].set_label("/\\1");
+	rb_vcf_env_mode[3].set_active();
+	for (i = 0; i < 4; i++) {
+		rb_vcf_env_mode[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_vcf_env_mode_button_clicked));
+		vcf_grid.attach(rb_vcf_env_mode[i], 1, 8 + i, 1, 1);
+	}
+	
 	// VCA frame
 	vca_frame.set_border_width(1);
 	vca_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
@@ -717,6 +749,43 @@ void mks70_window::on_vcf_resonance_value_changed()
 	tone->set_vcf_resonance(adj_vcf_resonance->get_value(), midi_channel, midiout, true);
 }
 
+void mks70_window::on_vcf_lfo_value_changed()
+{
+	tone->set_vcf_lfo(adj_vcf_lfo->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_vcf_env_value_changed()
+{
+	tone->set_vcf_envelope(adj_vcf_env->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_vcf_key_value_changed()
+{
+	tone->set_vcf_key(adj_vcf_key->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_vcf_dyna_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_vcf_dyna[i].get_active()) {
+			tone->set_vcf_dyna(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
+void mks70_window::on_vcf_env_mode_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 4; i++)
+		if (rb_vcf_env_mode[i].get_active()) {
+			tone->set_vcf_env_mode(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;
@@ -737,6 +806,13 @@ void mks70_window::reset_controllers()
 	rb_mixer_dyna[0].set_active();
 	rb_mixer_mode[3].set_active();
 	rb_vcf_hpf[0].set_active();
+	adj_vcf_cutoff->set_value(0.0);
+	adj_vcf_resonance->set_value(0.0);
+	adj_vcf_lfo->set_value(0.0);
+	adj_vcf_env->set_value(0.0);
+	adj_vcf_key->set_value(0.0);
+	rb_vcf_dyna[0].set_active();
+	rb_vcf_env_mode[3].set_active();
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

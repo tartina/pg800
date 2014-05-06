@@ -111,10 +111,14 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label vcf_key_label;
 		Gtk::Scale sc_vcf_key;
 		Glib::RefPtr<Gtk::Adjustment> adj_vcf_key;
+		Gtk::Label vcf_dyna_label;
+		Gtk::RadioButton rb_vcf_dyna[4];
+		Gtk::Label vcf_env_mode_label;
+		Gtk::RadioButton rb_vcf_env_mode[4];
 
 		// VCA frame
 		Gtk::Frame vca_frame;
-		
+
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new();
@@ -139,9 +143,11 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_vcf_hpf_button_clicked();
 		void on_vcf_cutoff_value_changed();
 		void on_vcf_resonance_value_changed();
-		void on_vcf_lfo_value_changed() {};
-		void on_vcf_env_value_changed() {};
-		void on_vcf_key_value_changed() {};
+		void on_vcf_lfo_value_changed();
+		void on_vcf_env_value_changed();
+		void on_vcf_key_value_changed();
+		void on_vcf_dyna_button_clicked();
+		void on_vcf_env_mode_button_clicked();
 
 		void get_midi_port_names();
 		void reset_controllers();

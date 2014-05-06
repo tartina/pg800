@@ -55,6 +55,7 @@ private:
 	unsigned short vcf_env_mod_depth;
 	unsigned short vcf_key_follow;
 	unsigned short vcf_dynamics; // 4 values
+	unsigned short vcf_env_mode; // 4 values
 
 	unsigned short chorus; // 3 values
 
@@ -113,6 +114,16 @@ public:
 	                        RtMidiOut* midi_out, bool send = false);
 	void set_vcf_resonance(unsigned short value, unsigned short midi_channel,
 	                        RtMidiOut* midi_out, bool send = false);
+	void set_vcf_lfo(unsigned short value, unsigned short midi_channel,
+	                        RtMidiOut* midi_out, bool send = false);
+	void set_vcf_envelope(unsigned short value, unsigned short midi_channel,
+	                        RtMidiOut* midi_out, bool send = false);
+	void set_vcf_key(unsigned short value, unsigned short midi_channel,
+	                        RtMidiOut* midi_out, bool send = false);
+	void set_vcf_dyna(unsigned short dyna, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_vcf_env_mode(unsigned short mode, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);
