@@ -617,7 +617,70 @@ mks70_window::mks70_window()
 	sc_lfo_rate.signal_value_changed().connect(sigc::mem_fun(*this,
 		&mks70_window::on_lfo_rate_value_changed));
 	lfo_grid.attach(sc_lfo_rate, 2, 1, 1, 3);
-	
+
+	// Envelope Frames
+	for (i = 0; i < 2; i++) {
+		envelope_grid[i].set_border_width(2);
+		envelope_grid[i].set_column_spacing(1);
+		envelope_frame[i].set_label("Envelope " + std::to_string(i + 1));
+		envelope_frame[i].set_border_width(1);
+		envelope_frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+		envelope_frame[i].add(envelope_grid[i]);
+		editor_box2.pack_start(envelope_frame[i], Gtk::PACK_SHRINK);
+
+		envelope_attack_label[i].set_label("Attack");
+		adj_envelope_attack[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_envelope_attack[i] = new Gtk::Scale(adj_envelope_attack[i], Gtk::ORIENTATION_VERTICAL);
+		sc_envelope_attack[i]->set_digits(0);
+		sc_envelope_attack[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_envelope_attack[i]->set_draw_value();
+		sc_envelope_attack[i]->set_inverted(); // highest value at top
+		sc_envelope_attack[i]->set_size_request(-1, range_height);
+		sc_envelope_attack[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_attack_value_changed));
+		envelope_grid[i].attach(envelope_attack_label[i], 0, 0, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_attack[i], 0, 1, 1, 1);
+
+		envelope_decay_label[i].set_label("Decay");
+		adj_envelope_decay[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_envelope_decay[i] = new Gtk::Scale(adj_envelope_decay[i], Gtk::ORIENTATION_VERTICAL);
+		sc_envelope_decay[i]->set_digits(0);
+		sc_envelope_decay[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_envelope_decay[i]->set_draw_value();
+		sc_envelope_decay[i]->set_inverted(); // highest value at top
+		sc_envelope_decay[i]->set_size_request(-1, range_height);
+		sc_envelope_decay[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_decay_value_changed));
+		envelope_grid[i].attach(envelope_decay_label[i], 1, 0, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_decay[i], 1, 1, 1, 1);
+
+		envelope_sustain_label[i].set_label("Sustain");
+		adj_envelope_sustain[i] = Gtk::Adjustment::create(127.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_envelope_sustain[i] = new Gtk::Scale(adj_envelope_sustain[i], Gtk::ORIENTATION_VERTICAL);
+		sc_envelope_sustain[i]->set_digits(0);
+		sc_envelope_sustain[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_envelope_sustain[i]->set_draw_value();
+		sc_envelope_sustain[i]->set_inverted(); // highest value at top
+		sc_envelope_sustain[i]->set_size_request(-1, range_height);
+		sc_envelope_sustain[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_sustain_value_changed));
+		envelope_grid[i].attach(envelope_sustain_label[i], 2, 0, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_sustain[i], 2, 1, 1, 1);
+		
+		envelope_release_label[i].set_label("Release");
+		adj_envelope_release[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		sc_envelope_release[i] = new Gtk::Scale(adj_envelope_release[i], Gtk::ORIENTATION_VERTICAL);
+		sc_envelope_release[i]->set_digits(0);
+		sc_envelope_release[i]->set_value_pos(Gtk::POS_BOTTOM);
+		sc_envelope_release[i]->set_draw_value();
+		sc_envelope_release[i]->set_inverted(); // highest value at top
+		sc_envelope_release[i]->set_size_request(-1, range_height);
+		sc_envelope_release[i]->signal_value_changed().connect(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_release_value_changed));
+		envelope_grid[i].attach(envelope_release_label[i], 3, 0, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_release[i], 3, 1, 1, 1);
+	}
+
 	show_all_children();
 }
 
@@ -626,6 +689,10 @@ mks70_window::~mks70_window()
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
+		delete sc_envelope_release[i];
+		delete sc_envelope_sustain[i];
+		delete sc_envelope_decay[i];
+		delete sc_envelope_attack[i];
 		delete sc_mixer_dco[i];
 		delete sc_dco_envelope[i];
 		delete sc_dco_lfo[i];
@@ -951,6 +1018,10 @@ void mks70_window::reset_controllers()
 		adj_dco_lfo[i]->set_value(0.0);
 		adj_dco_envelope[i]->set_value(0.0);
 		adj_mixer_dco[i]->set_value(0.0);
+		adj_envelope_attack[i]->set_value(0.0);
+		adj_envelope_decay[i]->set_value(0.0);
+		adj_envelope_sustain[i]->set_value(127.0);
+		adj_envelope_release[i]->set_value(0.0);
 	}
 	rb_crossmod[0].set_active();
 	adj_dco2_ftune->set_value(64.0);

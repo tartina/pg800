@@ -46,7 +46,13 @@ mks70_tone::mks70_tone()
 		dco_lfo[i] = 0;
 		dco_env[i] = 0;
 		mix_dco[i] = 0;
+		env_attack_time[i] = 0;
+		env_decay_time[i] = 0;
+		env_sustain_level[i] = 127;
+		env_release_time[i] = 0;
+		env_key_follow[i] = 0;
 	}
+
 	dco2_xmod = 0;
 	dco2_ftune = 64;
 	dco_dynamics = 0;
@@ -71,6 +77,7 @@ mks70_tone::mks70_tone()
 	lfo_waveform = 2;
 	lfo_delay_time = 0;
 	lfo_rate = 0;
+	chorus = 0;
 
 #ifdef HAVE_DEBUG
 	dump_tone();

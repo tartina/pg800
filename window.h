@@ -56,7 +56,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::RadioButton rb_crossmod[4];
 
 		Gtk::Label dco_tune_label[2];
-		Gtk::Scale* sc_dco_tune[2];
+		Gtk::Scale* sc_dco_tune[2] = {0};
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_tune[2];
 
 		Gtk::Label dco2_ftune_label;
@@ -64,10 +64,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		Glib::RefPtr<Gtk::Adjustment> adj_dco2_ftune;
 
 		Gtk::Label dco_lfo_label[2];
-		Gtk::Scale* sc_dco_lfo[2];
+		Gtk::Scale* sc_dco_lfo[2] = {0};
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_lfo[2];
 		Gtk::Label dco_envelope_label[2];
-		Gtk::Scale* sc_dco_envelope[2];
+		Gtk::Scale* sc_dco_envelope[2] = {0};
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_envelope[2];
 
 		Gtk::Label dco_dyna_label;
@@ -81,7 +81,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Frame mixer_frame;
 		Gtk::Grid mixer_grid;
 		Gtk::Label mixer_dco_label[2];
-		Gtk::Scale* sc_mixer_dco[2];
+		Gtk::Scale* sc_mixer_dco[2] = {0};
 		Glib::RefPtr<Gtk::Adjustment> adj_mixer_dco[2];
 		Gtk::Label mixer_envelope_label;
 		Gtk::Scale sc_mixer_envelope;
@@ -142,6 +142,22 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Scale sc_lfo_rate;
 		Glib::RefPtr<Gtk::Adjustment> adj_lfo_rate;
 
+		// Envelope Frames
+		Gtk::Frame envelope_frame[2];
+		Gtk::Grid envelope_grid[2];
+		Gtk::Label envelope_attack_label[2];
+		Gtk::Label envelope_decay_label[2];
+		Gtk::Label envelope_sustain_label[2];
+		Gtk::Label envelope_release_label[2];
+		Gtk::Scale* sc_envelope_attack[2] = {0};
+		Glib::RefPtr<Gtk::Adjustment> adj_envelope_attack[2];
+		Gtk::Scale* sc_envelope_decay[2] = {0};
+		Glib::RefPtr<Gtk::Adjustment> adj_envelope_decay[2];
+		Gtk::Scale* sc_envelope_sustain[2] = {0};
+		Glib::RefPtr<Gtk::Adjustment> adj_envelope_sustain[2];
+		Gtk::Scale* sc_envelope_release[2] = {0};
+		Glib::RefPtr<Gtk::Adjustment> adj_envelope_release[2];
+		
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new();
@@ -177,6 +193,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_lfo_waveform_button_clicked();
 		void on_lfo_delay_time_value_changed();
 		void on_lfo_rate_value_changed();
+		void on_envelope_attack_value_changed() {};
+		void on_envelope_decay_value_changed() {};
+		void on_envelope_sustain_value_changed() {};
+		void on_envelope_release_value_changed() {};
 
 		void get_midi_port_names();
 		void reset_controllers();
