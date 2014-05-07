@@ -64,9 +64,11 @@ mks70_window::mks70_window()
 	lfo_frame("LFO"),
 	lfo_waveform_label("Waveform"), lfo_delay_time_label("Delay Time"),
 	lfo_rate_label("Rate"), sc_lfo_delay_time(Gtk::ORIENTATION_VERTICAL),
-	sc_lfo_rate(Gtk::ORIENTATION_VERTICAL)
+	sc_lfo_rate(Gtk::ORIENTATION_VERTICAL),
+	chorus_frame("Chorus"), chorus_label("Mode"),
+	chorus_box(Gtk::ORIENTATION_VERTICAL)
 {
-	unsigned short i;
+	unsigned short i, k;
 	Gtk::RadioButton::Group group;
 	Gtk::IconInfo icon_info;
 
@@ -639,7 +641,7 @@ mks70_window::mks70_window()
 		sc_envelope_attack[i]->signal_value_changed().connect(sigc::mem_fun(*this,
 			&mks70_window::on_envelope_attack_value_changed));
 		envelope_grid[i].attach(envelope_attack_label[i], 0, 0, 1, 1);
-		envelope_grid[i].attach(*sc_envelope_attack[i], 0, 1, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_attack[i], 0, 1, 1, 4);
 
 		envelope_decay_label[i].set_label("Decay");
 		adj_envelope_decay[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
@@ -652,7 +654,7 @@ mks70_window::mks70_window()
 		sc_envelope_decay[i]->signal_value_changed().connect(sigc::mem_fun(*this,
 			&mks70_window::on_envelope_decay_value_changed));
 		envelope_grid[i].attach(envelope_decay_label[i], 1, 0, 1, 1);
-		envelope_grid[i].attach(*sc_envelope_decay[i], 1, 1, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_decay[i], 1, 1, 1, 4);
 
 		envelope_sustain_label[i].set_label("Sustain");
 		adj_envelope_sustain[i] = Gtk::Adjustment::create(127.0, 0.0, 127.0, 1.0, 10.0, 0.0);
@@ -665,7 +667,7 @@ mks70_window::mks70_window()
 		sc_envelope_sustain[i]->signal_value_changed().connect(sigc::mem_fun(*this,
 			&mks70_window::on_envelope_sustain_value_changed));
 		envelope_grid[i].attach(envelope_sustain_label[i], 2, 0, 1, 1);
-		envelope_grid[i].attach(*sc_envelope_sustain[i], 2, 1, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_sustain[i], 2, 1, 1, 4);
 		
 		envelope_release_label[i].set_label("Release");
 		adj_envelope_release[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
@@ -678,9 +680,43 @@ mks70_window::mks70_window()
 		sc_envelope_release[i]->signal_value_changed().connect(sigc::mem_fun(*this,
 			&mks70_window::on_envelope_release_value_changed));
 		envelope_grid[i].attach(envelope_release_label[i], 3, 0, 1, 1);
-		envelope_grid[i].attach(*sc_envelope_release[i], 3, 1, 1, 1);
+		envelope_grid[i].attach(*sc_envelope_release[i], 3, 1, 1, 4);
+
+		envelope_key_follow_label[i].set_label("Key Follow");
+		envelope_grid[i].attach(envelope_key_follow_label[i], 4, 0, 1, 1);
+		group = rb_envelope_key_follow[0][i].get_group();
+		for (k = 1; k < 4; k++) rb_envelope_key_follow[k][i].set_group(group);
+		rb_envelope_key_follow[0][i].set_label("Off");
+		rb_envelope_key_follow[1][i].set_label("1");
+		rb_envelope_key_follow[2][i].set_label("2");
+		rb_envelope_key_follow[3][i].set_label("3");
+		rb_envelope_key_follow[0][i].set_active();
+		for (k = 0; k < 4; k++) {
+			rb_envelope_key_follow[k][i].signal_clicked().connect(sigc::mem_fun(*this,
+				&mks70_window::on_envelope_key_follow_button_clicked));
+			envelope_grid[i].attach(rb_envelope_key_follow[k][i], 4, 1 + k, 1, 1);
+		}
 	}
 
+	// Chorus Frame
+	chorus_frame.set_border_width(1);
+	chorus_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+	chorus_box.set_border_width(2);
+	chorus_frame.add(chorus_box);
+	editor_box2.pack_start(chorus_frame, Gtk::PACK_SHRINK);
+	chorus_box.pack_start(chorus_label, Gtk::PACK_SHRINK);
+	group = rb_chorus[0].get_group();
+	rb_chorus[1].set_group(group);
+	rb_chorus[2].set_group(group);
+	rb_chorus[0].set_label("Off");
+	rb_chorus[1].set_label("1");
+	rb_chorus[2].set_label("2");
+	for (i = 0; i < 3; i++) {
+		rb_chorus[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_chorus_button_clicked));
+		chorus_box.pack_start(rb_chorus[i], Gtk::PACK_SHRINK);
+	}
+	
 	show_all_children();
 }
 
@@ -1022,7 +1058,9 @@ void mks70_window::reset_controllers()
 		adj_envelope_decay[i]->set_value(0.0);
 		adj_envelope_sustain[i]->set_value(127.0);
 		adj_envelope_release[i]->set_value(0.0);
+		rb_envelope_key_follow[0][i].set_active();
 	}
+
 	rb_crossmod[0].set_active();
 	adj_dco2_ftune->set_value(64.0);
 	rb_dco_dyna[0].set_active();
@@ -1044,6 +1082,7 @@ void mks70_window::reset_controllers()
 	rb_lfo_waveform[2].set_active();
 	adj_lfo_delay_time->set_value(0.0);
 	adj_lfo_rate->set_value(0.0);
+	rb_chorus[0].set_active();
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

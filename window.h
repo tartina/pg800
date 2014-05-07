@@ -157,7 +157,15 @@ class mks70_window : public Gtk::ApplicationWindow
 		Glib::RefPtr<Gtk::Adjustment> adj_envelope_sustain[2];
 		Gtk::Scale* sc_envelope_release[2] = {0};
 		Glib::RefPtr<Gtk::Adjustment> adj_envelope_release[2];
-		
+		Gtk::Label envelope_key_follow_label[2];
+		Gtk::RadioButton rb_envelope_key_follow[4][2];
+
+		// Chorus Frame
+		Gtk::Frame chorus_frame;
+		Gtk::Box chorus_box;
+		Gtk::Label chorus_label;
+		Gtk::RadioButton rb_chorus[3];
+
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new();
@@ -197,6 +205,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_envelope_decay_value_changed() {};
 		void on_envelope_sustain_value_changed() {};
 		void on_envelope_release_value_changed() {};
+		void on_envelope_key_follow_button_clicked() {};
+		void on_chorus_button_clicked() {};
 
 		void get_midi_port_names();
 		void reset_controllers();
