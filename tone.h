@@ -139,6 +139,21 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_lfo_rate(unsigned short value, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
+	void set_envelope_attack(unsigned short envelope, unsigned short value,
+	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         bool send = false);
+	void set_envelope_decay(unsigned short envelope, unsigned short value,
+	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         bool send = false);
+	void set_envelope_sustain(unsigned short envelope, unsigned short value,
+	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         bool send = false);
+	void set_envelope_release(unsigned short envelope, unsigned short value,
+	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         bool send = false);
+	void set_envelope_key_follow(unsigned short envelope, unsigned short value,
+	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);

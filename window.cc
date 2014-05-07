@@ -1043,6 +1043,52 @@ void mks70_window::on_lfo_rate_value_changed()
 	tone->set_lfo_rate(adj_lfo_rate->get_value(), midi_channel, midiout, true);
 }
 
+void mks70_window::on_envelope_attack_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_envelope_attack(i, adj_envelope_attack[i]->get_value(),
+		                          midi_channel, midiout, true);
+}
+
+void mks70_window::on_envelope_decay_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_envelope_decay(i, adj_envelope_decay[i]->get_value(),
+		                          midi_channel, midiout, true);
+}
+
+void mks70_window::on_envelope_sustain_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_envelope_sustain(i, adj_envelope_sustain[i]->get_value(),
+		                          midi_channel, midiout, true);
+}
+
+void mks70_window::on_envelope_release_value_changed()
+{
+	unsigned short i;
+
+	for (i = 0; i < 2; i++)
+		tone->set_envelope_release(i, adj_envelope_release[i]->get_value(),
+		                          midi_channel, midiout, true);
+}
+
+void mks70_window::on_envelope_key_follow_button_clicked()
+{
+	unsigned short i, k;
+
+	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
+		if (rb_envelope_key_follow[k][i].get_active())
+			tone->set_envelope_key_follow(i, k, midi_channel, midiout, true);
+	}
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;

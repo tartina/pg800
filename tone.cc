@@ -1078,6 +1078,236 @@ void mks70_tone::set_lfo_rate(unsigned short value, unsigned short midi_channel,
 	}
 }
 
+void mks70_tone::set_envelope_attack(unsigned short envelope, unsigned short value,
+                              unsigned short midi_channel, RtMidiOut* midi_out,
+                              bool send)
+{
+	if (envelope > 1 || value > 127) return;
+
+	if (value != env_attack_time[envelope]) {
+		env_attack_time[envelope] = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			switch(envelope) {
+				case 0:
+					message.push_back(47);
+					break;
+				case 1:
+					message.push_back(52);
+					break;
+				default:
+					// Error if here
+					assert(0);
+					break;
+			}
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Envelope Attack: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_envelope_decay(unsigned short envelope, unsigned short value,
+                              unsigned short midi_channel, RtMidiOut* midi_out,
+                              bool send)
+{
+	if (envelope > 1 || value > 127) return;
+
+	if (value != env_decay_time[envelope]) {
+		env_decay_time[envelope] = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			switch(envelope) {
+				case 0:
+					message.push_back(48);
+					break;
+				case 1:
+					message.push_back(53);
+					break;
+				default:
+					// Error if here
+					assert(0);
+					break;
+			}
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Envelope Decay: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_envelope_sustain(unsigned short envelope, unsigned short value,
+                              unsigned short midi_channel, RtMidiOut* midi_out,
+                              bool send)
+{
+	if (envelope > 1 || value > 127) return;
+
+	if (value != env_sustain_level[envelope]) {
+		env_sustain_level[envelope] = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			switch(envelope) {
+				case 0:
+					message.push_back(49);
+					break;
+				case 1:
+					message.push_back(54);
+					break;
+				default:
+					// Error if here
+					assert(0);
+					break;
+			}
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Envelope Sustain: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_envelope_release(unsigned short envelope, unsigned short value,
+                              unsigned short midi_channel, RtMidiOut* midi_out,
+                              bool send)
+{
+	if (envelope > 1 || value > 127) return;
+
+	if (value != env_release_time[envelope]) {
+		env_release_time[envelope] = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			switch(envelope) {
+				case 0:
+					message.push_back(50);
+					break;
+				case 1:
+					message.push_back(55);
+					break;
+				default:
+					// Error if here
+					assert(0);
+					break;
+			}
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Envelope Release: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_envelope_key_follow(unsigned short envelope, unsigned short value,
+                               unsigned short midi_channel, RtMidiOut* midi_out, bool send)
+{
+	if (envelope > 1 || value > 3) return;
+
+	if (value != env_key_follow[envelope]) {
+		env_key_follow[envelope] = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			switch(envelope) {
+				case 0:
+					message.push_back(51);
+					break;
+				case 1:
+					message.push_back(56);
+					break;
+			}
+			message.push_back(value * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Envelope Key Follow: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);
@@ -1102,6 +1332,16 @@ void mks70_tone::dump_tone()
 		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Lfo: " << dco_lfo[i] << std::endl;
 		std::cout << std::setbase(10) << "DCO" << (i + 1) << " Envelope: " << dco_env[i] << std::endl;
 		std::cout << std::setbase(10) << "Mixer DCO" << (i + 1) << ": " << mix_dco[i] << std::endl;
+		std::cout << std::setbase(10) << "Envelope " << (i + 1) << " Attack: "
+			<< env_attack_time[i] << std::endl;
+		std::cout << std::setbase(10) << "Envelope " << (i + 1) << " Decay: "
+			<< env_decay_time[i] << std::endl;
+		std::cout << std::setbase(10) << "Envelope " << (i + 1) << " Sustain: "
+			<< env_sustain_level[i] << std::endl;
+		std::cout << std::setbase(10) << "Envelope " << (i + 1) << " Release: "
+			<< env_release_time[i] << std::endl;
+		std::cout << std::setbase(10) << "Envelope " << (i + 1) << " Key Follow: "
+			<< env_key_follow[i] << std::endl;
 	}
 	std::cout << std::setbase(10) << "DCO2 XMod: " << dco2_xmod << std::endl;
 	std::cout << std::setbase(10) << "DCO2 FTune: " << dco2_ftune << std::endl;
@@ -1122,6 +1362,7 @@ void mks70_tone::dump_tone()
 	std::cout << std::setbase(10) << "LFO Waveform: " << lfo_waveform << std::endl;
 	std::cout << std::setbase(10) << "LFO Delay Time: " << lfo_delay_time << std::endl;
 	std::cout << std::setbase(10) << "LFO Rate: " << lfo_rate << std::endl;
+	std::cout << std::setbase(10) << "Chorus: " << chorus << std::endl;
 }
 #endif
 
