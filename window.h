@@ -170,7 +170,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_action_file_open() {};
 		void on_action_file_new();
 		void on_action_file_save() {};
-		void on_action_file_send() {};
+		void on_action_file_send();
 		void on_action_file_preferences();
 		void inline on_action_file_quit() {hide();};
 		void on_action_help_about();

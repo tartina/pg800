@@ -89,6 +89,9 @@ mks70_window::mks70_window()
 	catch (const Gdk::PixbufError& pixbuf_error) {
 		std::cerr << pixbuf_error.what() << std::endl;
 	}
+	catch (const Glib::FileError& file_error) {
+		std::cerr << file_error.what() << std::endl;
+	}
 
 	tone = new mks70_tone();
 
@@ -784,6 +787,22 @@ void mks70_window::on_action_file_new()
 		tone = new mks70_tone();
 		reset_controllers();
 	}
+	delete dialog;
+}
+
+void mks70_window::on_action_file_send()
+{
+	Gtk::MessageDialog* dialog;
+	int result;
+
+	dialog = new Gtk::MessageDialog("Send this patch?", false,
+	                               Gtk::MessageType::MESSAGE_QUESTION,
+	                               Gtk::ButtonsType::BUTTONS_OK_CANCEL,
+	                               true);
+	result = dialog->run();
+	if (result == Gtk::ResponseType::RESPONSE_OK)
+		tone->apr_send(midi_channel, midiout);
+
 	delete dialog;
 }
 

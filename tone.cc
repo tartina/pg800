@@ -1352,6 +1352,20 @@ void mks70_tone::set_tone_number(const unsigned short tone)
 	if (tone < 2) tone_number = tone;
 }
 
+void mks70_tone::apr_send(unsigned short midi_channel, RtMidiOut* midi_out)
+{
+	message.clear();
+	message.push_back(0xF0);
+	message.push_back(0x41);
+	message.push_back(0x35);
+	message.push_back(midi_channel);
+	message.push_back(0x24);
+	message.push_back(0x20);
+	message.push_back(tone_number + 1);
+	// Message: 59 byte
+	message.push_back(0xF7);
+}
+
 #ifdef HAVE_DEBUG
 void mks70_tone::dump_tone()
 {

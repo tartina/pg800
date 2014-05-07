@@ -79,7 +79,7 @@ public:
 	static const std::string init_tone_name;
 	mks70_tone();
 	virtual ~mks70_tone();
-	bool apr_send(unsigned short midi_channel, unsigned short tone);
+	void apr_send(unsigned short midi_channel, RtMidiOut* midi_out);
 
 	inline std::string get_name() {return name;};
 	void set_name(std::string newname);
