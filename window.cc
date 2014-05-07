@@ -1089,6 +1089,16 @@ void mks70_window::on_envelope_key_follow_button_clicked()
 	}
 }
 
+void mks70_window::on_chorus_button_clicked()
+{
+	unsigned short i;
+	for (i = 0; i < 3; i++)
+		if (rb_chorus[i].get_active()) {
+			tone->set_chorus(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
 void mks70_window::reset_controllers()
 {
 	unsigned short i;

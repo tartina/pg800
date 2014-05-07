@@ -1308,6 +1308,40 @@ void mks70_tone::set_envelope_key_follow(unsigned short envelope, unsigned short
 	}
 }
 
+void mks70_tone::set_chorus(unsigned short value, unsigned short midi_channel,
+                              RtMidiOut* midi_out, bool send)
+{
+	if (value > 2) return;
+	if (value != chorus) {
+		chorus = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(43);
+			message.push_back(chorus * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI Chorus: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);

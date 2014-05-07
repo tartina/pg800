@@ -73,7 +73,6 @@ private:
 	unsigned short env_release_time[2];
 	unsigned short env_key_follow[2]; // 4 values
 
-
 	std::vector<unsigned char> message;
 
 public:
@@ -154,6 +153,8 @@ public:
 	void set_envelope_key_follow(unsigned short envelope, unsigned short value,
 	                         unsigned short midi_channel, RtMidiOut* midi_out,
 	                         bool send = false);
+	void set_chorus(unsigned short value, unsigned short midi_channel,
+	                RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);

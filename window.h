@@ -206,7 +206,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_envelope_sustain_value_changed();
 		void on_envelope_release_value_changed();
 		void on_envelope_key_follow_button_clicked();
-		void on_chorus_button_clicked() {};
+		void on_chorus_button_clicked();
 
 		void get_midi_port_names();
 		void reset_controllers();
