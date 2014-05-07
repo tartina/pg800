@@ -133,6 +133,12 @@ public:
 	                       RtMidiOut* midi_out, bool send = false);
 	void set_vca_env_mode(unsigned short mode, unsigned short midi_channel,
 	                       RtMidiOut* midi_out, bool send = false);
+	void set_lfo_waveform(unsigned short waveform, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_lfo_delay_time(unsigned short value, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
+	void set_lfo_rate(unsigned short value, unsigned short midi_channel,
+	                       RtMidiOut* midi_out, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);

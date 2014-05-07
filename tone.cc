@@ -68,6 +68,9 @@ mks70_tone::mks70_tone()
 	vca_level = 0;
 	vca_dynamics = 0;
 	vca_env_mode = 1;
+	lfo_waveform = 2;
+	lfo_delay_time = 0;
+	lfo_rate = 0;
 
 #ifdef HAVE_DEBUG
 	dump_tone();
@@ -964,6 +967,110 @@ void mks70_tone::set_vca_env_mode(unsigned short mode, unsigned short midi_chann
 	}
 }
 
+void mks70_tone::set_lfo_waveform(unsigned short waveform, unsigned short midi_channel,
+                                   RtMidiOut* midi_out, bool send)
+{
+	if (waveform > 2) return;
+	if (waveform != lfo_waveform) {
+		lfo_waveform = waveform;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(44);
+			message.push_back(waveform * 32);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI LFO Waveform: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// TODO send dco_wave via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_lfo_delay_time(unsigned short value, unsigned short midi_channel,
+                                    RtMidiOut* midi_out, bool send)
+{
+	if (value > 127) return;
+
+	if (value != lfo_delay_time) {
+		lfo_delay_time = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(45);
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI LFO Delay Time: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
+void mks70_tone::set_lfo_rate(unsigned short value, unsigned short midi_channel,
+                                    RtMidiOut* midi_out, bool send)
+{
+	if (value > 127) return;
+
+	if (value != lfo_rate) {
+		lfo_rate = value;
+		if (send) {
+			message.clear();
+			message.push_back(0xF0);
+			message.push_back(0x41);
+			message.push_back(0x36);
+			message.push_back(midi_channel);
+			message.push_back(0x24);
+			message.push_back(0x20);
+			message.push_back(tone_number + 1);
+			message.push_back(46);
+			message.push_back(value);
+			message.push_back(0xF7);
+#ifdef HAVE_DEBUG
+			std::cout << "MIDI LFO Rate: ";
+			for (std::vector<unsigned char>::iterator it = message.begin();
+			     it < message.end(); ++it)
+				std::cout << std::setbase(16) << (unsigned short)*it << " ";
+			std::cout << std::endl;
+#endif
+			// Send dco tune via MIDI
+			midi_out->sendMessage(&message);
+		}
+#ifdef HAVE_DEBUG
+		dump_tone();
+#endif
+	}
+}
+
 void mks70_tone::set_name(const std::string& name)
 {
 	this->name = name.substr(0 ,10);
@@ -1005,6 +1112,9 @@ void mks70_tone::dump_tone()
 	std::cout << std::setbase(10) << "VCA Level: " << vca_level << std::endl;
 	std::cout << std::setbase(10) << "VCA Dynamics: " << vca_dynamics << std::endl;
 	std::cout << std::setbase(10) << "VCA Envelope Mode: " << vca_env_mode << std::endl;
+	std::cout << std::setbase(10) << "LFO Waveform: " << lfo_waveform << std::endl;
+	std::cout << std::setbase(10) << "LFO Delay Time: " << lfo_delay_time << std::endl;
+	std::cout << std::setbase(10) << "LFO Rate: " << lfo_rate << std::endl;
 }
 #endif
 

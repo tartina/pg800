@@ -63,7 +63,8 @@ mks70_window::mks70_window()
 	editor_box2(Gtk::ORIENTATION_HORIZONTAL),
 	lfo_frame("LFO"),
 	lfo_waveform_label("Waveform"), lfo_delay_time_label("Delay Time"),
-	lfo_rate_label("Rate")
+	lfo_rate_label("Rate"), sc_lfo_delay_time(Gtk::ORIENTATION_VERTICAL),
+	sc_lfo_rate(Gtk::ORIENTATION_VERTICAL)
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -603,8 +604,19 @@ mks70_window::mks70_window()
 	sc_lfo_delay_time.signal_value_changed().connect(sigc::mem_fun(*this,
 		&mks70_window::on_lfo_delay_time_value_changed));
 	lfo_grid.attach(sc_lfo_delay_time, 1, 1, 1, 3);
-	
+
 	// LFO Rate
+	lfo_grid.attach(lfo_rate_label, 2, 0, 1, 1);
+	adj_lfo_rate = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_lfo_rate.set_adjustment(adj_lfo_rate);
+	sc_lfo_rate.set_digits(0);
+	sc_lfo_rate.set_value_pos(Gtk::POS_BOTTOM);
+	sc_lfo_rate.set_draw_value();
+	sc_lfo_rate.set_inverted(); // highest value at top
+	sc_lfo_rate.set_size_request(-1, range_height);
+	sc_lfo_rate.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_lfo_rate_value_changed));
+	lfo_grid.attach(sc_lfo_rate, 2, 1, 1, 3);
 	
 	show_all_children();
 }
@@ -905,6 +917,27 @@ void mks70_window::on_vca_dyna_button_clicked()
 			tone->set_vca_dyna(i, midi_channel, midiout, true);
 			break;
 		}
+}
+
+void mks70_window::on_lfo_waveform_button_clicked()
+{
+	unsigned short i;
+
+	for (i = 0; i < 3; i++)
+		if (rb_lfo_waveform[i].get_active()) {
+			tone->set_lfo_waveform(i, midi_channel, midiout, true);
+			break;
+		}
+}
+
+void mks70_window::on_lfo_delay_time_value_changed()
+{
+	tone->set_lfo_delay_time(adj_lfo_delay_time->get_value(), midi_channel, midiout, true);
+}
+
+void mks70_window::on_lfo_rate_value_changed()
+{
+	tone->set_lfo_rate(adj_lfo_rate->get_value(), midi_channel, midiout, true);
 }
 
 void mks70_window::reset_controllers()

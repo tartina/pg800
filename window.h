@@ -141,7 +141,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label lfo_rate_label;
 		Gtk::Scale sc_lfo_rate;
 		Glib::RefPtr<Gtk::Adjustment> adj_lfo_rate;
-		
+
 		// Signal handlers
 		void on_action_file_open() {};
 		void on_action_file_new();
@@ -174,9 +174,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_vca_level_value_changed();
 		void on_vca_env_mode_button_clicked();
 		void on_vca_dyna_button_clicked();
-		void on_lfo_waveform_button_clicked() {};
-		void on_lfo_delay_time_value_changed() {};
-		void on_lfo_rate_value_changed() {};
+		void on_lfo_waveform_button_clicked();
+		void on_lfo_delay_time_value_changed();
+		void on_lfo_rate_value_changed();
 
 		void get_midi_port_names();
 		void reset_controllers();
