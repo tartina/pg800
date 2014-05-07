@@ -61,7 +61,9 @@ mks70_window::mks70_window()
 	vca_dyna_label("Dynamics"),
 	vca_separator(Gtk::ORIENTATION_HORIZONTAL),
 	editor_box2(Gtk::ORIENTATION_HORIZONTAL),
-	lfo_frame("LFO")
+	lfo_frame("LFO"),
+	lfo_waveform_label("Waveform"), lfo_delay_time_label("Delay Time"),
+	lfo_rate_label("Rate")
 {
 	unsigned short i;
 	Gtk::RadioButton::Group group;
@@ -570,7 +572,40 @@ mks70_window::mks70_window()
 	lfo_frame.set_border_width(1);
 	lfo_frame.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 	editor_box2.pack_start(lfo_frame, Gtk::PACK_SHRINK);
+	lfo_grid.set_border_width(2);
+	lfo_grid.set_column_spacing(1);
+	lfo_frame.add(lfo_grid);
 
+	// LFO Waveform
+	lfo_grid.attach(lfo_waveform_label, 0, 0, 1, 1);
+	group = rb_lfo_waveform[0].get_group();
+	rb_lfo_waveform[1].set_group(group);
+	rb_lfo_waveform[2].set_group(group);
+	rb_lfo_waveform[0].set_label("Random");
+	rb_lfo_waveform[1].set_label("Square");
+	rb_lfo_waveform[2].set_label("Triangle");
+	rb_lfo_waveform[2].set_active();
+	for (i = 0; i < 3; i++) {
+		rb_lfo_waveform[i].signal_clicked().connect(sigc::mem_fun(*this,
+			&mks70_window::on_lfo_waveform_button_clicked));
+		lfo_grid.attach(rb_lfo_waveform[i], 0, 1 + i, 1, 1);
+	}
+
+	// LFO Delay Time
+	lfo_grid.attach(lfo_delay_time_label, 1, 0, 1, 1);
+	adj_lfo_delay_time = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	sc_lfo_delay_time.set_adjustment(adj_lfo_delay_time);
+	sc_lfo_delay_time.set_digits(0);
+	sc_lfo_delay_time.set_value_pos(Gtk::POS_BOTTOM);
+	sc_lfo_delay_time.set_draw_value();
+	sc_lfo_delay_time.set_inverted(); // highest value at top
+	sc_lfo_delay_time.set_size_request(-1, range_height);
+	sc_lfo_delay_time.signal_value_changed().connect(sigc::mem_fun(*this,
+		&mks70_window::on_lfo_delay_time_value_changed));
+	lfo_grid.attach(sc_lfo_delay_time, 1, 1, 1, 3);
+	
+	// LFO Rate
+	
 	show_all_children();
 }
 
@@ -902,6 +937,9 @@ void mks70_window::reset_controllers()
 	adj_vca_level->set_value(0.0);
 	rb_vca_env_mode[1].set_active();
 	rb_vca_dyna[0].set_active();
+	rb_lfo_waveform[2].set_active();
+	adj_lfo_delay_time->set_value(0.0);
+	adj_lfo_rate->set_value(0.0);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";
