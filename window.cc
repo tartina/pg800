@@ -224,9 +224,9 @@ mks70_window::mks70_window()
 		m_Wave_Label[i].set_label("Waveform");
 		dco_grid[i].attach(m_Wave_Label[i], 1, 0, 1 ,1);
 		dco_grid[i].attach(m_rb_dco_wave_noise[i], 1, 1, 1,1);
-		dco_grid[i].attach(m_rb_dco_wave_saw[i], 1, 2, 1 ,1);
+		dco_grid[i].attach(m_rb_dco_wave_square[i], 1, 2, 1 ,1);
 		dco_grid[i].attach(m_rb_dco_wave_pulse[i], 1, 3, 1 ,1);
-		dco_grid[i].attach(m_rb_dco_wave_square[i], 1, 4, 1 ,1);
+		dco_grid[i].attach(m_rb_dco_wave_saw[i], 1, 4, 1 ,1);
 
 		m_DCO_Frame[i].add(dco_grid[i]);
 		m_Editor_Box.pack_start(m_DCO_Frame[i], Gtk::PACK_SHRINK);
@@ -763,11 +763,11 @@ void mks70_window::on_dco_wave_button_clicked()
 	for (i = 0; i < 2; i++) {
 		if (m_rb_dco_wave_noise[i].get_active())
 			tone->set_dco_wave(i, 0, midi_channel, midiout, true);
-		if (m_rb_dco_wave_saw[i].get_active())
+		if (m_rb_dco_wave_square[i].get_active())
 			tone->set_dco_wave(i, 1, midi_channel, midiout, true);
 		if (m_rb_dco_wave_pulse[i].get_active())
 			tone->set_dco_wave(i, 2, midi_channel, midiout, true);
-		if (m_rb_dco_wave_square[i].get_active())
+		if (m_rb_dco_wave_saw[i].get_active())
 			tone->set_dco_wave(i, 3, midi_channel, midiout, true);
 	}
 }
