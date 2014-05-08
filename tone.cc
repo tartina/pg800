@@ -1354,6 +1354,9 @@ void mks70_tone::set_tone_number(const unsigned short tone)
 
 void mks70_tone::apr_send(unsigned short midi_channel, RtMidiOut* midi_out)
 {
+	std::string::const_iterator it;
+	unsigned short i;
+
 	message.clear();
 	message.push_back(0xF0);
 	message.push_back(0x41);
@@ -1363,7 +1366,65 @@ void mks70_tone::apr_send(unsigned short midi_channel, RtMidiOut* midi_out)
 	message.push_back(0x20);
 	message.push_back(tone_number + 1);
 	// Message: 59 byte
+	for (it = name.begin(), i = 0; i < 10 && it < name.end(); ++i, ++it)
+		message.push_back(*it);
+	for (; i < 10; i++) message.push_back(' ');
+	message.push_back(0); // Byte 10 undefined
+	message.push_back(dco_range[0] * 32);
+	message.push_back(dco_wave[0] * 32);
+	message.push_back(dco_tune[0]);
+	message.push_back(dco_lfo[0]);
+	message.push_back(dco_env[0]);
+	message.push_back(dco_range[1] * 32);
+	message.push_back(dco_wave[1] * 32);
+	message.push_back(dco2_xmod * 32);
+	message.push_back(dco_tune[1]);
+	message.push_back(dco2_ftune);
+	message.push_back(dco_lfo[1]);
+	message.push_back(dco_env[1]);
+	message.push_back(0); // Byte 23 undefined
+	message.push_back(0); // Byte 24 undefined
+	message.push_back(0); // Byte 25 undefined
+	message.push_back(dco_dynamics * 32);
+	message.push_back(dco_mode * 32);
+	message.push_back(mix_dco[0]);
+	message.push_back(mix_dco[1]);
+	message.push_back(mix_env);
+	message.push_back(mix_dynamics * 32);
+	message.push_back(mix_env_mode * 32);
+	message.push_back(vcf_hpf * 32);
+	message.push_back(vcf_cutoff_freq);
+	message.push_back(vcf_resonance);
+	message.push_back(vcf_lfo_mod_depth);
+	message.push_back(vcf_env_mod_depth);
+	message.push_back(vcf_key_follow);
+	message.push_back(vcf_dynamics * 32);
+	message.push_back(vcf_env_mode * 32);
+	message.push_back(vca_level);
+	message.push_back(vca_dynamics * 32);
+	message.push_back(chorus * 32);
+	message.push_back(lfo_waveform * 32);
+	message.push_back(lfo_delay_time);
+	message.push_back(lfo_rate);
+	for (i = 0; i < 2; i++) {
+		message.push_back(env_attack_time[i]);
+		message.push_back(env_decay_time[i]);
+		message.push_back(env_sustain_level[i]);
+		message.push_back(env_release_time[i]);
+		message.push_back(env_key_follow[i] * 32);
+	}
+	message.push_back(0); // Byte 57 undefined
+	message.push_back(vca_env_mode * 64);
 	message.push_back(0xF7);
+
+#ifdef HAVE_DEBUG
+	std::cout << "MIDI APR Send: ";
+	for (std::vector<unsigned char>::iterator it = message.begin();
+	     it < message.end(); ++it)
+		std::cout << std::setbase(16) << (unsigned short)*it << " ";
+	std::cout << std::endl;
+#endif
+	midi_out->sendMessage(&message);
 }
 
 #ifdef HAVE_DEBUG
