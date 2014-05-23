@@ -123,7 +123,7 @@ mks70_window::mks70_window()
 	m_refActionGroup->add( Gtk::Action::create("Open", "_Open"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_open) );
 	m_refActionGroup->add( Gtk::Action::create("Saveas", "_Save as"),
-		sigc::mem_fun(*this, &mks70_window::on_action_file_save) );
+		sigc::mem_fun(*this, &mks70_window::on_action_file_save_as) );
 	m_refActionGroup->add( Gtk::Action::create("Send", "S_end patch"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_send) );
 	m_refActionGroup->add( Gtk::Action::create("Preferences", "_Preferences"),
@@ -787,6 +787,34 @@ void mks70_window::on_action_file_new()
 		tone = new mks70_tone();
 		reset_controllers();
 	}
+	delete dialog;
+}
+
+void mks70_window::on_action_file_open()
+{
+	Gtk::FileChooserDialog* dialog;
+	int result;
+
+	dialog = new Gtk::FileChooserDialog("Open tone",
+	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog->add_button("Open", Gtk::RESPONSE_OK);
+
+	result = dialog->run();
+	delete dialog;
+}
+
+void mks70_window::on_action_file_save_as()
+{
+	Gtk::FileChooserDialog* dialog;
+	int result;
+
+	dialog = new Gtk::FileChooserDialog("Save tone",
+	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog->add_button("Open", Gtk::RESPONSE_OK);
+
+	result = dialog->run();
 	delete dialog;
 }
 

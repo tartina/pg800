@@ -167,9 +167,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::RadioButton rb_chorus[3];
 
 		// Signal handlers
-		void on_action_file_open() {};
+		void on_action_file_open();
 		void on_action_file_new();
-		void on_action_file_save() {};
+		void on_action_file_save_as();
 		void on_action_file_send();
 		void on_action_file_preferences();
 		void inline on_action_file_quit() {hide();};
