@@ -812,9 +812,13 @@ void mks70_window::on_action_file_save_as()
 	dialog = new Gtk::FileChooserDialog("Save tone",
 	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog->add_button("Open", Gtk::RESPONSE_OK);
+	dialog->add_button("Save", Gtk::RESPONSE_OK);
 
 	result = dialog->run();
+	if (result == Gtk::ResponseType::RESPONSE_OK) {
+		tone->save_to_file(dialog->get_filename());
+	}
+
 	delete dialog;
 }
 

@@ -160,8 +160,10 @@ public:
 	void set_tone_number(const unsigned short tone);
 	unsigned short get_tone_number() {return tone_number;};
 
+	void save_to_file(const std::string& file_name) const;
+
 #ifdef HAVE_DEBUG
-	void dump_tone();
+	void dump_tone() const;
 #endif
 };
 

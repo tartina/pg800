@@ -30,6 +30,7 @@
 
 #include <vector>
 #include <cassert>
+#include <libxml++/libxml++.h>
 #include "tone.h"
 
 mks70_tone::mks70_tone()
@@ -1427,8 +1428,41 @@ void mks70_tone::apr_send(unsigned short midi_channel, RtMidiOut* midi_out)
 	midi_out->sendMessage(&message);
 }
 
+void mks70_tone::save_to_file(const std::string& file_name) const
+{
+	unsigned short i;
+	xmlpp::Document* doc = 0;
+	xmlpp::Element* root_node = 0;
+	xmlpp::Element* current_node = 0;
+	xmlpp::Element* dco[2] = {0,};
+	xmlpp::Element* elem[2] = {0,};
+
+	doc = new xmlpp::Document();
+	root_node = doc->create_root_node("mks70tone", "http://heavyware.it/namespace/mks70",
+	                                  "mks70");
+	current_node = root_node->add_child("name");
+	current_node->add_child_text(name);
+
+	for (i = 0; i < 2; i++) {
+		dco[i] = root_node->add_child("dco");
+		dco[i]->set_attribute("index", std::to_string(i + 1));
+		elem[i] = dco[i]->add_child("range");
+		elem[i]->set_attribute("value", std::to_string(dco_range[i]));
+		elem[i] = dco[i]->add_child("waveform");
+		elem[i]->set_attribute("value", std::to_string(dco_wave[i]));
+	}
+
 #ifdef HAVE_DEBUG
-void mks70_tone::dump_tone()
+	doc->write_to_file_formatted(file_name);
+#else
+	doc->write_to_file(file_name);
+#endif
+
+	delete doc;
+}
+
+#ifdef HAVE_DEBUG
+void mks70_tone::dump_tone() const
 {
 	unsigned short i;
 

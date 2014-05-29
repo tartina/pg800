@@ -15,6 +15,7 @@ PKG_PROG_PKG_CONFIG
 # Checks for libraries.
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
 PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
+PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
 
 # Checks for header files.
 
