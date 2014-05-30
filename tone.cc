@@ -1440,18 +1440,39 @@ void mks70_tone::save_to_file(const std::string& file_name) const
 	doc = new xmlpp::Document();
 	root_node = doc->create_root_node("mks70tone", "http://heavyware.it/namespace/mks70",
 	                                  "mks70");
-	current_node = root_node->add_child("name");
+	current_node = root_node->add_child("mks70:name");
 	current_node->add_child_text(name);
 
 	for (i = 0; i < 2; i++) {
-		dco[i] = root_node->add_child("dco");
+		dco[i] = root_node->add_child("mks70:dco");
 		dco[i]->set_attribute("index", std::to_string(i + 1));
-		elem[i] = dco[i]->add_child("range");
-		elem[i]->set_attribute("value", std::to_string(dco_range[i]));
-		elem[i] = dco[i]->add_child("waveform");
-		elem[i]->set_attribute("value", std::to_string(dco_wave[i]));
+		elem[i] = dco[i]->add_child("mks70:range");
+		elem[i]->add_child_text(std::to_string(dco_range[i]));
+		elem[i] = dco[i]->add_child("mks70:waveform");
+		elem[i]->add_child_text(std::to_string(dco_wave[i]));
+		elem[i] = dco[i]->add_child("mks70:tune");
+		elem[i]->add_child_text(std::to_string(dco_tune[i]));
+		elem[i] = dco[i]->add_child("mks70:lfo");
+		elem[i]->add_child_text(std::to_string(dco_lfo[i]));
+		elem[i] = dco[i]->add_child("mks70:envelope");
+		elem[i]->add_child_text(std::to_string(dco_env[i]));
 	}
+	elem[1] = dco[1]->add_child("mks70:xmod");
+	elem[1]->add_child_text(std::to_string(dco2_xmod));
+	elem[1] = dco[1]->add_child("mks70:ftune");
+	elem[1]->add_child_text(std::to_string(dco2_ftune));
+	elem[1] = dco[1]->add_child("mks70:dynamics");
+	elem[1]->add_child_text(std::to_string(dco_dynamics));
+	elem[1] = dco[1]->add_child("mks70:mode");
+	elem[1]->add_child_text(std::to_string(dco_mode));
 
+	current_node = root_node->add_child("mks70:mixer");
+	for (i = 0; i < 2; i++) {
+		dco[i] = current_node->add_child("mks70:dco");
+		dco[i]->set_attribute("index", std::to_string(i + 1));
+		dco[i]->add_child_text(std::to_string(mix_dco[i]));
+	}
+	
 #ifdef HAVE_DEBUG
 	doc->write_to_file_formatted(file_name);
 #else
