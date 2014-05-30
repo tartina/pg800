@@ -1434,7 +1434,7 @@ void mks70_tone::save_to_file(const std::string& file_name) const
 	xmlpp::Document* doc = 0;
 	xmlpp::Element* root_node = 0;
 	xmlpp::Element* current_node = 0;
-	xmlpp::Element* dco[2] = {0,};
+	xmlpp::Element* xmlnode[2] = {0,};
 	xmlpp::Element* elem[2] = {0,};
 
 	doc = new xmlpp::Document();
@@ -1443,36 +1443,102 @@ void mks70_tone::save_to_file(const std::string& file_name) const
 	current_node = root_node->add_child("mks70:name");
 	current_node->add_child_text(name);
 
+	// DCO
 	for (i = 0; i < 2; i++) {
-		dco[i] = root_node->add_child("mks70:dco");
-		dco[i]->set_attribute("index", std::to_string(i + 1));
-		elem[i] = dco[i]->add_child("mks70:range");
+		xmlnode[i] = root_node->add_child("mks70:dco");
+		xmlnode[i]->set_attribute("index", std::to_string(i + 1));
+		elem[i] = xmlnode[i]->add_child("mks70:range");
 		elem[i]->add_child_text(std::to_string(dco_range[i]));
-		elem[i] = dco[i]->add_child("mks70:waveform");
+		elem[i] = xmlnode[i]->add_child("mks70:waveform");
 		elem[i]->add_child_text(std::to_string(dco_wave[i]));
-		elem[i] = dco[i]->add_child("mks70:tune");
+		elem[i] = xmlnode[i]->add_child("mks70:tune");
 		elem[i]->add_child_text(std::to_string(dco_tune[i]));
-		elem[i] = dco[i]->add_child("mks70:lfo");
+		elem[i] = xmlnode[i]->add_child("mks70:lfo");
 		elem[i]->add_child_text(std::to_string(dco_lfo[i]));
-		elem[i] = dco[i]->add_child("mks70:envelope");
+		elem[i] = xmlnode[i]->add_child("mks70:envelope");
 		elem[i]->add_child_text(std::to_string(dco_env[i]));
 	}
-	elem[1] = dco[1]->add_child("mks70:xmod");
+	elem[1] = xmlnode[1]->add_child("mks70:xmod");
 	elem[1]->add_child_text(std::to_string(dco2_xmod));
-	elem[1] = dco[1]->add_child("mks70:ftune");
+	elem[1] = xmlnode[1]->add_child("mks70:ftune");
 	elem[1]->add_child_text(std::to_string(dco2_ftune));
-	elem[1] = dco[1]->add_child("mks70:dynamics");
+	elem[1] = xmlnode[1]->add_child("mks70:dynamics");
 	elem[1]->add_child_text(std::to_string(dco_dynamics));
-	elem[1] = dco[1]->add_child("mks70:mode");
+	elem[1] = xmlnode[1]->add_child("mks70:mode");
 	elem[1]->add_child_text(std::to_string(dco_mode));
 
+	// Mixer
 	current_node = root_node->add_child("mks70:mixer");
 	for (i = 0; i < 2; i++) {
-		dco[i] = current_node->add_child("mks70:dco");
-		dco[i]->set_attribute("index", std::to_string(i + 1));
-		dco[i]->add_child_text(std::to_string(mix_dco[i]));
+		xmlnode[i] = current_node->add_child("mks70:dco");
+		xmlnode[i]->set_attribute("index", std::to_string(i + 1));
+		xmlnode[i]->add_child_text(std::to_string(mix_dco[i]));
 	}
+	elem[0] = current_node->add_child("mks70:envelope");
+	elem[0]->add_child_text(std::to_string(mix_env));
+	elem[0] = current_node->add_child("mks70:dynamics");
+	elem[0]->add_child_text(std::to_string(mix_dynamics));
+	elem[0] = current_node->add_child("mks70:mode");
+	elem[0]->add_child_text(std::to_string(mix_env_mode));
+
+	// VCF
+	current_node = root_node->add_child("mks70:vcf");
+	elem[0] = current_node->add_child("mks70:hpf");
+	elem[0]->add_child_text(std::to_string(vcf_hpf));
+	elem[0] = current_node->add_child("mks70:cutoff");
+	elem[0]->add_child_text(std::to_string(vcf_cutoff_freq));
+	elem[0] = current_node->add_child("mks70:resonance");
+	elem[0]->add_child_text(std::to_string(vcf_resonance));
+	elem[0] = current_node->add_child("mks70:lfo");
+	elem[0]->add_child_text(std::to_string(vcf_lfo_mod_depth));
+	elem[0] = current_node->add_child("mks70:envelope");
+	elem[0]->add_child_text(std::to_string(vcf_env_mod_depth));
+	elem[0] = current_node->add_child("mks70:key");
+	elem[0]->add_child_text(std::to_string(vcf_key_follow));
+	elem[0] = current_node->add_child("mks70:dynamics");
+	elem[0]->add_child_text(std::to_string(vcf_dynamics));
+	elem[0] = current_node->add_child("mks70:mode");
+	elem[0]->add_child_text(std::to_string(vcf_env_mode));
+
+	// VCA
+	current_node = root_node->add_child("mks70:vca");
+	elem[0] = current_node->add_child("mks70:level");
+	elem[0]->add_child_text(std::to_string(vca_level));
+	elem[0] = current_node->add_child("mks70:mode");
+	elem[0]->add_child_text(std::to_string(vca_env_mode));
+	elem[0] = current_node->add_child("mks70:dynamics");
+	elem[0]->add_child_text(std::to_string(vca_dynamics));
+
+	// LFO
+	current_node = root_node->add_child("mks70:lfo");
+	elem[0] = current_node->add_child("mks70:waveform");
+	elem[0]->add_child_text(std::to_string(lfo_waveform));
+	elem[0] = current_node->add_child("mks70:delay");
+	elem[0]->add_child_text(std::to_string(lfo_delay_time));
+	elem[0] = current_node->add_child("mks70:rate");
+	elem[0]->add_child_text(std::to_string(lfo_rate));
 	
+	// Envelopes
+	for (i = 0; i < 2; i++) {
+		xmlnode[i] = root_node->add_child("mks70:envelope");
+		xmlnode[i]->set_attribute("index", std::to_string(i + 1));
+		elem[i] = xmlnode[i]->add_child("mks70:attack");
+		elem[i]->add_child_text(std::to_string(env_attack_time[i]));
+		elem[i] = xmlnode[i]->add_child("mks70:decay");
+		elem[i]->add_child_text(std::to_string(env_decay_time[i]));
+		elem[i] = xmlnode[i]->add_child("mks70:sustain");
+		elem[i]->add_child_text(std::to_string(env_sustain_level[i]));
+		elem[i] = xmlnode[i]->add_child("mks70:release");
+		elem[i]->add_child_text(std::to_string(env_release_time[i]));
+		elem[i] = xmlnode[i]->add_child("mks70:key");
+		elem[i]->add_child_text(std::to_string(env_key_follow[i]));
+	}
+
+	// Chorus
+	current_node = root_node->add_child("mks70:chorus");
+	elem[0] = current_node->add_child("mks70:mode");
+	elem[0]->add_child_text(std::to_string(chorus));
+
 #ifdef HAVE_DEBUG
 	doc->write_to_file_formatted(file_name);
 #else

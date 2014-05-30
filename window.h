@@ -217,6 +217,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		unsigned int midi_port = 0;
 		unsigned short midi_channel = 0;
 		std::vector<std::string> midi_port_name;
+
+		Glib::RefPtr<Gtk::FileFilter> filter;
+		Glib::RefPtr<Gtk::FileFilter> filter_any;
 };
 
 #endif

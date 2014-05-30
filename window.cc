@@ -719,7 +719,14 @@ mks70_window::mks70_window()
 			&mks70_window::on_chorus_button_clicked));
 		chorus_box.pack_start(rb_chorus[i], Gtk::PACK_SHRINK);
 	}
-	
+
+	filter = Gtk::FileFilter::create();
+	filter->set_name("Roland MKS70 Patch");
+	filter->add_pattern("*.mks70");
+	filter_any = Gtk::FileFilter::create();
+	filter_any->set_name("Any files");
+	filter_any->add_pattern("*");
+
 	show_all_children();
 }
 
@@ -799,6 +806,8 @@ void mks70_window::on_action_file_open()
 	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("Open", Gtk::RESPONSE_OK);
+	dialog->add_filter(filter);
+	dialog->add_filter(filter_any);
 
 	result = dialog->run();
 	delete dialog;
@@ -813,6 +822,8 @@ void mks70_window::on_action_file_save_as()
 	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("Save", Gtk::RESPONSE_OK);
+	dialog->add_filter(filter);
+	dialog->add_filter(filter_any);
 
 	result = dialog->run();
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
