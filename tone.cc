@@ -1602,7 +1602,8 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 	bool load_ok = true;
 	xmlpp::DomParser* parser = 0;
 	const xmlpp::Document* doc = 0;
-	xmlpp::Element* root_node = 0;
+	const xmlpp::Element* root_node = 0;
+	xmlpp::Node::NodeList::const_iterator iter;
 
 	try {
 		parser = new xmlpp::DomParser(file_name, false);
@@ -1614,6 +1615,12 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 		std::cout << "Root node name: " << root_node->get_name() << std::endl;
 #endif
 			if (root_node->get_name() == "mks70tone") {
+				const xmlpp::Node::NodeList list = root_node->get_children();
+				for (iter = list.begin(); iter != list.end(); ++iter) {
+#ifdef HAVE_DEBUG
+		std::cout << "Current: " << (*iter)->get_name() << std::endl;
+#endif
+				}
 			}
 			else load_ok = false;
 		}
