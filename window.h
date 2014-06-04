@@ -73,8 +73,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label dco_dyna_label;
 		Gtk::Box dco_dyna_box;
 		Gtk::RadioButton rb_dco_dyna[4];
-		Gtk::Box dco_mode_box;
 		Gtk::Label dco_mode_label;
+		Gtk::Box dco_mode_box;
 		Gtk::RadioButton rb_dco_mode[4];
 
 		// Mixer frame
@@ -162,8 +162,8 @@ class mks70_window : public Gtk::ApplicationWindow
 
 		// Chorus Frame
 		Gtk::Frame chorus_frame;
-		Gtk::Box chorus_box;
 		Gtk::Label chorus_label;
+		Gtk::Box chorus_box;
 		Gtk::RadioButton rb_chorus[3];
 
 		// Signal handlers

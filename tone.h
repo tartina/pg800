@@ -79,6 +79,8 @@ public:
 	static const std::string init_tone_name;
 	mks70_tone();
 	virtual ~mks70_tone();
+	mks70_tone& operator=(const mks70_tone& other);
+
 	void apr_send(unsigned short midi_channel, RtMidiOut* midi_out);
 
 	inline std::string get_name() {return name;};
@@ -161,6 +163,7 @@ public:
 	unsigned short get_tone_number() {return tone_number;};
 
 	void save_to_file(const std::string& file_name) const;
+	bool load_from_file(const std::string& file_name);
 
 #ifdef HAVE_DEBUG
 	void dump_tone() const;

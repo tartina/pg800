@@ -33,14 +33,15 @@ mks70_window::mks70_window()
 	crossmod_label("Crossmod"),
 	sc_dco2_ftune(Gtk::ORIENTATION_VERTICAL),
 	dco_dyna_label("Dynamics"),
-	dco_mode_label("Env Mode"),
 	dco_dyna_box(Gtk::ORIENTATION_VERTICAL),
+	dco_mode_label("Env Mode"),
 	dco_mode_box(Gtk::ORIENTATION_VERTICAL),
-	mixer_frame("Mixer"), vcf_frame("VCF"), vca_frame("VCA"),
+	mixer_frame("Mixer"),
 	mixer_envelope_label("Envelope"),
 	sc_mixer_envelope(Gtk::ORIENTATION_VERTICAL),
 	mixer_dyna_label("Dynamics"),
 	mixer_mode_label("Env Mode"),
+	vcf_frame("VCF"),
 	vcf_hpf_label("HPF"),
 	vcf_cutoff_label("Cutoff"),
 	sc_vcf_cutoff(Gtk::ORIENTATION_VERTICAL),
@@ -54,6 +55,7 @@ mks70_window::mks70_window()
 	sc_vcf_key(Gtk::ORIENTATION_VERTICAL),
 	vcf_dyna_label("Dynamics"),
 	vcf_env_mode_label("Env Mode"),
+	vca_frame("VCA"),
 	vca_box(Gtk::ORIENTATION_VERTICAL),
 	vca_level_label("Level"),
 	sc_vca_level(Gtk::ORIENTATION_VERTICAL),
@@ -63,7 +65,8 @@ mks70_window::mks70_window()
 	editor_box2(Gtk::ORIENTATION_HORIZONTAL),
 	lfo_frame("LFO"),
 	lfo_waveform_label("Waveform"), lfo_delay_time_label("Delay Time"),
-	lfo_rate_label("Rate"), sc_lfo_delay_time(Gtk::ORIENTATION_VERTICAL),
+	sc_lfo_delay_time(Gtk::ORIENTATION_VERTICAL),
+	lfo_rate_label("Rate"),
 	sc_lfo_rate(Gtk::ORIENTATION_VERTICAL),
 	chorus_frame("Chorus"), chorus_label("Mode"),
 	chorus_box(Gtk::ORIENTATION_VERTICAL)
@@ -735,16 +738,17 @@ mks70_window::~mks70_window()
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
-		delete sc_envelope_release[i];
-		delete sc_envelope_sustain[i];
-		delete sc_envelope_decay[i];
-		delete sc_envelope_attack[i];
-		delete sc_mixer_dco[i];
-		delete sc_dco_envelope[i];
-		delete sc_dco_lfo[i];
-		delete sc_dco_tune[i];
+		delete sc_envelope_release[i]; sc_envelope_release[i] = 0;
+		delete sc_envelope_sustain[i]; sc_envelope_sustain[i] = 0;
+		delete sc_envelope_decay[i]; sc_envelope_decay[i] = 0;
+		delete sc_envelope_attack[i]; sc_envelope_attack[i] = 0;
+		delete sc_mixer_dco[i]; sc_mixer_dco[i] = 0;
+		delete sc_dco_envelope[i]; sc_dco_envelope[i] = 0;
+		delete sc_dco_lfo[i]; sc_dco_lfo[i] = 0;
+		delete sc_dco_tune[i]; sc_dco_tune[i] = 0;
 	}
-	delete tone; delete midiout;
+	delete tone; tone = 0;
+	delete midiout; midiout = 0;
 }
 
 void mks70_window::on_dco_range_button_clicked()
@@ -800,7 +804,10 @@ void mks70_window::on_action_file_new()
 void mks70_window::on_action_file_open()
 {
 	Gtk::FileChooserDialog* dialog;
+	Gtk::MessageDialog* message;
 	int result;
+	bool load_ok;
+	std::string filename;
 
 	dialog = new Gtk::FileChooserDialog("Open tone",
 	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
@@ -810,7 +817,19 @@ void mks70_window::on_action_file_open()
 	dialog->add_filter(filter_any);
 
 	result = dialog->run();
+	if (result == Gtk::ResponseType::RESPONSE_OK) filename = dialog->get_filename();
 	delete dialog;
+
+	if (result == Gtk::ResponseType::RESPONSE_OK) {
+		load_ok = tone->load_from_file(filename);
+		if (load_ok);
+		else {
+			message = new Gtk::MessageDialog("Load failed!", false, Gtk::MessageType::MESSAGE_ERROR,
+			                                 Gtk::ButtonsType::BUTTONS_OK, true);
+			message->run();
+			delete message;
+		}
+	}
 }
 
 void mks70_window::on_action_file_save_as()
