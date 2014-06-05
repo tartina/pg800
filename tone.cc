@@ -35,7 +35,7 @@
 #ifdef HAVE_BOOST_LEXICAL_CAST_HPP
 #include <boost/lexical_cast.hpp>
 #else
-#error We need boost
+#error We need boost lexical_cast
 #endif
 
 #include "tone.h"
@@ -745,7 +745,7 @@ void mks70_tone::set_vcf_resonance(unsigned short value, unsigned short midi_cha
 			message.push_back(value);
 			message.push_back(0xF7);
 #ifdef HAVE_DEBUG
-			std::cout << "MIDI VCF Cutoff: ";
+			std::cout << "MIDI VCF Resonance: ";
 			for (std::vector<unsigned char>::iterator it = message.begin();
 			     it < message.end(); ++it)
 				std::cout << std::setbase(16) << (unsigned short)*it << " ";
@@ -1727,6 +1727,11 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 unsigned short mks70_tone::get_dco_range(unsigned short dco)
 {
 	if (dco < 2) return dco_range[dco];
+	return 0;
+}
+unsigned short mks70_tone::get_dco_waveform(unsigned short dco)
+{
+	if (dco < 2) return dco_wave[dco];
 	return 0;
 }
 

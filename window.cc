@@ -1206,7 +1206,7 @@ void mks70_window::reset_controllers()
 	rb_mixer_dyna[0].set_active();
 	rb_mixer_mode[3].set_active();
 	rb_vcf_hpf[0].set_active();
-	adj_vcf_cutoff->set_value(0.0);
+	adj_vcf_cutoff->set_value(127.0);
 	adj_vcf_resonance->set_value(0.0);
 	adj_vcf_lfo->set_value(0.0);
 	adj_vcf_env->set_value(0.0);

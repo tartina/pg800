@@ -161,18 +161,46 @@ public:
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);
-	unsigned short get_tone_number() {return tone_number;};
+	inline unsigned short get_tone_number() {return tone_number;};
 
 	void save_to_file(const std::string& file_name) const;
 	bool load_from_file(const std::string& file_name);
 
 	// Get methods
 	unsigned short get_dco_range(unsigned short dco);
+	unsigned short get_dco_waveform(unsigned short dco);
+	unsigned short get_dco_tune(unsigned short dco);
+	unsigned short get_dco_lfo(unsigned short dco);
+	unsigned short get_dco_env(unsigned short dco);
+	unsigned short get_mix_dco(unsigned short dco);
+	unsigned short get_envelope_attack_time(unsigned short envelope);
+	unsigned short get_envelope_decay_time(unsigned short envelope);
+	unsigned short get_envelope_sustain_level(unsigned short envelope);
+	unsigned short get_envelope_release_time(unsigned short envelope);
+	unsigned short get_envelope_key_follow(unsigned short envelope);
 
-	unsigned short get_dco2_crossmod() {return dco2_xmod;};
-	unsigned short get_dco2_ftune() {return dco2_ftune;};
-	unsigned short get_dco_dyna() {return dco_dynamics;};
-	unsigned short get_dco_mode() {return dco_mode;};
+	inline unsigned short get_dco2_crossmod() {return dco2_xmod;};
+	inline unsigned short get_dco2_ftune() {return dco2_ftune;};
+	inline unsigned short get_dco_dynamics() {return dco_dynamics;};
+	inline unsigned short get_dco_mode() {return dco_mode;};
+	inline unsigned short get_mix_envelope() {return mix_env;};
+	inline unsigned short get_mix_dynamics() {return mix_dynamics;};
+	inline unsigned short get_mix_envelope_mode() {return mix_env_mode;};
+	inline unsigned short get_vcf_hpf() {return vcf_hpf;};
+	inline unsigned short get_vcf_cutoff_freq() {return vcf_cutoff_freq;};
+	inline unsigned short get_vcf_resonance() {return vcf_resonance;};
+	inline unsigned short get_vcf_lfo_mod_depth() {return vcf_lfo_mod_depth;};
+	inline unsigned short get_vcf_envelope_mod_depth() {return vcf_env_mod_depth;};
+	inline unsigned short get_vcf_key_follow() {return vcf_key_follow;};
+	inline unsigned short get_vcf_dynamics() {return vcf_dynamics;};
+	inline unsigned short get_vcf_envelope_mode() {return vcf_env_mode;};
+	inline unsigned short get_vca_level() {return vca_level;};
+	inline unsigned short get_dynamics() {return vca_dynamics;};
+	inline unsigned short get_vca_envelope_mode() {return vca_env_mode;};
+	inline unsigned short get_chorus() {return chorus;};
+	inline unsigned short get_lfo_waveform() {return lfo_waveform;};
+	inline unsigned short get_lfo_delay_time() {return lfo_delay_time;};
+	inline unsigned short get_lfo_rate() {return lfo_rate;};
 
 #ifdef HAVE_DEBUG
 	void dump_tone() const;
