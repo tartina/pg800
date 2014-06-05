@@ -1607,14 +1607,18 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 {
 	bool load_ok = true;
 	unsigned short index = 0;
+	unsigned short value = 0;
 	xmlpp::DomParser* parser = 0;
 	const xmlpp::Document* doc = 0;
 	const xmlpp::Element* root_node = 0;
 	xmlpp::Node::NodeList::const_iterator iter;
+	xmlpp::Node::NodeList::const_iterator child_iter;
 	xmlpp::Element* elem = 0;
 	xmlpp::TextNode* text_node = 0;
 	xmlpp::Attribute* attribute = 0;
+	xmlpp::Element* child_elem = 0;
 	Glib::ustring node_name;
+	Glib::ustring child_name;
 	Glib::ustring text_value;
 
 	try {
@@ -1650,6 +1654,7 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 						}
 					}
 					if (node_name == "dco") {
+						index = 0;
 						elem = dynamic_cast<xmlpp::Element*>(*iter);
 						if (elem) {
 							attribute = elem->get_attribute("index");
@@ -1658,6 +1663,40 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 #ifdef HAVE_DEBUG
 	std::cout << "Index: " <<	text_value << std::endl;
 #endif
+								try {
+									index = boost::lexical_cast<unsigned short>(text_value);
+								}
+								catch (const boost::bad_lexical_cast &) {
+									index = 0;
+								}
+							}
+							if (index == 1 || index == 2) {
+								const xmlpp::Node::NodeList children = elem->get_children();
+								for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+									child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+		std::cout << "Current: " << child_name << std::endl;
+#endif
+									if (child_name == "range") {
+										child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+										if (child_elem) {
+											text_node = child_elem->get_child_text();
+											if (text_node) {
+												text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+		std::cout << "Value: " << text_value << std::endl;
+#endif
+												try {
+													value = boost::lexical_cast<unsigned short>(text_value);
+												}
+												catch (const boost::bad_lexical_cast &) {
+													value = 0;
+												}
+												set_dco_range (index - 1, value);
+											}
+										}
+									}
+								}
 							}
 						}
 					}

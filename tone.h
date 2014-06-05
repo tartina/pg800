@@ -88,7 +88,7 @@ public:
 	inline std::string get_name() {return name;};
 
 	void set_dco_range(unsigned short dco, unsigned short range,
-	                   unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	                   unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
 	void set_dco_wave(unsigned short dco, unsigned short wave,
 	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
 	void set_dco2_crossmod(unsigned short crossmod, unsigned short midi_channel,
