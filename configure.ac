@@ -18,13 +18,16 @@ PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
 
 # Checks for header files.
+AC_LANG_PUSH([C++])
+AC_CHECK_HEADERS(boost/lexical_cast.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
+AC_LANG_POP([C++])
 
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
 AC_ARG_ENABLE([debug],
-	      AS_HELP_STRING([--enable-debug], [enable debug]),
-	      AC_DEFINE([HAVE_DEBUG], [1], [Enable debugging code]))
+	AS_HELP_STRING([--enable-debug], [enable debug]),
+	AC_DEFINE([HAVE_DEBUG], [1], [Enable debugging code]))
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
