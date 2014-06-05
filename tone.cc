@@ -1734,6 +1734,21 @@ unsigned short mks70_tone::get_dco_waveform(unsigned short dco)
 	if (dco < 2) return dco_wave[dco];
 	return 0;
 }
+unsigned short mks70_tone::get_dco_tune(unsigned short dco)
+{
+	if (dco < 2) return dco_tune[dco];
+	return 0;
+}
+unsigned short mks70_tone::get_dco_lfo(unsigned short dco)
+{
+	if (dco < 2) return dco_lfo[dco];
+	return 0;
+}
+unsigned short mks70_tone::get_dco_envelope(unsigned short dco)
+{
+	if (dco < 2) return dco_env[dco];
+	return 0;
+}
 
 #ifdef HAVE_DEBUG
 void mks70_tone::dump_tone() const

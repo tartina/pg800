@@ -171,7 +171,7 @@ public:
 	unsigned short get_dco_waveform(unsigned short dco);
 	unsigned short get_dco_tune(unsigned short dco);
 	unsigned short get_dco_lfo(unsigned short dco);
-	unsigned short get_dco_env(unsigned short dco);
+	unsigned short get_dco_envelope(unsigned short dco);
 	unsigned short get_mix_dco(unsigned short dco);
 	unsigned short get_envelope_attack_time(unsigned short envelope);
 	unsigned short get_envelope_decay_time(unsigned short envelope);
