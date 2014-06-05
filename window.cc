@@ -822,7 +822,7 @@ void mks70_window::on_action_file_open()
 
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
 		load_ok = tone->load_from_file(filename);
-		if (load_ok);
+		if (load_ok) reset_controllers();
 		else {
 			message = new Gtk::MessageDialog("Load failed!", false, Gtk::MessageType::MESSAGE_ERROR,
 			                                 Gtk::ButtonsType::BUTTONS_OK, true);
@@ -1198,8 +1198,8 @@ void mks70_window::reset_controllers()
 		rb_envelope_key_follow[0][i].set_active();
 	}
 
-	rb_crossmod[0].set_active();
-	adj_dco2_ftune->set_value(64.0);
+	rb_crossmod[tone->get_dco2_crossmod()].set_active();
+	adj_dco2_ftune->set_value(tone->get_dco2_ftune());
 	rb_dco_dyna[0].set_active();
 	rb_dco_mode[3].set_active();
 	adj_mixer_envelope->set_value(0.0);

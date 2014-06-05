@@ -166,6 +166,14 @@ public:
 	void save_to_file(const std::string& file_name) const;
 	bool load_from_file(const std::string& file_name);
 
+	// Get methods
+	unsigned short get_dco_range(unsigned short dco);
+
+	unsigned short get_dco2_crossmod() {return dco2_xmod;};
+	unsigned short get_dco2_ftune() {return dco2_ftune;};
+	unsigned short get_dco_dyna() {return dco_dynamics;};
+	unsigned short get_dco_mode() {return dco_mode;};
+
 #ifdef HAVE_DEBUG
 	void dump_tone() const;
 #endif

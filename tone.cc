@@ -1717,6 +1717,13 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 	return load_ok;
 }
 
+// Get methods
+unsigned short mks70_tone::get_dco_range(unsigned short dco)
+{
+	if (dco < 2) return dco_range[dco];
+	return 0;
+}
+
 #ifdef HAVE_DEBUG
 void mks70_tone::dump_tone() const
 {
