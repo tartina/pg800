@@ -31,9 +31,15 @@
 #include <vector>
 #include <cassert>
 #include <libxml++/libxml++.h>
+#include <boost/lexical_cast.hpp>
 #include "tone.h"
 
 mks70_tone::mks70_tone()
+{
+	init_tone();
+}
+
+void mks70_tone::init_tone()
 {
 	unsigned short i;
 
@@ -1600,10 +1606,16 @@ void mks70_tone::save_to_file(const std::string& file_name) const
 bool mks70_tone::load_from_file(const std::string& file_name)
 {
 	bool load_ok = true;
+	unsigned short index = 0;
 	xmlpp::DomParser* parser = 0;
 	const xmlpp::Document* doc = 0;
 	const xmlpp::Element* root_node = 0;
 	xmlpp::Node::NodeList::const_iterator iter;
+	xmlpp::Element* elem = 0;
+	xmlpp::TextNode* text_node = 0;
+	xmlpp::Attribute* attribute = 0;
+	Glib::ustring node_name;
+	Glib::ustring text_value;
 
 	try {
 		parser = new xmlpp::DomParser(file_name, false);
@@ -1615,11 +1627,40 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 		std::cout << "Root node name: " << root_node->get_name() << std::endl;
 #endif
 			if (root_node->get_name() == "mks70tone") {
+				// OK the root node is ok, initialize data
+				init_tone();
+
 				const xmlpp::Node::NodeList list = root_node->get_children();
 				for (iter = list.begin(); iter != list.end(); ++iter) {
+					node_name = (*iter)->get_name();
 #ifdef HAVE_DEBUG
-		std::cout << "Current: " << (*iter)->get_name() << std::endl;
+		std::cout << "Current: " << node_name << std::endl;
 #endif
+					if (node_name == "name") {
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							text_node = elem->get_child_text();
+							if (text_node) {
+								text_value = text_node->get_content();
+								set_name(text_value);
+#ifdef HAVE_DEBUG
+	std::cout << "Content: " <<	text_value << std::endl;
+#endif
+							}
+						}
+					}
+					if (node_name == "dco") {
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							attribute = elem->get_attribute("index");
+							if (attribute) {
+								text_value = attribute->get_value();
+#ifdef HAVE_DEBUG
+	std::cout << "Index: " <<	text_value << std::endl;
+#endif
+							}
+						}
+					}
 				}
 			}
 			else load_ok = false;
