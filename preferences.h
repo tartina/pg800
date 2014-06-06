@@ -32,9 +32,9 @@ public:
                 unsigned short midi_channel = 0,
 	            unsigned short tone_number = 0);
 	virtual ~preferences();
-	unsigned int get_midi_port_number() {return midi_port_number;};
-	unsigned short get_midi_channel() {return midi_channel;};
-	unsigned short get_tone_number() {return tone_number;};
+	inline unsigned int get_midi_port_number() {return midi_port_number;};
+	inline unsigned short get_midi_channel() {return midi_channel;};
+	inline unsigned short get_tone_number() {return tone_number;};
 
 private:
 	unsigned int midi_port_number = 0;

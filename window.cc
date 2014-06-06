@@ -742,8 +742,10 @@ void mks70_window::on_dco_range_button_clicked(unsigned short dco)
 #endif
 
 	for (i = 0; i < 4; i++)
-		if (rb_dco_range[i][dco].get_active())
+		if (rb_dco_range[i][dco].get_active()) {
 			tone->set_dco_range(dco, i, midi_channel, midiout, true);
+			break;
+		}
 }
 
 void mks70_window::on_dco_waveform_button_clicked(unsigned short dco)
@@ -755,8 +757,10 @@ void mks70_window::on_dco_waveform_button_clicked(unsigned short dco)
 #endif
 
 	for (i = 0; i < 4; i++)
-		if (rb_dco_waveform[i][dco].get_active())
+		if (rb_dco_waveform[i][dco].get_active()) {
 			tone->set_dco_wave(dco, i, midi_channel, midiout, true);
+			break;
+		}
 }
 
 void mks70_window::on_action_file_new()
