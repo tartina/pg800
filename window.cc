@@ -736,6 +736,9 @@ mks70_window::~mks70_window()
 void mks70_window::on_dco_range_button_clicked()
 {
 	unsigned short i, k;
+#ifdef HAVE_DEBUG
+	std::cout << "on_dco_range_button_clicked CALLED!" << std::endl;
+#endif
 
 	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
 		if (rb_dco_range[k][i].get_active())
@@ -764,7 +767,7 @@ void mks70_window::on_action_file_new()
 	                               true);
 	result = dialog->run();
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
-		delete tone;
+		delete tone; tone = 0;
 		tone = new mks70_tone();
 		reset_controllers();
 	}
@@ -1155,8 +1158,8 @@ void mks70_window::reset_controllers()
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
-		rb_dco_range[1][i].set_active();
-		rb_dco_waveform[3][i].set_active();
+		rb_dco_range[tone->get_dco_range(i)][i].set_active();
+		rb_dco_waveform[tone->get_dco_waveform(i)][i].set_active();
 		adj_dco_tune[i]->set_value(64.0);
 		adj_dco_lfo[i]->set_value(0.0);
 		adj_dco_envelope[i]->set_value(0.0);

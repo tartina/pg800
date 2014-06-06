@@ -54,7 +54,7 @@ void mks70_tone::init_tone()
 
 	for (i = 0; i < 2; i++) {
 		dco_range[i] = 1; // dco range = 8'
-		dco_wave[i] = 1; // dco wave = saw
+		dco_wave[i] = 3; // dco wave = saw
 		dco_tune[i] = 64; // dco tune
 		dco_lfo[i] = 0;
 		dco_env[i] = 0;
@@ -95,55 +95,6 @@ void mks70_tone::init_tone()
 #ifdef HAVE_DEBUG
 	dump_tone();
 #endif
-}
-
-mks70_tone& mks70_tone::operator=(const mks70_tone& other)
-{
-	unsigned short i;
-
-	if (this != &other) {
-		name = other.name;
-
-		for (i = 0; i < 2; i++) {
-			dco_range[i] = other.dco_range[i];
-			dco_wave[i] = other.dco_wave[i];
-			dco_tune[i] = other.dco_tune[i];
-			dco_lfo[i] = other.dco_lfo[i];
-			dco_env[i] = other.dco_env[i];
-			mix_dco[i] = other.mix_dco[i];
-			env_attack_time[i] = other.env_attack_time[i];
-			env_decay_time[i] = other.env_decay_time[i];
-			env_sustain_level[i] = other.env_sustain_level[i];
-			env_release_time[i] = other.env_release_time[i];
-			env_key_follow[i] = other.env_key_follow[i];
-		}
-		dco2_xmod = other.dco2_xmod;
-		dco2_ftune = other.dco2_ftune;
-		dco_dynamics = other.dco_dynamics;
-		dco_mode = other.dco_mode;
-		mix_env = other.mix_env;
-		mix_dynamics = other.mix_dynamics;
-		mix_env_mode = other.mix_env_mode;
-		vcf_hpf = other.vcf_hpf;
-		vcf_cutoff_freq = other.vcf_cutoff_freq;
-		vcf_resonance = other.vcf_resonance;
-		vcf_lfo_mod_depth = other.vcf_lfo_mod_depth;
-		vcf_env_mod_depth = other.vcf_env_mod_depth;
-		vcf_key_follow = other.vcf_key_follow;
-		vcf_lfo_mod_depth = other.vcf_lfo_mod_depth;
-		vcf_env_mod_depth = other.vcf_env_mod_depth;
-		vcf_key_follow = other.vcf_key_follow;
-		vcf_dynamics = other.vcf_dynamics;
-		vcf_env_mode = other.vcf_env_mode;
-		vca_level = other.vca_level;
-		vca_dynamics = other.vca_dynamics;
-		vca_env_mode = other.vca_env_mode;
-		lfo_waveform = other.lfo_waveform;
-		lfo_delay_time = other.lfo_delay_time;
-		lfo_rate = other.lfo_rate;
-		chorus = other.chorus;
-	}
-	return *this;
 }
 
 mks70_tone::~mks70_tone() {}
