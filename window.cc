@@ -181,55 +181,37 @@ mks70_window::mks70_window()
 		m_DCO_Frame[i].set_border_width(1);
 		m_DCO_Frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
-		group = m_rb_dco_range16[i].get_group();
-		m_rb_dco_range8[i].set_group(group);
-		m_rb_dco_range4[i].set_group(group);
-		m_rb_dco_range2[i].set_group(group);
-		m_rb_dco_range8[i].set_active();
-		m_rb_dco_range16[i].set_label("16'");
-		m_rb_dco_range8[i].set_label("8'");
-		m_rb_dco_range4[i].set_label("4'");
-		m_rb_dco_range2[i].set_label("2'");
-		m_rb_dco_range16[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_range_button_clicked));
-		m_rb_dco_range8[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_range_button_clicked));
-		m_rb_dco_range4[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_range_button_clicked));
-		m_rb_dco_range2[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_range_button_clicked));
-
-		group = m_rb_dco_wave_noise[i].get_group();
-		m_rb_dco_wave_saw[i].set_group(group);
-		m_rb_dco_wave_pulse[i].set_group(group);
-		m_rb_dco_wave_square[i].set_group(group);
-		m_rb_dco_wave_saw[i].set_active();
-		m_rb_dco_wave_noise[i].set_label("Noise");
-		m_rb_dco_wave_saw[i].set_label("Saw");
-		m_rb_dco_wave_pulse[i].set_label("Pulse");
-		m_rb_dco_wave_square[i].set_label("Square");
-		m_rb_dco_wave_noise[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_wave_button_clicked));
-		m_rb_dco_wave_saw[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_wave_button_clicked));
-		m_rb_dco_wave_pulse[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_wave_button_clicked));
-		m_rb_dco_wave_square[i].signal_clicked().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_wave_button_clicked));
-
 		m_Range_Label[i].set_label("Range");
 		dco_grid[i].attach(m_Range_Label[i], 0, 0, 1, 1);
-		dco_grid[i].attach(m_rb_dco_range16[i], 0, 1, 1, 1);
-		dco_grid[i].attach(m_rb_dco_range8[i], 0, 2, 1, 1);
-		dco_grid[i].attach(m_rb_dco_range4[i], 0, 3, 1, 1);
-		dco_grid[i].attach(m_rb_dco_range2[i], 0, 4, 1, 1);
+
+		group = rb_dco_range[0][i].get_group();
+		for (k = 1; k < 4; k++) rb_dco_range[k][i].set_group(group);
+		rb_dco_range[0][i].set_label("16");
+		rb_dco_range[1][i].set_label("8");
+		rb_dco_range[2][i].set_label("4");
+		rb_dco_range[3][i].set_label("2");
+		rb_dco_range[1][i].set_active();
+		for (k = 0; k < 4; k++) {
+			rb_dco_range[k][i].signal_clicked().connect(sigc::mem_fun(*this,
+				&mks70_window::on_dco_range_button_clicked));
+			dco_grid[i].attach(rb_dco_range[k][i], 0, 1 + k, 1, 1);
+		}
 
 		m_Wave_Label[i].set_label("Waveform");
 		dco_grid[i].attach(m_Wave_Label[i], 1, 0, 1 ,1);
-		dco_grid[i].attach(m_rb_dco_wave_noise[i], 1, 1, 1,1);
-		dco_grid[i].attach(m_rb_dco_wave_square[i], 1, 2, 1 ,1);
-		dco_grid[i].attach(m_rb_dco_wave_pulse[i], 1, 3, 1 ,1);
-		dco_grid[i].attach(m_rb_dco_wave_saw[i], 1, 4, 1 ,1);
+
+		group = rb_dco_waveform[0][i].get_group();
+		for (k = 1; k < 4; k++) rb_dco_waveform[k][i].set_group(group);
+		rb_dco_waveform[0][i].set_label("Noise");
+		rb_dco_waveform[1][i].set_label("Square");
+		rb_dco_waveform[2][i].set_label("Pulse");
+		rb_dco_waveform[3][i].set_label("Saw");
+		rb_dco_waveform[3][i].set_active();
+		for (k = 0; k < 4; k++) {
+			rb_dco_waveform[k][i].signal_clicked().connect(sigc::mem_fun(*this,
+				&mks70_window::on_dco_waveform_button_clicked));
+			dco_grid[i].attach(rb_dco_waveform[k][i], 1, 1 + k, 1, 1);
+		}
 
 		m_DCO_Frame[i].add(dco_grid[i]);
 		m_Editor_Box.pack_start(m_DCO_Frame[i], Gtk::PACK_SHRINK);
@@ -753,33 +735,21 @@ mks70_window::~mks70_window()
 
 void mks70_window::on_dco_range_button_clicked()
 {
-	unsigned short i;
+	unsigned short i, k;
 
-	for (i = 0; i < 2; i++) {
-		if (m_rb_dco_range16[i].get_active())
-			tone->set_dco_range(i, 0, midi_channel, midiout, true);
-		if (m_rb_dco_range8[i].get_active())
-			tone->set_dco_range(i, 1, midi_channel, midiout, true);
-		if (m_rb_dco_range4[i].get_active())
-			tone->set_dco_range(i, 2, midi_channel, midiout, true);
-		if (m_rb_dco_range2[i].get_active())
-			tone->set_dco_range(i, 3, midi_channel, midiout, true);
+	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
+		if (rb_dco_range[k][i].get_active())
+			tone->set_dco_range(i, k, midi_channel, midiout, true);
 	}
 }
 
-void mks70_window::on_dco_wave_button_clicked()
+void mks70_window::on_dco_waveform_button_clicked()
 {
-	unsigned short i;
+	unsigned short i, k;
 
-	for (i = 0; i < 2; i++) {
-		if (m_rb_dco_wave_noise[i].get_active())
-			tone->set_dco_wave(i, 0, midi_channel, midiout, true);
-		if (m_rb_dco_wave_square[i].get_active())
-			tone->set_dco_wave(i, 1, midi_channel, midiout, true);
-		if (m_rb_dco_wave_pulse[i].get_active())
-			tone->set_dco_wave(i, 2, midi_channel, midiout, true);
-		if (m_rb_dco_wave_saw[i].get_active())
-			tone->set_dco_wave(i, 3, midi_channel, midiout, true);
+	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
+		if (rb_dco_waveform[k][i].get_active())
+			tone->set_dco_wave(i, k, midi_channel, midiout, true);
 	}
 }
 
@@ -1185,8 +1155,8 @@ void mks70_window::reset_controllers()
 	unsigned short i;
 
 	for (i = 0; i < 2; i++) {
-		m_rb_dco_range8[i].set_active();
-		m_rb_dco_wave_saw[i].set_active();
+		rb_dco_range[1][i].set_active();
+		rb_dco_waveform[3][i].set_active();
 		adj_dco_tune[i]->set_value(64.0);
 		adj_dco_lfo[i]->set_value(0.0);
 		adj_dco_envelope[i]->set_value(0.0);

@@ -46,11 +46,24 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Grid dco_grid[2];
 
 		Gtk::Label m_Range_Label[2];
-		Gtk::RadioButton m_rb_dco_range16[2], m_rb_dco_range8[2],
-			m_rb_dco_range4[2], m_rb_dco_range2[2];
+/*
+	Range buttons are:
+	[0] -> 16
+	[1] -> 8
+	[2] -> 4
+	[3] -> 2
+*/
+		Gtk::RadioButton rb_dco_range[4][2];
+
 		Gtk::Label m_Wave_Label[2];
-		Gtk::RadioButton m_rb_dco_wave_noise[2], m_rb_dco_wave_saw[2],
-			m_rb_dco_wave_pulse[2], m_rb_dco_wave_square[2];
+/*
+	Waveform buttons are (wrong docs):
+	[0] -> Noise
+	[1] -> Square
+	[2] -> Pulse
+	[3] -> Saw
+*/
+		Gtk::RadioButton rb_dco_waveform[4][2];
 
 		Gtk::Label crossmod_label;
 		Gtk::RadioButton rb_crossmod[4];
@@ -175,7 +188,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void inline on_action_file_quit() {hide();};
 		void on_action_help_about();
 		void on_dco_range_button_clicked();
-		void on_dco_wave_button_clicked();
+		void on_dco_waveform_button_clicked();
 		void on_dco2_crossmod_button_clicked();
 		void on_dco_tune_value_changed();
 		void on_dco2_ftune_value_changed();
