@@ -192,8 +192,8 @@ mks70_window::mks70_window()
 		rb_dco_range[3][i].set_label("2");
 		rb_dco_range[1][i].set_active();
 		for (k = 0; k < 4; k++) {
-			rb_dco_range[k][i].signal_clicked().connect(sigc::mem_fun(*this,
-				&mks70_window::on_dco_range_button_clicked));
+			rb_dco_range[k][i].signal_clicked().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+				&mks70_window::on_dco_range_button_clicked), i));
 			dco_grid[i].attach(rb_dco_range[k][i], 0, 1 + k, 1, 1);
 		}
 
@@ -208,8 +208,8 @@ mks70_window::mks70_window()
 		rb_dco_waveform[3][i].set_label("Saw");
 		rb_dco_waveform[3][i].set_active();
 		for (k = 0; k < 4; k++) {
-			rb_dco_waveform[k][i].signal_clicked().connect(sigc::mem_fun(*this,
-				&mks70_window::on_dco_waveform_button_clicked));
+			rb_dco_waveform[k][i].signal_clicked().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+				&mks70_window::on_dco_waveform_button_clicked), i));
 			dco_grid[i].attach(rb_dco_waveform[k][i], 1, 1 + k, 1, 1);
 		}
 
@@ -733,27 +733,30 @@ mks70_window::~mks70_window()
 	delete midiout; midiout = 0;
 }
 
-void mks70_window::on_dco_range_button_clicked()
+void mks70_window::on_dco_range_button_clicked(unsigned short dco)
 {
-	unsigned short i, k;
+	unsigned short i;
+
 #ifdef HAVE_DEBUG
 	std::cout << "on_dco_range_button_clicked CALLED!" << std::endl;
 #endif
 
-	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
-		if (rb_dco_range[k][i].get_active())
-			tone->set_dco_range(i, k, midi_channel, midiout, true);
-	}
+	for (i = 0; i < 4; i++)
+		if (rb_dco_range[i][dco].get_active())
+			tone->set_dco_range(dco, i, midi_channel, midiout, true);
 }
 
-void mks70_window::on_dco_waveform_button_clicked()
+void mks70_window::on_dco_waveform_button_clicked(unsigned short dco)
 {
-	unsigned short i, k;
+	unsigned short i;
 
-	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
-		if (rb_dco_waveform[k][i].get_active())
-			tone->set_dco_wave(i, k, midi_channel, midiout, true);
-	}
+#ifdef HAVE_DEBUG
+	std::cout << "on_dco_waveform_button_clicked CALLED!" << std::endl;
+#endif
+
+	for (i = 0; i < 4; i++)
+		if (rb_dco_waveform[i][dco].get_active())
+			tone->set_dco_wave(dco, i, midi_channel, midiout, true);
 }
 
 void mks70_window::on_action_file_new()

@@ -187,8 +187,8 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_action_file_preferences();
 		void inline on_action_file_quit() {hide();};
 		void on_action_help_about();
-		void on_dco_range_button_clicked();
-		void on_dco_waveform_button_clicked();
+		void on_dco_range_button_clicked(unsigned short dco);
+		void on_dco_waveform_button_clicked(unsigned short dco);
 		void on_dco2_crossmod_button_clicked();
 		void on_dco_tune_value_changed();
 		void on_dco2_ftune_value_changed();
