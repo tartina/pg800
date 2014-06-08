@@ -190,7 +190,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco_range_button_clicked(unsigned short dco);
 		void on_dco_waveform_button_clicked(unsigned short dco);
 		void on_dco2_crossmod_button_clicked();
-		void on_dco_tune_value_changed();
+		void on_dco_tune_value_changed(unsigned short dco);
 		void on_dco2_ftune_value_changed();
 		void on_dco_lfo_value_changed();
 		void on_dco_envelope_value_changed();

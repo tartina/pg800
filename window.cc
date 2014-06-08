@@ -245,8 +245,8 @@ mks70_window::mks70_window()
 		sc_dco_tune[i]->set_draw_value();
 		sc_dco_tune[i]->set_inverted(); // highest value at top
 		sc_dco_tune[i]->set_size_request(-1, range_height);
-		sc_dco_tune[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_tune_value_changed));
+		sc_dco_tune[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_dco_tune_value_changed), i));
 		dco_grid[i].attach(dco_tune_label[i], 0, 5, 1, 1);
 		dco_grid[i].attach(*sc_dco_tune[i], 0, 6, 1, 1);
 	}
@@ -741,7 +741,7 @@ void mks70_window::on_dco_range_button_clicked(unsigned short dco)
 	std::cout << "on_dco_range_button_clicked CALLED!" << std::endl;
 #endif
 
-	for (i = 0; i < 4; i++)
+	if (dco < 2) for (i = 0; i < 4; i++)
 		if (rb_dco_range[i][dco].get_active()) {
 			tone->set_dco_range(dco, i, midi_channel, midiout, true);
 			break;
@@ -756,7 +756,7 @@ void mks70_window::on_dco_waveform_button_clicked(unsigned short dco)
 	std::cout << "on_dco_waveform_button_clicked CALLED!" << std::endl;
 #endif
 
-	for (i = 0; i < 4; i++)
+	if (dco < 2) for (i = 0; i < 4; i++)
 		if (rb_dco_waveform[i][dco].get_active()) {
 			tone->set_dco_wave(dco, i, midi_channel, midiout, true);
 			break;
@@ -912,12 +912,10 @@ void mks70_window::on_dco2_crossmod_button_clicked()
 		}
 }
 
-void mks70_window::on_dco_tune_value_changed()
+void mks70_window::on_dco_tune_value_changed(unsigned short dco)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_dco_tune(i, adj_dco_tune[i]->get_value(), midi_channel, midiout, true);
+	if (dco < 2)
+		tone->set_dco_tune(dco, adj_dco_tune[dco]->get_value(), midi_channel, midiout, true);
 }
 
 void mks70_window::on_dco2_ftune_value_changed()
