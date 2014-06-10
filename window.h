@@ -192,11 +192,11 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_dco2_crossmod_button_clicked();
 		void on_dco_tune_value_changed(unsigned short dco);
 		void on_dco2_ftune_value_changed();
-		void on_dco_lfo_value_changed();
-		void on_dco_envelope_value_changed();
+		void on_dco_lfo_value_changed(unsigned short dco);
+		void on_dco_envelope_value_changed(unsigned short dco);
 		void on_dco_dyna_button_clicked();
 		void on_dco_mode_button_clicked();
-		void on_mixer_dco_value_changed();
+		void on_mixer_dco_value_changed(unsigned short dco);
 		void on_mixer_envelope_value_changed();
 		void on_mixer_dyna_button_clicked();
 		void on_mixer_mode_button_clicked();
@@ -214,11 +214,11 @@ class mks70_window : public Gtk::ApplicationWindow
 		void on_lfo_waveform_button_clicked();
 		void on_lfo_delay_time_value_changed();
 		void on_lfo_rate_value_changed();
-		void on_envelope_attack_value_changed();
-		void on_envelope_decay_value_changed();
-		void on_envelope_sustain_value_changed();
-		void on_envelope_release_value_changed();
-		void on_envelope_key_follow_button_clicked();
+		void on_envelope_attack_value_changed(unsigned short envelope);
+		void on_envelope_decay_value_changed(unsigned short envelope);
+		void on_envelope_sustain_value_changed(unsigned short envelope);
+		void on_envelope_release_value_changed(unsigned short envelope);
+		void on_envelope_key_follow_button_clicked(unsigned short envelope);
 		void on_chorus_button_clicked();
 
 		void get_midi_port_names();

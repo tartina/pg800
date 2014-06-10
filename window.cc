@@ -275,8 +275,8 @@ mks70_window::mks70_window()
 		sc_dco_lfo[i]->set_draw_value();
 		sc_dco_lfo[i]->set_inverted(); // highest value at top
 		sc_dco_lfo[i]->set_size_request(-1, range_height);
-		sc_dco_lfo[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_lfo_value_changed));
+		sc_dco_lfo[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_dco_lfo_value_changed), i));
 		dco_grid[i].attach(dco_lfo_label[i], 0, 7, 1, 1);
 		dco_grid[i].attach(*sc_dco_lfo[i], 0, 8, 1, 1);
 
@@ -288,8 +288,8 @@ mks70_window::mks70_window()
 		sc_dco_envelope[i]->set_draw_value();
 		sc_dco_envelope[i]->set_inverted(); // highest value at top
 		sc_dco_envelope[i]->set_size_request(-1, range_height);
-		sc_dco_envelope[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_dco_envelope_value_changed));
+		sc_dco_envelope[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_dco_envelope_value_changed), i));
 		dco_grid[i].attach(dco_envelope_label[i], 1, 7, 1, 1);
 		dco_grid[i].attach(*sc_dco_envelope[i], 1, 8, 1, 1);
 	}
@@ -346,8 +346,8 @@ mks70_window::mks70_window()
 		sc_mixer_dco[i]->set_draw_value();
 		sc_mixer_dco[i]->set_inverted(); // highest value at top
 		sc_mixer_dco[i]->set_size_request(-1, range_height);
-		sc_mixer_dco[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_mixer_dco_value_changed));
+		sc_mixer_dco[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_mixer_dco_value_changed), i));
 		mixer_grid.attach(mixer_dco_label[i], i, 0, 1, 1);
 		mixer_grid.attach(*sc_mixer_dco[i], i, 1, 1, 1);
 	}
@@ -626,8 +626,8 @@ mks70_window::mks70_window()
 		sc_envelope_attack[i]->set_draw_value();
 		sc_envelope_attack[i]->set_inverted(); // highest value at top
 		sc_envelope_attack[i]->set_size_request(-1, range_height);
-		sc_envelope_attack[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_envelope_attack_value_changed));
+		sc_envelope_attack[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_attack_value_changed) ,i));
 		envelope_grid[i].attach(envelope_attack_label[i], 0, 0, 1, 1);
 		envelope_grid[i].attach(*sc_envelope_attack[i], 0, 1, 1, 4);
 
@@ -639,8 +639,8 @@ mks70_window::mks70_window()
 		sc_envelope_decay[i]->set_draw_value();
 		sc_envelope_decay[i]->set_inverted(); // highest value at top
 		sc_envelope_decay[i]->set_size_request(-1, range_height);
-		sc_envelope_decay[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_envelope_decay_value_changed));
+		sc_envelope_decay[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_decay_value_changed) ,i));
 		envelope_grid[i].attach(envelope_decay_label[i], 1, 0, 1, 1);
 		envelope_grid[i].attach(*sc_envelope_decay[i], 1, 1, 1, 4);
 
@@ -652,8 +652,8 @@ mks70_window::mks70_window()
 		sc_envelope_sustain[i]->set_draw_value();
 		sc_envelope_sustain[i]->set_inverted(); // highest value at top
 		sc_envelope_sustain[i]->set_size_request(-1, range_height);
-		sc_envelope_sustain[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_envelope_sustain_value_changed));
+		sc_envelope_sustain[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_sustain_value_changed), i));
 		envelope_grid[i].attach(envelope_sustain_label[i], 2, 0, 1, 1);
 		envelope_grid[i].attach(*sc_envelope_sustain[i], 2, 1, 1, 4);
 		
@@ -665,8 +665,8 @@ mks70_window::mks70_window()
 		sc_envelope_release[i]->set_draw_value();
 		sc_envelope_release[i]->set_inverted(); // highest value at top
 		sc_envelope_release[i]->set_size_request(-1, range_height);
-		sc_envelope_release[i]->signal_value_changed().connect(sigc::mem_fun(*this,
-			&mks70_window::on_envelope_release_value_changed));
+		sc_envelope_release[i]->signal_value_changed().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+			&mks70_window::on_envelope_release_value_changed) ,i));
 		envelope_grid[i].attach(envelope_release_label[i], 3, 0, 1, 1);
 		envelope_grid[i].attach(*sc_envelope_release[i], 3, 1, 1, 4);
 
@@ -680,8 +680,8 @@ mks70_window::mks70_window()
 		rb_envelope_key_follow[3][i].set_label("3");
 		rb_envelope_key_follow[0][i].set_active();
 		for (k = 0; k < 4; k++) {
-			rb_envelope_key_follow[k][i].signal_clicked().connect(sigc::mem_fun(*this,
-				&mks70_window::on_envelope_key_follow_button_clicked));
+			rb_envelope_key_follow[k][i].signal_clicked().connect(sigc::bind<unsigned short>(sigc::mem_fun(*this,
+				&mks70_window::on_envelope_key_follow_button_clicked) ,i));
 			envelope_grid[i].attach(rb_envelope_key_follow[k][i], 4, 1 + k, 1, 1);
 		}
 	}
@@ -923,20 +923,16 @@ void mks70_window::on_dco2_ftune_value_changed()
 	tone->set_dco2_ftune(adj_dco2_ftune->get_value(), midi_channel, midiout, true);
 }
 
-void mks70_window::on_dco_lfo_value_changed()
+void mks70_window::on_dco_lfo_value_changed(unsigned short dco)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_dco_lfo(i, adj_dco_lfo[i]->get_value(), midi_channel, midiout, true);
+	if (dco < 2)
+		tone->set_dco_lfo(dco, adj_dco_lfo[dco]->get_value(), midi_channel, midiout, true);
 }
 
-void mks70_window::on_dco_envelope_value_changed()
+void mks70_window::on_dco_envelope_value_changed(unsigned short dco)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_dco_envelope(i, adj_dco_envelope[i]->get_value(), midi_channel, midiout, true);
+	if (dco < 2)
+		tone->set_dco_envelope(dco, adj_dco_envelope[dco]->get_value(), midi_channel, midiout, true);
 }
 
 void mks70_window::on_dco_dyna_button_clicked()
@@ -961,12 +957,10 @@ void mks70_window::on_dco_mode_button_clicked()
 		}
 }
 
-void mks70_window::on_mixer_dco_value_changed()
+void mks70_window::on_mixer_dco_value_changed(unsigned short dco)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_mixer_dco(i, adj_mixer_dco[i]->get_value(), midi_channel, midiout, true);
+	if (dco < 2)
+		tone->set_mixer_dco(dco, adj_mixer_dco[dco]->get_value(), midi_channel, midiout, true);
 }
 
 void mks70_window::on_mixer_envelope_value_changed()
@@ -1102,49 +1096,41 @@ void mks70_window::on_lfo_rate_value_changed()
 	tone->set_lfo_rate(adj_lfo_rate->get_value(), midi_channel, midiout, true);
 }
 
-void mks70_window::on_envelope_attack_value_changed()
+void mks70_window::on_envelope_attack_value_changed(unsigned short envelope)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_envelope_attack(i, adj_envelope_attack[i]->get_value(),
+	if (envelope < 2)
+		tone->set_envelope_attack(envelope, adj_envelope_attack[envelope]->get_value(),
 		                          midi_channel, midiout, true);
 }
 
-void mks70_window::on_envelope_decay_value_changed()
+void mks70_window::on_envelope_decay_value_changed(unsigned short envelope)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_envelope_decay(i, adj_envelope_decay[i]->get_value(),
+	if (envelope < 2)
+		tone->set_envelope_decay(envelope, adj_envelope_decay[envelope]->get_value(),
 		                          midi_channel, midiout, true);
 }
 
-void mks70_window::on_envelope_sustain_value_changed()
+void mks70_window::on_envelope_sustain_value_changed(unsigned short envelope)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_envelope_sustain(i, adj_envelope_sustain[i]->get_value(),
+	if (envelope < 2)
+		tone->set_envelope_sustain(envelope, adj_envelope_sustain[envelope]->get_value(),
 		                          midi_channel, midiout, true);
 }
 
-void mks70_window::on_envelope_release_value_changed()
+void mks70_window::on_envelope_release_value_changed(unsigned short envelope)
 {
-	unsigned short i;
-
-	for (i = 0; i < 2; i++)
-		tone->set_envelope_release(i, adj_envelope_release[i]->get_value(),
+	if (envelope < 2)
+		tone->set_envelope_release(envelope, adj_envelope_release[envelope]->get_value(),
 		                          midi_channel, midiout, true);
 }
 
-void mks70_window::on_envelope_key_follow_button_clicked()
+void mks70_window::on_envelope_key_follow_button_clicked(unsigned short envelope)
 {
-	unsigned short i, k;
+	unsigned short i;
 
-	for (i = 0; i < 2; i++) for (k = 0; k < 4; k++) {
-		if (rb_envelope_key_follow[k][i].get_active())
-			tone->set_envelope_key_follow(i, k, midi_channel, midiout, true);
+	if (envelope < 2) for (i = 0; i < 4; i++) {
+		if (rb_envelope_key_follow[i][envelope].get_active())
+			tone->set_envelope_key_follow(envelope, i, midi_channel, midiout, true);
 	}
 }
 
