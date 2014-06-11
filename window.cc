@@ -1151,15 +1151,15 @@ void mks70_window::reset_controllers()
 	for (i = 0; i < 2; i++) {
 		rb_dco_range[tone->get_dco_range(i)][i].set_active();
 		rb_dco_waveform[tone->get_dco_waveform(i)][i].set_active();
-		adj_dco_tune[i]->set_value(64.0);
-		adj_dco_lfo[i]->set_value(0.0);
-		adj_dco_envelope[i]->set_value(0.0);
-		adj_mixer_dco[i]->set_value(0.0);
-		adj_envelope_attack[i]->set_value(0.0);
-		adj_envelope_decay[i]->set_value(0.0);
-		adj_envelope_sustain[i]->set_value(127.0);
-		adj_envelope_release[i]->set_value(0.0);
-		rb_envelope_key_follow[0][i].set_active();
+		adj_dco_tune[i]->set_value(tone->get_dco_tune(i));
+		adj_dco_lfo[i]->set_value(tone->get_dco_lfo(i));
+		adj_dco_envelope[i]->set_value(tone->get_dco_envelope(i));
+		adj_mixer_dco[i]->set_value(tone->get_mix_dco(i));
+		adj_envelope_attack[i]->set_value(tone->get_envelope_attack_time(i));
+		adj_envelope_decay[i]->set_value(tone->get_envelope_decay_time(i));
+		adj_envelope_sustain[i]->set_value(tone->get_envelope_sustain_level(i));
+		adj_envelope_release[i]->set_value(tone->get_envelope_release_time(i));
+		rb_envelope_key_follow[tone->get_envelope_key_follow(i)][i].set_active();
 	}
 
 	rb_crossmod[tone->get_dco2_crossmod()].set_active();
