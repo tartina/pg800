@@ -1700,6 +1700,36 @@ unsigned short mks70_tone::get_dco_envelope(unsigned short dco)
 	if (dco < 2) return dco_env[dco];
 	return 0;
 }
+unsigned short mks70_tone::get_mix_dco(unsigned short dco)
+{
+	if (dco < 2) return mix_dco[dco];
+	return 0;
+}
+unsigned short mks70_tone::get_envelope_attack_time(unsigned short envelope)
+{
+	if (envelope < 2) return env_attack_time[envelope];
+	return 0;
+}
+unsigned short mks70_tone::get_envelope_decay_time(unsigned short envelope)
+{
+	if (envelope < 2) return env_decay_time[envelope];
+	return 0;
+}
+unsigned short mks70_tone::get_envelope_sustain_level(unsigned short envelope)
+{
+	if (envelope < 2) return env_sustain_level[envelope];
+	return 0;
+}
+unsigned short mks70_tone::get_envelope_release_time(unsigned short envelope)
+{
+	if (envelope < 2) return env_release_time[envelope];
+	return 0;
+}
+unsigned short mks70_tone::get_envelope_key_follow(unsigned short envelope)
+{
+	if (envelope < 2) return env_key_follow[envelope];
+	return 0;
+}
 
 #ifdef HAVE_DEBUG
 void mks70_tone::dump_tone() const
