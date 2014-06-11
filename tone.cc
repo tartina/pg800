@@ -1653,6 +1653,51 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 											}
 										}
 									}
+#ifdef HAVE_DEBUG
+		std::cout << "Current: " << child_name << std::endl;
+#endif
+									if (child_name == "waveform") {
+										child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+										if (child_elem) {
+											text_node = child_elem->get_child_text();
+											if (text_node) {
+												text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+		std::cout << "Value: " << text_value << std::endl;
+#endif
+												try {
+													value = boost::lexical_cast<unsigned short>(text_value);
+												}
+												catch (const boost::bad_lexical_cast &) {
+													value = 0;
+												}
+												set_dco_wave(index - 1, value);
+											}
+										}
+									}
+#ifdef HAVE_DEBUG
+		std::cout << "Current: " << child_name << std::endl;
+#endif
+									if (child_name == "tune") {
+										child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+										if (child_elem) {
+											text_node = child_elem->get_child_text();
+											if (text_node) {
+												text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+		std::cout << "Value: " << text_value << std::endl;
+#endif
+												try {
+													value = boost::lexical_cast<unsigned short>(text_value);
+												}
+												catch (const boost::bad_lexical_cast &) {
+													value = 0;
+												}
+												set_dco_tune(index - 1, value);
+											}
+										}
+									}
+
 								}
 							}
 						}

@@ -89,74 +89,74 @@ public:
 	void set_dco_range(unsigned short dco, unsigned short range,
 	                   unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
 	void set_dco_wave(unsigned short dco, unsigned short wave,
-	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
-	void set_dco2_crossmod(unsigned short crossmod, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
+	                  unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
+	void set_dco2_crossmod(unsigned short crossmod, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
 	void set_dco_tune(unsigned short dco, unsigned short tune,
-	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
-	void set_dco2_ftune(unsigned short ftune, unsigned short midi_channel,
-	                    RtMidiOut* midi_out, bool send = false);
+	                  unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
+	void set_dco2_ftune(unsigned short ftune, unsigned short midi_channel = 0,
+	                    RtMidiOut* midi_out = 0, bool send = false);
 	void set_dco_lfo(unsigned short dco, unsigned short lfo,
-	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
+	                  unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
 	void set_dco_envelope(unsigned short dco, unsigned short envelope,
-	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
-	void set_dco_dyna(unsigned short dyna, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_dco_mode(unsigned short mode, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
+	                  unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
+	void set_dco_dyna(unsigned short dyna, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_dco_mode(unsigned short mode, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
 	void set_mixer_dco(unsigned short dco, unsigned short value,
-	                  unsigned short midi_channel, RtMidiOut* midi_out, bool send = false);
-	void set_mixer_envelope(unsigned short envelope, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_mixer_dyna(unsigned short dyna, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_mixer_mode(unsigned short mode, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_vcf_hpf(unsigned short value, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_vcf_cutoff(unsigned short value, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_vcf_resonance(unsigned short value, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_vcf_lfo(unsigned short value, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_vcf_envelope(unsigned short value, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_vcf_key(unsigned short value, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_vcf_dyna(unsigned short dyna, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_vcf_env_mode(unsigned short mode, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_vca_level(unsigned short value, unsigned short midi_channel,
-	                        RtMidiOut* midi_out, bool send = false);
-	void set_vca_dyna(unsigned short dyna, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_vca_env_mode(unsigned short mode, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_lfo_waveform(unsigned short waveform, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_lfo_delay_time(unsigned short value, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
-	void set_lfo_rate(unsigned short value, unsigned short midi_channel,
-	                       RtMidiOut* midi_out, bool send = false);
+	                  unsigned short midi_channel = 0, RtMidiOut* midi_out = 0, bool send = false);
+	void set_mixer_envelope(unsigned short envelope, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_mixer_dyna(unsigned short dyna, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_mixer_mode(unsigned short mode, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_hpf(unsigned short value, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_cutoff(unsigned short value, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_resonance(unsigned short value, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_lfo(unsigned short value, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_envelope(unsigned short value, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_key(unsigned short value, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_dyna(unsigned short dyna, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_vcf_env_mode(unsigned short mode, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_vca_level(unsigned short value, unsigned short midi_channel = 0,
+	                        RtMidiOut* midi_out = 0, bool send = false);
+	void set_vca_dyna(unsigned short dyna, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_vca_env_mode(unsigned short mode, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_lfo_waveform(unsigned short waveform, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_lfo_delay_time(unsigned short value, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
+	void set_lfo_rate(unsigned short value, unsigned short midi_channel = 0,
+	                       RtMidiOut* midi_out = 0, bool send = false);
 	void set_envelope_attack(unsigned short envelope, unsigned short value,
-	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         unsigned short midi_channel = 0, RtMidiOut* midi_out = 0,
 	                         bool send = false);
 	void set_envelope_decay(unsigned short envelope, unsigned short value,
-	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         unsigned short midi_channel = 0, RtMidiOut* midi_out = 0,
 	                         bool send = false);
 	void set_envelope_sustain(unsigned short envelope, unsigned short value,
-	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         unsigned short midi_channel = 0, RtMidiOut* midi_out = 0,
 	                         bool send = false);
 	void set_envelope_release(unsigned short envelope, unsigned short value,
-	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         unsigned short midi_channel = 0, RtMidiOut* midi_out = 0,
 	                         bool send = false);
 	void set_envelope_key_follow(unsigned short envelope, unsigned short value,
-	                         unsigned short midi_channel, RtMidiOut* midi_out,
+	                         unsigned short midi_channel = 0, RtMidiOut* midi_out = 0,
 	                         bool send = false);
-	void set_chorus(unsigned short value, unsigned short midi_channel,
-	                RtMidiOut* midi_out, bool send = false);
+	void set_chorus(unsigned short value, unsigned short midi_channel = 0,
+	                RtMidiOut* midi_out = 0, bool send = false);
 
 	void set_name(const std::string& name);
 	void set_tone_number(const unsigned short tone);
