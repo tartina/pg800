@@ -58,7 +58,7 @@ void mks70_tone::init_tone()
 		dco_tune[i] = 64; // dco tune
 		dco_lfo[i] = 0;
 		dco_env[i] = 0;
-		mix_dco[i] = 0;
+		mix_dco[i] = 64;
 		env_attack_time[i] = 0;
 		env_decay_time[i] = 0;
 		env_sustain_level[i] = 127;
@@ -84,7 +84,7 @@ void mks70_tone::init_tone()
 	vcf_key_follow = 0;
 	vcf_dynamics = 0;
 	vcf_env_mode = 3;
-	vca_level = 0;
+	vca_level = 64;
 	vca_dynamics = 0;
 	vca_env_mode = 1;
 	lfo_waveform = 2;
@@ -1661,6 +1661,14 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 										set_dco_lfo(index - 1, value);
 									if (child_name == "envelope")
 										set_dco_envelope(index - 1, value);
+									if (child_name == "xmod" && index == 2)
+										set_dco2_crossmod(value);
+									if (child_name == "ftune" && index == 2)
+										set_dco2_ftune(value);
+									if (child_name == "dynamics" && index == 2)
+										set_dco_dyna(value);
+									if (child_name == "mode" && index == 2)
+										set_dco_mode(value);
 
 								}
 							}

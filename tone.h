@@ -194,7 +194,7 @@ public:
 	inline unsigned short get_vcf_dynamics() {return vcf_dynamics;};
 	inline unsigned short get_vcf_envelope_mode() {return vcf_env_mode;};
 	inline unsigned short get_vca_level() {return vca_level;};
-	inline unsigned short get_dynamics() {return vca_dynamics;};
+	inline unsigned short get_vca_dynamics() {return vca_dynamics;};
 	inline unsigned short get_vca_envelope_mode() {return vca_env_mode;};
 	inline unsigned short get_chorus() {return chorus;};
 	inline unsigned short get_lfo_waveform() {return lfo_waveform;};

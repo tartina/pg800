@@ -113,7 +113,7 @@ mks70_window::mks70_window()
 	if (midi_port < number_of_ports) midiout->openPort(midi_port);
 
 	set_default_size(640, 400);
-	set_title(mks70_tone::init_tone_name + " - " + window_title);
+	set_title(window_title);
 	set_border_width(6);
 
 	add(m_Application_Box);
@@ -169,7 +169,7 @@ mks70_window::mks70_window()
 	m_Application_Box.pack_start(*pMenubar, Gtk::PACK_SHRINK);
 	m_Application_Box.pack_start(m_Editor_Box, Gtk::PACK_SHRINK);
 	m_Application_Box.pack_start(editor_box2, Gtk::PACK_SHRINK);
-	status_bar.push("Tone A");
+	status_bar.push("Tone A - " + mks70_tone::init_tone_name);
 	m_Application_Box.pack_end(status_bar, Gtk::PACK_SHRINK);
 
 	// DCO range and waveform radio buttons
@@ -339,7 +339,7 @@ mks70_window::mks70_window()
 
 	for (i = 0; i < 2; i++) {
 		mixer_dco_label[i].set_label("DCO " + std::to_string(i + 1));
-		adj_mixer_dco[i] = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+		adj_mixer_dco[i] = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 10.0, 0.0);
 		sc_mixer_dco[i] = new Gtk::Scale(adj_mixer_dco[i], Gtk::ORIENTATION_VERTICAL);
 		sc_mixer_dco[i]->set_digits(0);
 		sc_mixer_dco[i]->set_value_pos(Gtk::POS_BOTTOM);
@@ -519,7 +519,7 @@ mks70_window::mks70_window()
 
 	// VCA Level
 	vca_box.pack_start(vca_level_label, Gtk::PACK_SHRINK);
-	adj_vca_level = Gtk::Adjustment::create(0.0, 0.0, 127.0, 1.0, 10.0, 0.0);
+	adj_vca_level = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 10.0, 0.0);
 	sc_vca_level.set_adjustment(adj_vca_level);
 	sc_vca_level.set_digits(0);
 	sc_vca_level.set_value_pos(Gtk::POS_BOTTOM);
@@ -852,19 +852,18 @@ void mks70_window::on_action_file_preferences()
 {
 	int result;
 	unsigned int old_midi_port = midi_port;
-	unsigned short tone_number;
 
 	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel,
-	                                    tone->get_tone_number());
+	                                    tone->get_tone_number(), tone->get_name());
 	result = pref->run();
 	if (result == Gtk::ResponseType::RESPONSE_OK) {
 		midi_port = pref->get_midi_port_number ();
 		midi_channel = pref->get_midi_channel();
-		tone_number = pref->get_tone_number();
-		tone->set_tone_number(tone_number);
+		tone->set_tone_number(pref->get_tone_number());
+		tone->set_name(pref->get_tone_name());
 		status_bar.remove_all_messages();
-		if (tone_number == 0) status_bar.push("Tone A");
-		else status_bar.push("Tone B");
+		if (tone->get_tone_number() == 0) status_bar.push("Tone A - " + tone->get_name());
+		else status_bar.push("Tone B - " + tone->get_name());
 	}
 	delete pref;
 
@@ -1161,29 +1160,28 @@ void mks70_window::reset_controllers()
 		adj_envelope_release[i]->set_value(tone->get_envelope_release_time(i));
 		rb_envelope_key_follow[tone->get_envelope_key_follow(i)][i].set_active();
 	}
-
 	rb_crossmod[tone->get_dco2_crossmod()].set_active();
 	adj_dco2_ftune->set_value(tone->get_dco2_ftune());
-	rb_dco_dyna[0].set_active();
-	rb_dco_mode[3].set_active();
-	adj_mixer_envelope->set_value(0.0);
-	rb_mixer_dyna[0].set_active();
-	rb_mixer_mode[3].set_active();
-	rb_vcf_hpf[0].set_active();
-	adj_vcf_cutoff->set_value(127.0);
-	adj_vcf_resonance->set_value(0.0);
-	adj_vcf_lfo->set_value(0.0);
-	adj_vcf_env->set_value(0.0);
-	adj_vcf_key->set_value(0.0);
-	rb_vcf_dyna[0].set_active();
-	rb_vcf_env_mode[3].set_active();
-	adj_vca_level->set_value(0.0);
-	rb_vca_env_mode[1].set_active();
-	rb_vca_dyna[0].set_active();
-	rb_lfo_waveform[2].set_active();
-	adj_lfo_delay_time->set_value(0.0);
-	adj_lfo_rate->set_value(0.0);
-	rb_chorus[0].set_active();
+	rb_dco_dyna[tone->get_dco_dynamics()].set_active();
+	rb_dco_mode[tone->get_dco_mode()].set_active();
+	adj_mixer_envelope->set_value(tone->get_mix_envelope());
+	rb_mixer_dyna[tone->get_mix_dynamics()].set_active();
+	rb_mixer_mode[tone->get_mix_envelope_mode()].set_active();
+	rb_vcf_hpf[tone->get_vcf_hpf()].set_active();
+	adj_vcf_cutoff->set_value(tone->get_vcf_cutoff_freq());
+	adj_vcf_resonance->set_value(tone->get_vcf_resonance());
+	adj_vcf_lfo->set_value(tone->get_vcf_lfo_mod_depth());
+	adj_vcf_env->set_value(tone->get_vcf_envelope_mod_depth());
+	adj_vcf_key->set_value(tone->get_vcf_key_follow());
+	rb_vcf_dyna[tone->get_vcf_dynamics()].set_active();
+	rb_vcf_env_mode[tone->get_vcf_envelope_mode()].set_active();
+	adj_vca_level->set_value(tone->get_vca_level());
+	rb_vca_env_mode[tone->get_vca_envelope_mode()].set_active();
+	rb_vca_dyna[tone->get_vca_dynamics()].set_active();
+	rb_lfo_waveform[tone->get_lfo_waveform()].set_active();
+	adj_lfo_delay_time->set_value(tone->get_lfo_delay_time());
+	adj_lfo_rate->set_value(tone->get_lfo_rate());
+	rb_chorus[tone->get_chorus()].set_active();
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

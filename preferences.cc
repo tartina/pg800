@@ -28,15 +28,17 @@
 #include "preferences.h"
 
 preferences::preferences(const std::vector<std::string>& midi_port_name,
-                         unsigned int midi_port_number,
-                         unsigned short midi_channel,
-                         unsigned short tone_number)
+                         const unsigned int midi_port_number,
+                         const unsigned short midi_channel,
+                         const unsigned short tone_number,
+                         const std::string tone_name)
 	: Gtk::Dialog("Preferences", true),
 	adj_midi_channel(Gtk::Adjustment::create(midi_channel + 1, 1.0, 16.0, 1.0, 1.0, 0.0)),
 	sb_midi_channel(adj_midi_channel),
 	lb_midi_channel("MIDI channel"),
 	lb_midi_port("MIDI port"),
-	lb_tone_number("Tone")
+	lb_tone_number("Tone"),
+	lb_tone_name("Tone name")
 {
 	if (midi_channel < 16) this->midi_channel = midi_channel;
 	this->midi_port_number = midi_port_number;
@@ -54,14 +56,19 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 		cb_midi_port.append(*it);
 	cb_midi_port.set_active(midi_port_number);
 
-	cb_midi_port.signal_changed().connect( sigc::mem_fun(*this,
+	cb_midi_port.signal_changed().connect(sigc::mem_fun(*this,
 		&preferences::on_midi_port_changed));
 
 	cb_tone_number.append("Tone A");
 	cb_tone_number.append("Tone B");
 	cb_tone_number.set_active(tone_number);
-	cb_tone_number.signal_changed().connect( sigc::mem_fun(*this,
+	cb_tone_number.signal_changed().connect(sigc::mem_fun(*this,
 		&preferences::on_tone_number_changed));
+
+	en_tone_name.set_max_length(10);
+	en_tone_name.set_text(tone_name);
+	en_tone_name.signal_changed().connect(sigc::mem_fun(*this,
+		&preferences::on_tone_name_changed));
 
 	area = get_content_area();
 	area->pack_start(lb_midi_channel, Gtk::PACK_SHRINK);
@@ -70,6 +77,8 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 	area->pack_start(cb_midi_port, Gtk::PACK_SHRINK);
 	area->pack_start(lb_tone_number, Gtk::PACK_SHRINK);
 	area->pack_start(cb_tone_number, Gtk::PACK_SHRINK);
+	area->pack_start(lb_tone_name, Gtk::PACK_SHRINK);
+	area->pack_start(en_tone_name, Gtk::PACK_SHRINK);
 
 	show_all_children();
 }
@@ -98,5 +107,13 @@ void preferences::on_tone_number_changed()
 	tone_number = cb_tone_number.get_active_row_number();
 #ifdef HAVE_DEBUG
 	std::cout << "Tone number: " << tone_number << std::endl;
+#endif
+}
+
+void preferences::on_tone_name_changed()
+{
+	tone_name = en_tone_name.get_text();
+#ifdef HAVE_DEBUG
+	std::cout << "Tone name: " << tone_name << std::endl;
 #endif
 }
