@@ -23,6 +23,8 @@ AC_CHECK_HEADERS(boost/lexical_cast.hpp, [], [AC_MSG_ERROR(You need the Boost li
 AC_LANG_POP([C++])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_HEADER_STDBOOL
+AC_C_INLINE
 
 # Checks for library functions.
 AC_ARG_ENABLE([debug],
