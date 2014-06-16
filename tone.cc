@@ -1744,6 +1744,152 @@ std::cout << "Value: " << text_value << std::endl;
 						}
 					} // End mixer
 
+					if (node_name == "vcf") {
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							const xmlpp::Node::NodeList children = elem->get_children();
+							for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+								child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+	std::cout << "Current: " << child_name << std::endl;
+#endif
+								child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+								if (child_elem) {
+									text_node = child_elem->get_child_text();
+									if (text_node) {
+										text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+std::cout << "Value: " << text_value << std::endl;
+#endif
+										try {
+											value = boost::lexical_cast<unsigned short>(text_value);
+										}
+										catch (const boost::bad_lexical_cast &) {
+											value = 0;
+										}
+									}
+									if (child_name == "hpf")
+										set_vcf_hpf(value);
+									if (child_name == "cutoff")
+										set_vcf_cutoff(value);
+									if (child_name == "resonance")
+										set_vcf_resonance(value);
+									if (child_name == "lfo")
+										set_vcf_lfo(value);
+									if (child_name == "envelope")
+										set_vcf_envelope(value);
+									if (child_name == "key")
+										set_vcf_key(value);
+									if (child_name == "dynamics")
+										set_vcf_dyna(value);
+									if (child_name == "mode")
+										set_vcf_env_mode(value);
+								}
+							}
+						}
+					} // End vcf
+
+					if (node_name == "vca") {
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							const xmlpp::Node::NodeList children = elem->get_children();
+							for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+								child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+	std::cout << "Current: " << child_name << std::endl;
+#endif
+								child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+								if (child_elem) {
+									text_node = child_elem->get_child_text();
+									if (text_node) {
+										text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+std::cout << "Value: " << text_value << std::endl;
+#endif
+										try {
+											value = boost::lexical_cast<unsigned short>(text_value);
+										}
+										catch (const boost::bad_lexical_cast &) {
+											value = 0;
+										}
+									}
+									if (child_name == "level")
+										set_vca_level(value);
+									if (child_name == "mode")
+										set_vca_env_mode(value);
+									if (child_name == "dynamics")
+										set_vca_dyna(value);
+								}
+							}
+						}
+					} // End vca
+
+					if (node_name == "lfo") {
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							const xmlpp::Node::NodeList children = elem->get_children();
+							for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+								child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+	std::cout << "Current: " << child_name << std::endl;
+#endif
+								child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+								if (child_elem) {
+									text_node = child_elem->get_child_text();
+									if (text_node) {
+										text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+std::cout << "Value: " << text_value << std::endl;
+#endif
+										try {
+											value = boost::lexical_cast<unsigned short>(text_value);
+										}
+										catch (const boost::bad_lexical_cast &) {
+											value = 0;
+										}
+									}
+									if (child_name == "waveform")
+										set_lfo_waveform(value);
+									if (child_name == "delay")
+										set_lfo_delay_time(value);
+									if (child_name == "rate")
+										set_lfo_rate(value);
+								}
+							}
+						}
+					} // End lfo
+
+					if (node_name == "chorus") {
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							const xmlpp::Node::NodeList children = elem->get_children();
+							for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+								child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+	std::cout << "Current: " << child_name << std::endl;
+#endif
+								child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+								if (child_elem) {
+									text_node = child_elem->get_child_text();
+									if (text_node) {
+										text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+std::cout << "Value: " << text_value << std::endl;
+#endif
+										try {
+											value = boost::lexical_cast<unsigned short>(text_value);
+										}
+										catch (const boost::bad_lexical_cast &) {
+											value = 0;
+										}
+									}
+									if (child_name == "mode")
+										set_chorus(value);
+								}
+							}
+						}
+					} // End chorus
+
 				}
 			}
 			else load_ok = false;
