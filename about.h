@@ -22,7 +22,7 @@
 
 #include <gtkmm.h>
 
-class about : public Gtk::AboutDialog 
+class about : public Gtk::AboutDialog
 {
 public:
 	about();

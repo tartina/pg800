@@ -1673,7 +1673,77 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 								}
 							}
 						}
-					}
+					} // End dco
+
+					if (node_name == "mixer") {
+						index = 0;
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							const xmlpp::Node::NodeList children = elem->get_children();
+							for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+								child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+	std::cout << "Current: " << child_name << std::endl;
+#endif
+								child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+								if (child_elem) {
+									if (child_name == "dco") {
+										attribute = child_elem->get_attribute("index");
+										if (attribute) {
+											text_value = attribute->get_value();
+#ifdef HAVE_DEBUG
+	std::cout << "Index: " <<	text_value << std::endl;
+#endif
+											try {
+												index = boost::lexical_cast<unsigned short>(text_value);
+											}
+											catch (const boost::bad_lexical_cast &) {
+												index = 0;
+											}
+										}
+										if (index == 1 || index == 2) {
+											text_node = child_elem->get_child_text();
+											if (text_node) {
+												text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+	std::cout << "Value: " << text_value << std::endl;
+#endif
+												try {
+													value = boost::lexical_cast<unsigned short>(text_value);
+												}
+												catch (const boost::bad_lexical_cast &) {
+													value = 0;
+												}
+											}
+											set_mixer_dco(index -1, value);
+										}
+									}
+
+									text_node = child_elem->get_child_text();
+									if (text_node) {
+										text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+std::cout << "Value: " << text_value << std::endl;
+#endif
+										try {
+											value = boost::lexical_cast<unsigned short>(text_value);
+										}
+										catch (const boost::bad_lexical_cast &) {
+											value = 0;
+										}
+									}
+
+									if (child_name == "envelope")
+										set_mixer_envelope(value);
+									if (child_name == "dynamics")
+										set_mixer_dyna(value);
+									if (child_name == "mode")
+										set_mixer_mode(value);
+								}
+							}
+						}
+					} // End mixer
+
 				}
 			}
 			else load_ok = false;
