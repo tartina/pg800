@@ -1610,6 +1610,7 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 							}
 						}
 					}
+
 					if (node_name == "dco") {
 						index = 0;
 						elem = dynamic_cast<xmlpp::Element*>(*iter);
@@ -1650,9 +1651,8 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 											}
 										}
 									}
-
 									if (child_name == "range")
-										set_dco_range (index - 1, value);
+										set_dco_range(index - 1, value);
 									if (child_name == "waveform")
 										set_dco_wave(index - 1, value);
 									if (child_name == "tune")
@@ -1669,7 +1669,6 @@ bool mks70_tone::load_from_file(const std::string& file_name)
 										set_dco_dyna(value);
 									if (child_name == "mode" && index == 2)
 										set_dco_mode(value);
-
 								}
 							}
 						}
@@ -1858,6 +1857,61 @@ std::cout << "Value: " << text_value << std::endl;
 							}
 						}
 					} // End lfo
+
+					if (node_name == "envelope") {
+						index = 0;
+						elem = dynamic_cast<xmlpp::Element*>(*iter);
+						if (elem) {
+							attribute = elem->get_attribute("index");
+							if (attribute) {
+								text_value = attribute->get_value();
+#ifdef HAVE_DEBUG
+	std::cout << "Index: " <<	text_value << std::endl;
+#endif
+								try {
+									index = boost::lexical_cast<unsigned short>(text_value);
+								}
+								catch (const boost::bad_lexical_cast &) {
+									index = 0;
+								}
+							}
+							if (index == 1 || index == 2) {
+								const xmlpp::Node::NodeList children = elem->get_children();
+								for (child_iter = children.begin(); child_iter != children.end(); ++child_iter) {
+									child_name = (*child_iter)->get_name();
+#ifdef HAVE_DEBUG
+		std::cout << "Current: " << child_name << std::endl;
+#endif
+									child_elem = dynamic_cast<xmlpp::Element*>(*child_iter);
+									if (child_elem) {
+										text_node = child_elem->get_child_text();
+										if (text_node) {
+											text_value = text_node->get_content();
+#ifdef HAVE_DEBUG
+	std::cout << "Value: " << text_value << std::endl;
+#endif
+											try {
+												value = boost::lexical_cast<unsigned short>(text_value);
+											}
+											catch (const boost::bad_lexical_cast &) {
+												value = 0;
+											}
+										}
+									}
+									if (child_name == "attack")
+										set_envelope_attack(index - 1, value);
+									if (child_name == "decay")
+										set_envelope_decay(index - 1, value);
+									if (child_name == "sustain")
+										set_envelope_sustain(index - 1, value);
+									if (child_name == "release")
+										set_envelope_release(index - 1, value);
+									if (child_name == "key")
+										set_envelope_key_follow(index - 1, value);
+								}
+							}
+						}
+					} // End envelope
 
 					if (node_name == "chorus") {
 						elem = dynamic_cast<xmlpp::Element*>(*iter);
