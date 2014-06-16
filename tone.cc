@@ -1529,7 +1529,7 @@ void mks70_tone::save_to_file(const std::string& file_name) const
 	elem[0]->add_child_text(std::to_string(lfo_delay_time));
 	elem[0] = current_node->add_child("mks70:rate");
 	elem[0]->add_child_text(std::to_string(lfo_rate));
-	
+
 	// Envelopes
 	for (i = 0; i < 2; i++) {
 		xmlnode[i] = root_node->add_child("mks70:envelope");
