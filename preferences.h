@@ -40,15 +40,15 @@ public:
 	inline std::string get_tone_name() const {return tone_name;};
 
 private:
-	unsigned int midi_port_number = 0;
-	unsigned short midi_channel = 0;
-	unsigned short tone_number = 0;
-	std::string tone_name = "";
+	unsigned int midi_port_number;
+	unsigned short midi_channel;
+	unsigned short tone_number;
+	std::string tone_name;
 
 	Glib::RefPtr<Gtk::Adjustment> adj_midi_channel;
 	Gtk::SpinButton sb_midi_channel;
 	Gtk::Label lb_midi_channel, lb_midi_port, lb_tone_number, lb_tone_name;
-	Gtk::Box *area = 0;
+	Gtk::Box *area;
 	Gtk::ComboBoxText cb_midi_port, cb_tone_number;
 	Gtk::Entry en_tone_name;
 

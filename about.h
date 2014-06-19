@@ -28,7 +28,7 @@ public:
 	about();
 	virtual ~about() {};
 private:
-	std::vector<Glib::ustring> authors;
+	const std::vector<Glib::ustring> authors;
 };
 
 #endif // _ABOUT_H_

@@ -40,6 +40,12 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 	lb_tone_number("Tone"),
 	lb_tone_name("Tone name")
 {
+	this->midi_port_number = 0;
+	this->midi_channel = 0;
+	this->tone_number = 0;
+	this->tone_name = "";
+	this->area = 0;
+
 	if (midi_channel < 16) this->midi_channel = midi_channel;
 	this->midi_port_number = midi_port_number;
 	if (tone_number < 2) this->tone_number = tone_number;

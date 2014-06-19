@@ -51,6 +51,7 @@ void mks70_tone::init_tone()
 
 	// Initialize the tone with default values
 	name = "INIT TONE";
+	tone_number = 0;
 
 	for (i = 0; i < 2; i++) {
 		dco_range[i] = 1; // dco range = 8'

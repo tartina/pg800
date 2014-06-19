@@ -82,6 +82,23 @@ mks70_window::mks70_window()
 	Gtk::RadioButton::Group group;
 	Gtk::IconInfo icon_info;
 
+	for (i = 0; i < 2; i++) {
+		sc_dco_tune[i] = 0;
+		sc_dco_lfo[i] = 0;
+		sc_dco_envelope[i] = 0;
+		sc_mixer_dco[i] = 0;
+		sc_envelope_attack[i] = 0;
+		sc_envelope_decay[i] = 0;
+		sc_envelope_sustain[i] = 0;
+		sc_envelope_release[i] = 0;
+	}
+
+	tone = 0;
+	midiout = 0;
+	number_of_ports = 0;
+	midi_port = 0;
+	midi_channel = 0;
+
 	try {
 		icon_theme = Gtk::IconTheme::get_default();
 #ifdef HAVE_DEBUG

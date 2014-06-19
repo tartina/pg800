@@ -24,7 +24,7 @@
 #include <vector>
 #include "about.h"
 
-about::about()
+about::about() : authors(1, "Guido Aulisi <guido.aulisi@gmail.com>")
 {
 	set_program_name(PACKAGE_NAME);
 	set_authors(authors);
@@ -33,5 +33,4 @@ about::about()
 	set_copyright("Copyright (C) 2014 Guido Aulisi");
 	set_comments(PACKAGE_NAME
 	             " is a MIDI tone editor for the Roland MKS-70 Super JX analogue synthesizer.");
-	authors.push_back("Guido Aulisi <guido.aulisi@gmail.com>");
 }

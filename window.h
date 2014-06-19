@@ -69,7 +69,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::RadioButton rb_crossmod[4];
 
 		Gtk::Label dco_tune_label[2];
-		Gtk::Scale* sc_dco_tune[2] = {0};
+		Gtk::Scale* sc_dco_tune[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_tune[2];
 
 		Gtk::Label dco2_ftune_label;
@@ -77,10 +77,10 @@ class mks70_window : public Gtk::ApplicationWindow
 		Glib::RefPtr<Gtk::Adjustment> adj_dco2_ftune;
 
 		Gtk::Label dco_lfo_label[2];
-		Gtk::Scale* sc_dco_lfo[2] = {0};
+		Gtk::Scale* sc_dco_lfo[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_lfo[2];
 		Gtk::Label dco_envelope_label[2];
-		Gtk::Scale* sc_dco_envelope[2] = {0};
+		Gtk::Scale* sc_dco_envelope[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_dco_envelope[2];
 
 		Gtk::Label dco_dyna_label;
@@ -94,7 +94,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Frame mixer_frame;
 		Gtk::Grid mixer_grid;
 		Gtk::Label mixer_dco_label[2];
-		Gtk::Scale* sc_mixer_dco[2] = {0};
+		Gtk::Scale* sc_mixer_dco[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_mixer_dco[2];
 		Gtk::Label mixer_envelope_label;
 		Gtk::Scale sc_mixer_envelope;
@@ -162,13 +162,13 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::Label envelope_decay_label[2];
 		Gtk::Label envelope_sustain_label[2];
 		Gtk::Label envelope_release_label[2];
-		Gtk::Scale* sc_envelope_attack[2] = {0};
+		Gtk::Scale* sc_envelope_attack[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_envelope_attack[2];
-		Gtk::Scale* sc_envelope_decay[2] = {0};
+		Gtk::Scale* sc_envelope_decay[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_envelope_decay[2];
-		Gtk::Scale* sc_envelope_sustain[2] = {0};
+		Gtk::Scale* sc_envelope_sustain[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_envelope_sustain[2];
-		Gtk::Scale* sc_envelope_release[2] = {0};
+		Gtk::Scale* sc_envelope_release[2];
 		Glib::RefPtr<Gtk::Adjustment> adj_envelope_release[2];
 		Gtk::Label envelope_key_follow_label[2];
 		Gtk::RadioButton rb_envelope_key_follow[4][2];
@@ -224,11 +224,11 @@ class mks70_window : public Gtk::ApplicationWindow
 		void get_midi_port_names();
 		void reset_controllers();
 
-		mks70_tone* tone = 0;
-		RtMidiOut* midiout = 0;
-		unsigned int number_of_ports = 0;
-		unsigned int midi_port = 0;
-		unsigned short midi_channel = 0;
+		mks70_tone* tone;
+		RtMidiOut* midiout;
+		unsigned int number_of_ports;
+		unsigned int midi_port;
+		unsigned short midi_channel;
 		std::vector<std::string> midi_port_name;
 
 		Glib::RefPtr<Gtk::FileFilter> filter;

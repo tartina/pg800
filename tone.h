@@ -31,7 +31,7 @@ class mks70_tone
 {
 private:
 	std::string name;
-	unsigned short tone_number = 0; // Tone A = 0, tone B = 1
+	unsigned short tone_number; // Tone A = 0, tone B = 1
 
 	unsigned short dco_range[2]; // 4 values
 	unsigned short dco_wave[2]; // 4 values
