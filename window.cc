@@ -23,6 +23,13 @@
 
 #include <string>
 #include <iostream>
+
+#ifdef HAVE_BOOST_LEXICAL_CAST_HPP
+#include <boost/lexical_cast.hpp>
+#else
+#error We need boost lexical_cast
+#endif
+
 #include "window.h"
 #include "preferences.h"
 #include "about.h"
@@ -83,7 +90,7 @@ mks70_window::mks70_window()
 		     it < paths.end(); ++it)
 				std::cout << "Icon search path: " << *it << std::endl;
 #endif
-		icon_info = icon_theme->lookup_icon(PACKAGE_NAME, 48, Gtk::IconLookupFlags::ICON_LOOKUP_NO_SVG);
+		icon_info = icon_theme->lookup_icon(PACKAGE_NAME, 48, Gtk::ICON_LOOKUP_NO_SVG);
 #ifdef HAVE_DEBUG
 		if (icon_info) std::cout << "Icon path: " << icon_info.get_filename() << std::endl;
 #endif
@@ -177,7 +184,7 @@ mks70_window::mks70_window()
 		dco_grid[i].set_border_width(2);
 		dco_grid[i].set_column_spacing(1);
 
-		m_DCO_Frame[i].set_label("DCO " + std::to_string(i + 1));
+		m_DCO_Frame[i].set_label("DCO " + boost::lexical_cast<std::string>(i + 1));
 		m_DCO_Frame[i].set_border_width(1);
 		m_DCO_Frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
@@ -338,7 +345,7 @@ mks70_window::mks70_window()
 	mixer_frame.add(mixer_grid);
 
 	for (i = 0; i < 2; i++) {
-		mixer_dco_label[i].set_label("DCO " + std::to_string(i + 1));
+		mixer_dco_label[i].set_label("DCO " + boost::lexical_cast<std::string>(i + 1));
 		adj_mixer_dco[i] = Gtk::Adjustment::create(64.0, 0.0, 127.0, 1.0, 10.0, 0.0);
 		sc_mixer_dco[i] = new Gtk::Scale(adj_mixer_dco[i], Gtk::ORIENTATION_VERTICAL);
 		sc_mixer_dco[i]->set_digits(0);
@@ -408,7 +415,7 @@ mks70_window::mks70_window()
 	for (i = 1; i < 4; i++) rb_vcf_hpf[i].set_group(group);
 	rb_vcf_hpf[0].set_active();
 	for (i = 0; i < 4; i++) {
-		rb_vcf_hpf[i].set_label(std::to_string(i));
+		rb_vcf_hpf[i].set_label(boost::lexical_cast<std::string>(i));
 		rb_vcf_hpf[i].signal_clicked().connect(sigc::mem_fun(*this,
 			&mks70_window::on_vcf_hpf_button_clicked));
 		vcf_grid.attach(rb_vcf_hpf[i], 0, 1 + i, 1, 1);
@@ -612,7 +619,7 @@ mks70_window::mks70_window()
 	for (i = 0; i < 2; i++) {
 		envelope_grid[i].set_border_width(2);
 		envelope_grid[i].set_column_spacing(1);
-		envelope_frame[i].set_label("Envelope " + std::to_string(i + 1));
+		envelope_frame[i].set_label("Envelope " + boost::lexical_cast<std::string>(i + 1));
 		envelope_frame[i].set_border_width(1);
 		envelope_frame[i].set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 		envelope_frame[i].add(envelope_grid[i]);
@@ -769,11 +776,11 @@ void mks70_window::on_action_file_new()
 	int result;
 
 	dialog = new Gtk::MessageDialog("Reset all controls?", false,
-	                               Gtk::MessageType::MESSAGE_QUESTION,
-	                               Gtk::ButtonsType::BUTTONS_OK_CANCEL,
+	                               Gtk::MESSAGE_QUESTION,
+	                               Gtk::BUTTONS_OK_CANCEL,
 	                               true);
 	result = dialog->run();
-	if (result == Gtk::ResponseType::RESPONSE_OK) {
+	if (result == Gtk::RESPONSE_OK) {
 		delete tone; tone = 0;
 		tone = new mks70_tone();
 		reset_controllers();
@@ -790,22 +797,22 @@ void mks70_window::on_action_file_open()
 	std::string filename;
 
 	dialog = new Gtk::FileChooserDialog("Open tone",
-	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_OPEN);
+	                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("Open", Gtk::RESPONSE_OK);
 	dialog->add_filter(filter);
 	dialog->add_filter(filter_any);
 
 	result = dialog->run();
-	if (result == Gtk::ResponseType::RESPONSE_OK) filename = dialog->get_filename();
+	if (result == Gtk::RESPONSE_OK) filename = dialog->get_filename();
 	delete dialog;
 
-	if (result == Gtk::ResponseType::RESPONSE_OK) {
+	if (result == Gtk::RESPONSE_OK) {
 		load_ok = tone->load_from_file(filename);
 		if (load_ok) reset_controllers();
 		else {
-			message = new Gtk::MessageDialog("Load failed!", false, Gtk::MessageType::MESSAGE_ERROR,
-			                                 Gtk::ButtonsType::BUTTONS_OK, true);
+			message = new Gtk::MessageDialog("Load failed!", false, Gtk::MESSAGE_ERROR,
+			                                 Gtk::BUTTONS_OK, true);
 			message->run();
 			delete message;
 		}
@@ -818,14 +825,14 @@ void mks70_window::on_action_file_save_as()
 	int result;
 
 	dialog = new Gtk::FileChooserDialog("Save tone",
-	                                    Gtk::FileChooserAction::FILE_CHOOSER_ACTION_SAVE);
+	                                    Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("Save", Gtk::RESPONSE_OK);
 	dialog->add_filter(filter);
 	dialog->add_filter(filter_any);
 
 	result = dialog->run();
-	if (result == Gtk::ResponseType::RESPONSE_OK) {
+	if (result == Gtk::RESPONSE_OK) {
 		tone->save_to_file(dialog->get_filename());
 	}
 
@@ -838,11 +845,11 @@ void mks70_window::on_action_file_send()
 	int result;
 
 	dialog = new Gtk::MessageDialog("Send this patch?", false,
-	                               Gtk::MessageType::MESSAGE_QUESTION,
-	                               Gtk::ButtonsType::BUTTONS_OK_CANCEL,
+	                               Gtk::MESSAGE_QUESTION,
+	                               Gtk::BUTTONS_OK_CANCEL,
 	                               true);
 	result = dialog->run();
-	if (result == Gtk::ResponseType::RESPONSE_OK)
+	if (result == Gtk::RESPONSE_OK)
 		tone->apr_send(midi_channel, midiout);
 
 	delete dialog;
@@ -856,7 +863,7 @@ void mks70_window::on_action_file_preferences()
 	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel,
 	                                    tone->get_tone_number(), tone->get_name());
 	result = pref->run();
-	if (result == Gtk::ResponseType::RESPONSE_OK) {
+	if (result == Gtk::RESPONSE_OK) {
 		midi_port = pref->get_midi_port_number ();
 		midi_channel = pref->get_midi_channel();
 		tone->set_tone_number(pref->get_tone_number());

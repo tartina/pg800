@@ -45,8 +45,8 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 	if (tone_number < 2) this->tone_number = tone_number;
 
 	set_border_width(6);
-	add_button("Ok", Gtk::ResponseType::RESPONSE_OK);
-	add_button("Cancel", Gtk::ResponseType::RESPONSE_CANCEL);
+	add_button("Ok", Gtk::RESPONSE_OK);
+	add_button("Cancel", Gtk::RESPONSE_CANCEL);
 	sb_midi_channel.set_numeric();
 	sb_midi_channel.signal_value_changed().connect( sigc::mem_fun(*this,
 		&preferences::on_midi_channel_value_changed) );

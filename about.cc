@@ -27,12 +27,11 @@
 about::about()
 {
 	set_program_name(PACKAGE_NAME);
-	set_authors(about::authors);
-	set_license_type(Gtk::License::LICENSE_GPL_3_0);
+	set_authors(authors);
+	set_license_type(Gtk::LICENSE_GPL_3_0);
 	set_version("Version " PACKAGE_VERSION);
 	set_copyright("Copyright (C) 2014 Guido Aulisi");
 	set_comments(PACKAGE_NAME
 	             " is a MIDI tone editor for the Roland MKS-70 Super JX analogue synthesizer.");
+	authors.push_back("Guido Aulisi <guido.aulisi@gmail.com>");
 }
-
-const std::vector<Glib::ustring> about::authors = {"Guido Aulisi <guido.aulisi@gmail.com>"};
