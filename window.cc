@@ -149,7 +149,9 @@ mks70_window::mks70_window()
 		sigc::mem_fun(*this, &mks70_window::on_action_file_new) );
 	m_refActionGroup->add( Gtk::Action::create("Open", "_Open"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_open) );
-	m_refActionGroup->add( Gtk::Action::create("Saveas", "_Save as"),
+	m_refActionGroup->add( Gtk::Action::create("Save", "_Save"),
+		sigc::mem_fun(*this, &mks70_window::on_action_file_save) );
+	m_refActionGroup->add( Gtk::Action::create("Saveas", "Save as"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_save_as) );
 	m_refActionGroup->add( Gtk::Action::create("Send", "S_end patch"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_send) );
@@ -171,6 +173,7 @@ mks70_window::mks70_window()
 		"    <menu action='MenuFile'>"
 		"      <menuitem action='New'/>"
 		"      <menuitem action='Open'/>"
+		"      <menuitem action='Save'/>"
 		"      <menuitem action='Saveas'/>"
 		"      <menuitem action='Send'/>"
 		"      <separator/>"
@@ -800,7 +803,10 @@ void mks70_window::on_action_file_new()
 	if (result == Gtk::RESPONSE_OK) {
 		delete tone; tone = 0;
 		tone = new mks70_tone();
+		filename.clear();
 		reset_controllers();
+		update_status_bar();
+		set_title(window_title);
 	}
 	delete dialog;
 }
@@ -811,7 +817,6 @@ void mks70_window::on_action_file_open()
 	Gtk::MessageDialog* message;
 	int result;
 	bool load_ok;
-	std::string filename;
 
 	dialog = new Gtk::FileChooserDialog("Open tone",
 	                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
@@ -826,13 +831,26 @@ void mks70_window::on_action_file_open()
 
 	if (result == Gtk::RESPONSE_OK) {
 		load_ok = tone->load_from_file(filename);
-		if (load_ok) reset_controllers();
+		if (load_ok) {
+			reset_controllers();
+			update_status_bar();
+			update_window_title();
+		}
 		else {
 			message = new Gtk::MessageDialog("Load failed!", false, Gtk::MESSAGE_ERROR,
 			                                 Gtk::BUTTONS_OK, true);
 			message->run();
 			delete message;
 		}
+	}
+}
+
+void mks70_window::on_action_file_save()
+{
+	if (filename.empty()) on_action_file_save_as();
+	else {
+		tone->save_to_file(filename);
+		update_window_title();
 	}
 }
 
@@ -850,7 +868,9 @@ void mks70_window::on_action_file_save_as()
 
 	result = dialog->run();
 	if (result == Gtk::RESPONSE_OK) {
-		tone->save_to_file(dialog->get_filename());
+		filename = dialog->get_filename();
+		tone->save_to_file(filename);
+		update_window_title();
 	}
 
 	delete dialog;
@@ -885,9 +905,7 @@ void mks70_window::on_action_file_preferences()
 		midi_channel = pref->get_midi_channel();
 		tone->set_tone_number(pref->get_tone_number());
 		tone->set_name(pref->get_tone_name());
-		status_bar.remove_all_messages();
-		if (tone->get_tone_number() == 0) status_bar.push("Tone A - " + tone->get_name());
-		else status_bar.push("Tone B - " + tone->get_name());
+		update_status_bar();
 	}
 	delete pref;
 
@@ -1206,6 +1224,18 @@ void mks70_window::reset_controllers()
 	adj_lfo_delay_time->set_value(tone->get_lfo_delay_time());
 	adj_lfo_rate->set_value(tone->get_lfo_rate());
 	rb_chorus[tone->get_chorus()].set_active();
+}
+
+void mks70_window::update_status_bar()
+{
+	status_bar.remove_all_messages();
+	if (tone->get_tone_number() == 0) status_bar.push("Tone A - " + tone->get_name());
+	else status_bar.push("Tone B - " + tone->get_name());
+}
+
+void mks70_window::update_window_title()
+{
+	set_title(filename + " - " + window_title);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

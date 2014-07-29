@@ -43,12 +43,13 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 	this->midi_port_number = 0;
 	this->midi_channel = 0;
 	this->tone_number = 0;
-	this->tone_name = "";
+	this->tone_name.clear();
 	this->area = 0;
 
 	if (midi_channel < 16) this->midi_channel = midi_channel;
 	this->midi_port_number = midi_port_number;
 	if (tone_number < 2) this->tone_number = tone_number;
+	if (tone_name.length() > 0) this->tone_name = tone_name;
 
 	set_border_width(6);
 	add_button("Ok", Gtk::RESPONSE_OK);

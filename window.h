@@ -182,6 +182,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		// Signal handlers
 		void on_action_file_open();
 		void on_action_file_new();
+		void on_action_file_save();
 		void on_action_file_save_as();
 		void on_action_file_send();
 		void on_action_file_preferences();
@@ -223,6 +224,8 @@ class mks70_window : public Gtk::ApplicationWindow
 
 		void get_midi_port_names();
 		void reset_controllers();
+		void update_status_bar();
+		void update_window_title();
 
 		mks70_tone* tone;
 		RtMidiOut* midiout;
@@ -233,6 +236,8 @@ class mks70_window : public Gtk::ApplicationWindow
 
 		Glib::RefPtr<Gtk::FileFilter> filter;
 		Glib::RefPtr<Gtk::FileFilter> filter_any;
+
+		std::string filename;
 };
 
 #endif
