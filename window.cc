@@ -30,6 +30,12 @@
 #error We need boost lexical_cast
 #endif
 
+#ifdef HAVE_BOOST_FILESYSTEM_HPP
+#include <boost/filesystem.hpp>
+#else
+#error We need boost filesystem
+#endif
+
 #include "window.h"
 #include "preferences.h"
 #include "about.h"
@@ -799,6 +805,7 @@ void mks70_window::on_action_file_new()
 	                               Gtk::MESSAGE_QUESTION,
 	                               Gtk::BUTTONS_OK_CANCEL,
 	                               true);
+	dialog->set_transient_for(*this);
 	result = dialog->run();
 	if (result == Gtk::RESPONSE_OK) {
 		delete tone; tone = 0;
@@ -820,6 +827,7 @@ void mks70_window::on_action_file_open()
 
 	dialog = new Gtk::FileChooserDialog("Open tone",
 	                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
+	dialog->set_transient_for(*this);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("Open", Gtk::RESPONSE_OK);
 	dialog->add_filter(filter);
@@ -861,6 +869,7 @@ void mks70_window::on_action_file_save_as()
 
 	dialog = new Gtk::FileChooserDialog("Save tone",
 	                                    Gtk::FILE_CHOOSER_ACTION_SAVE);
+	dialog->set_transient_for(*this);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("Save", Gtk::RESPONSE_OK);
 	dialog->add_filter(filter);
@@ -885,6 +894,7 @@ void mks70_window::on_action_file_send()
 	                               Gtk::MESSAGE_QUESTION,
 	                               Gtk::BUTTONS_OK_CANCEL,
 	                               true);
+	dialog->set_transient_for(*this);
 	result = dialog->run();
 	if (result == Gtk::RESPONSE_OK)
 		tone->apr_send(midi_channel, midiout);
@@ -899,6 +909,7 @@ void mks70_window::on_action_file_preferences()
 
 	preferences* pref = new preferences(midi_port_name, midi_port, midi_channel,
 	                                    tone->get_tone_number(), tone->get_name());
+	pref->set_transient_for(*this);
 	result = pref->run();
 	if (result == Gtk::RESPONSE_OK) {
 		midi_port = pref->get_midi_port_number ();
@@ -923,6 +934,7 @@ void mks70_window::on_action_file_preferences()
 void mks70_window::on_action_help_about()
 {
 	about* dialog = new about();
+	dialog->set_transient_for(*this);
 	dialog->run();
 	delete dialog;
 }
@@ -1235,7 +1247,8 @@ void mks70_window::update_status_bar()
 
 void mks70_window::update_window_title()
 {
-	set_title(filename + " - " + window_title);
+	set_title(boost::filesystem::path(filename).filename().string() +
+	          " - " + window_title);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";

@@ -16,10 +16,13 @@ PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
 PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
+AC_LANG_PUSH([C++])
+AC_SEARCH_LIBS([main], [boost_filesystem])
+AC_LANG_POP([C++])
 
 # Checks for header files.
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS(boost/lexical_cast.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
+AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/filesystem.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
 AC_LANG_POP([C++])
 
 # Checks for typedefs, structures, and compiler characteristics.

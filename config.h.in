@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define to 1 if you have the <boost/filesystem.hpp> header file. */
+#undef HAVE_BOOST_FILESYSTEM_HPP
+
 /* Define to 1 if you have the <boost/lexical_cast.hpp> header file. */
 #undef HAVE_BOOST_LEXICAL_CAST_HPP
 
