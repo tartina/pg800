@@ -4,10 +4,12 @@
 AC_PREREQ([2.69])
 AC_INIT([pg800], [0.1], [guido.aulisi@gmail.com])
 AM_INIT_AUTOMAKE
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
+AC_PROG_LIBTOOL
 AC_PROG_CXX
 AC_PROG_CC
 PKG_PROG_PKG_CONFIG
@@ -16,9 +18,8 @@ PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
 PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
-AC_LANG_PUSH([C++])
-AC_SEARCH_LIBS([main], [boost_filesystem])
-AC_LANG_POP([C++])
+BOOST_REQUIRE([1.54.0])
+BOOST_FILESYSTEM
 
 # Checks for header files.
 AC_LANG_PUSH([C++])
