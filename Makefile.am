@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 bin_PROGRAMS = pg800
 pg800_SOURCES = main.cc window.cc window.h tone.cc tone.h preferences.cc preferences.h about.cc about.h
 
