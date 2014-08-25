@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([pg800], [0.1], [guido.aulisi@gmail.com])
+AC_INIT([pg800], [0.2], [guido.aulisi@gmail.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
