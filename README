@@ -1,3 +1,40 @@
-pg800 is a midi editor for the Roland MKS-70 Super JX analouge
+pg800 Copyright (C) 2014 Guido Aulisi <guido.aulisi@gmail.com>
+
+pg800 is a midi editor for the Roland MKS-70 Super JX analog
 synthesizer.
 It can send a single tone parameter or a complete tone.
+Tones can be saved to an XML file, one tone for file.
+
+To build from git repository you need the following packages:
+
+GNU Autotools
+libgtkmm30
+rtmidi
+boost
+libxml++
+inkscape (to generate the icons)
+
+Of course you need the devel (dev) packages of the libraries.
+
+First run autogen.sh to generate the files.
+Then run configure, make and make install to build and
+install the program. You may need to be root to install
+in system directories. This program can be run from
+the source directory without installation.
+
+To build from tarballs you don't need GNU Autotools, nor
+inkscape, but you still need the development packages
+of the libraries.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
