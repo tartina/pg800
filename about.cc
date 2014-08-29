@@ -32,5 +32,5 @@ about::about() : authors(1, "Guido Aulisi <guido.aulisi@gmail.com>")
 	set_version("Version " PACKAGE_VERSION);
 	set_copyright("Copyright (C) 2014 Guido Aulisi");
 	set_comments(PACKAGE_NAME
-	             " is a MIDI tone editor for the Roland MKS-70 Super JX analogue synthesizer.");
+	             " is a MIDI tone editor for the Roland MKS-70 Super JX analog synthesizer.");
 }
