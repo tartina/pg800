@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Roland MKS-70 Super JX Tone Editor
+Comment=pg800 is a MIDI editor for the Roland MKS-70 analog synthesizer
+Categories=AudioVideo;Audio;Midi;
+Exec=pg800
+Icon=pg800
+Terminal=false

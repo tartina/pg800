@@ -7,5 +7,8 @@ pg800_CPPFLAGS=$(gtkmm_CFLAGS) $(rtmidi_CFLAGS) $(libxml_CFLAGS)
 pg800_CXXFLAGS=-Wall
 pg800_LDADD=$(gtkmm_LIBS) $(rtmidi_LIBS) $(libxml_LIBS) $(BOOST_SYSTEM_LIBS) $(BOOST_FILESYSTEM_LIBS)
 
-icondir = $(datadir)/icons
+icondir = $(datadir)/icons/hicolor/48x48/apps
 dist_icon_DATA = icons/pg800.png
+
+desktopdir = $(datadir)/applications
+dist_desktop_DATA = pg800.desktop
