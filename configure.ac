@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([pg800], [0.2], [guido.aulisi@gmail.com])
+AC_INIT([pg800], [0.3], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
@@ -18,7 +18,7 @@ PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
 PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
-BOOST_REQUIRE([1.54.0])
+BOOST_REQUIRE([1.53.0])
 BOOST_FILESYSTEM
 
 # Checks for header files.
@@ -35,5 +35,5 @@ AC_ARG_ENABLE([debug],
 	AS_HELP_STRING([--enable-debug], [enable debug]),
 	AC_DEFINE([HAVE_DEBUG], [1], [Enable debugging code]))
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile pg800.spec])
 AC_OUTPUT
