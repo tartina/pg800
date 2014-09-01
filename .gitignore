@@ -60,3 +60,4 @@ Makefile
 /*.anjuta
 /pg800
 /pg800-*.tar.gz
+/pg800.spec
