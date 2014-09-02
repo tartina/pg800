@@ -1,6 +1,6 @@
 Name:           @PACKAGE_NAME@
 Version:        @PACKAGE_VERSION@
-Release:        1
+Release:        2
 Summary:        A MIDI editor for the Roland MKS-70 synthesizer
 Group:          Applications/Multimedia
 Packager:       Guido Aulisi
@@ -48,7 +48,11 @@ fi
 %{_bindir}/*
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
 
 %changelog
+* Tue Sep 02 2014 Guido Aulisi <guido.aulisi@gmail.com> - 0.3-2
+- Added 128x128 icon
+
 * Mon Sep  1 2014 Guido Aulisi <guido.aulisi@gmail.com> - 0.3-1
 - First version
