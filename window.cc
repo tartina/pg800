@@ -30,10 +30,10 @@
 #error We need boost lexical_cast
 #endif
 
-#ifdef HAVE_BOOST_FILESYSTEM_HPP
-#include <boost/filesystem.hpp>
+#ifdef HAVE_BOOST_ALGORITHM_STRING_PREDICATE_HPP
+#include <boost/algorithm/string/predicate.hpp>
 #else
-#error We need boost filesystem
+#error We need boost string predicate
 #endif
 
 #include "window.h"
@@ -870,15 +870,22 @@ void mks70_window::on_action_file_save_as()
 	dialog = new Gtk::FileChooserDialog("Save tone",
 	                                    Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dialog->set_transient_for(*this);
+	dialog->set_current_name("Untitled");
+	dialog->set_do_overwrite_confirmation(true);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
-	dialog->add_button("Save", Gtk::RESPONSE_OK);
+	dialog->add_button("_Save", Gtk::RESPONSE_OK);
 	dialog->add_filter(filter);
 	dialog->add_filter(filter_any);
 
 	result = dialog->run();
 	if (result == Gtk::RESPONSE_OK) {
 		filename = dialog->get_filename();
-		tone->save_to_file(filename);
+		if ( ! boost::algorithm::ends_with(filename, ".mks70"))
+			filename = filename + ".mks70";
+		try {
+			tone->save_to_file(filename);
+		}
+		catch (const std::exception& ex) {} // TODO: handle error
 		update_window_title();
 	}
 
@@ -1247,8 +1254,7 @@ void mks70_window::update_status_bar()
 
 void mks70_window::update_window_title()
 {
-	set_title(boost::filesystem::path(filename).filename().string() +
-	          " - " + window_title);
+	set_title(Glib::path_get_basename(filename) + " - " + window_title);
 }
 
 const std::string mks70_window::window_title = "Roland MKS-70 Super JX Tone Editor";
