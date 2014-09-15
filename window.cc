@@ -820,8 +820,8 @@ void mks70_window::on_action_file_new()
 
 void mks70_window::on_action_file_open()
 {
-	Gtk::FileChooserDialog* dialog;
-	Gtk::MessageDialog* message;
+	Gtk::FileChooserDialog* dialog = 0;
+	Gtk::MessageDialog* message = 0;
 	int result;
 	bool load_ok;
 
@@ -864,7 +864,8 @@ void mks70_window::on_action_file_save()
 
 void mks70_window::on_action_file_save_as()
 {
-	Gtk::FileChooserDialog* dialog;
+	Gtk::FileChooserDialog* dialog = 0;
+	Gtk::MessageDialog* message = 0;
 	int result;
 
 	dialog = new Gtk::FileChooserDialog("Save tone",
@@ -885,7 +886,12 @@ void mks70_window::on_action_file_save_as()
 		try {
 			tone->save_to_file(filename);
 		}
-		catch (const std::exception& ex) {} // TODO: handle error
+		catch (const std::exception& e) {
+			message = new Gtk::MessageDialog("Save failed!", false, Gtk::MESSAGE_ERROR,
+			                                 Gtk::BUTTONS_OK, true);
+			message->run();
+			delete message;
+		}
 		update_window_title();
 	}
 
