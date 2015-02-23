@@ -2,16 +2,22 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([pg800], [0.3], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
+AC_INIT([pg800], [0.4], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
-AC_PROG_LIBTOOL
 AC_PROG_CXX
+AC_PROG_AWK
 AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
+LT_INIT
 PKG_PROG_PKG_CONFIG
 
 # Checks for libraries.
@@ -21,9 +27,14 @@ PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
 BOOST_REQUIRE([1.53.0])
 
 # Checks for header files.
+old_CPPFLAGS=$CPPFLAGS
+CPPFLAGS="${rtmidi_CFLAGS} ${libxml_CFLAGS} $CFLAGS"
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/algorithm/string/predicate.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
+AC_CHECK_HEADERS(RtMidi.h, [], [AC_MSG_ERROR(RtMidi.h not found)])
+AC_CHECK_HEADERS(libxml++/libxml++.h, [], [AC_MSG_ERROR(libxml++.h not found)])
 AC_LANG_POP([C++])
+CPPFLAGS=$old_CPPFLAGS
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL

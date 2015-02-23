@@ -19,8 +19,14 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the <libxml++/libxml++.h> header file. */
+#undef HAVE_LIBXML___LIBXML___H
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <RtMidi.h> header file. */
+#undef HAVE_RTMIDI_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
