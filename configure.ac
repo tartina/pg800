@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([pg800], [0.4], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
+AC_INIT([pg800], [0.5], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
@@ -22,13 +22,15 @@ PKG_PROG_PKG_CONFIG
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
-PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0])
+PKG_CHECK_MODULES([librtmidi], [librtmidi >= 2.1], [AC_DEFINE([HAVE_LIBRTMIDI], [1], [New librtmidi])],
+	[PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0], [AC_DEFINE([HAVE_RTMIDI], [1], [Old rtmidi])])]
+)
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
 BOOST_REQUIRE([1.53.0])
 
 # Checks for header files.
 old_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="${rtmidi_CFLAGS} ${libxml_CFLAGS} $CFLAGS"
+CPPFLAGS="${rtmidi_CFLAGS} ${libxml_CFLAGS} $CPPFLAGS"
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/algorithm/string/predicate.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
 AC_CHECK_HEADERS(RtMidi.h, [], [AC_MSG_ERROR(RtMidi.h not found)])
