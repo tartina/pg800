@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([pg800], [0.5], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
+AC_INIT([pg800], [0.6], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
