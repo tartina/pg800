@@ -33,7 +33,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		static const std::string window_title;
 
 	private:
-		static const unsigned int range_height = 108;
+		static const unsigned int range_height = 110;
 		Glib::RefPtr<Gtk::IconTheme> icon_theme;
 
 		Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;

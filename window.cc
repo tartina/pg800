@@ -152,7 +152,7 @@ mks70_window::mks70_window()
 
 	set_default_size(640, 400);
 	set_title(window_title);
-	set_border_width(6);
+	set_border_width(4);
 
 	add(m_Application_Box);
 
