@@ -10,6 +10,9 @@
 /* Define to 1 if you have the <boost/lexical_cast.hpp> header file. */
 #undef HAVE_BOOST_LEXICAL_CAST_HPP
 
+/* define if the compiler supports basic C++11 syntax */
+#undef HAVE_CXX11
+
 /* Enable debugging code */
 #undef HAVE_DEBUG
 
@@ -58,8 +61,7 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
 /* Name of package */

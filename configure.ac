@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([pg800], [0.6], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
+AC_INIT([pg800], [0.7], [guido.aulisi@gmail.com],, [http://pinguino.linkpc.net])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([main.cc])
@@ -32,6 +32,7 @@ BOOST_REQUIRE([1.53.0])
 old_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="${rtmidi_CFLAGS} ${libxml_CFLAGS} $CPPFLAGS"
 AC_LANG_PUSH([C++])
+AX_CXX_COMPILE_STDCXX_11([ext],[optional])
 AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/algorithm/string/predicate.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
 AC_CHECK_HEADERS(RtMidi.h, [], [AC_MSG_ERROR(RtMidi.h not found)])
 AC_CHECK_HEADERS(libxml++/libxml++.h, [], [AC_MSG_ERROR(libxml++.h not found)])

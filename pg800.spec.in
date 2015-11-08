@@ -51,11 +51,5 @@ fi
 %{_datadir}/icons/hicolor/128x128/apps/%{name}.png
 
 %changelog
-* Sun Sep 13 2015 Guido Aulisi <guido.aulisi@gmail.com> - 0.6-1
-- Bump version
-
-* Tue Sep 02 2014 Guido Aulisi <guido.aulisi@gmail.com> - 0.3-2
-- Added 128x128 icon
-
-* Mon Sep  1 2014 Guido Aulisi <guido.aulisi@gmail.com> - 0.3-1
+* Mon Sep  1 2014 Guido Aulisi <guido.aulisi@gmail.com> - @PACKAGE_VERSION@-1
 - First version
