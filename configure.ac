@@ -27,6 +27,8 @@ PKG_CHECK_MODULES([librtmidi], [librtmidi >= 2.1], [AC_DEFINE([HAVE_LIBRTMIDI], 
 )
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
 BOOST_REQUIRE([1.53.0])
+BOOST_CONVERSION
+BOOST_STRING_ALGO
 
 # Checks for header files.
 old_CPPFLAGS=$CPPFLAGS
