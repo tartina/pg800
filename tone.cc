@@ -98,8 +98,6 @@ void mks70_tone::init_tone()
 #endif
 }
 
-mks70_tone::~mks70_tone() {}
-
 void mks70_tone::set_dco_range(unsigned short dco, unsigned short range,
                                unsigned short midi_channel, RtMidiOut* midi_out, bool send)
 {

@@ -80,7 +80,6 @@ private:
 public:
 	static const std::string init_tone_name;
 	mks70_tone();
-	virtual ~mks70_tone();
 
 	void apr_send(unsigned short midi_channel, RtMidiOut* midi_out);
 
