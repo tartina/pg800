@@ -144,7 +144,7 @@ mks70_window::mks70_window()
 #ifdef HAVE_DEBUG
 		error.printMessage();
 #endif
-		throw error;
+		throw;
 	}
 
 	get_midi_port_names();
