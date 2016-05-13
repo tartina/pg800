@@ -1,6 +1,6 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * bulkdump.h
+ * tonechooser.h
  * Copyright (C) 2016 Guido Aulisi <guido.aulisi@gmail.com>
  *
  * pg800 is free software: you can redistribute it and/or modify it
@@ -17,32 +17,33 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _BULKDUMP_H_
-#define _BULKDUMP_H_
+#ifndef _TONECHOOSER_H_
+#define _TONECHOOSER_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <gtkmm.h>
 
-#include <iostream>
-#include <fstream>
-#include <string>
+#include "tonemodelcolumns.h"
+#include "bulkdump.h"
 
-class mks70_bulkdump
+class ToneChooser: public Gtk::Dialog
 {
 public:
-	mks70_bulkdump(const std::string& file_name);
-	virtual ~mks70_bulkdump();
-	mks70_bulkdump(const mks70_bulkdump& other) = delete;
-	mks70_bulkdump& operator=(const mks70_bulkdump& other) = delete;
-	const std::string& get_tone_name(unsigned short index) const;
-	const unsigned short get_tone_number() const {return 50; }
+	ToneChooser(mks70_bulkdump *dump);
+	unsigned short get_tone_number() {return tone_number;}
 
-	static const std::string INVALID_TONE_NAME;
+protected:
+	void on_selection_changed();
 
 private:
-	char *dump; // The dump buffer 10234 bytes
-	std::string *tone_name[50]; // A dump contains 50 tones
+	unsigned short tone_number;
+	Gtk::Box *area;
+	ToneModelColumns m_Columns;
+	Glib::RefPtr<Gtk::ListStore> refListStore;
+	Gtk::TreeView tree_view;
+	Gtk::ScrolledWindow m_ScrolledWindow;
+	Glib::RefPtr<Gtk::TreeSelection> refTreeSelection;
+
+	mks70_bulkdump *dump;
 };
 
-#endif // _BULKDUMP_H_
+#endif // _TONECHOOSER_H_

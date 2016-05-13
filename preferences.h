@@ -32,7 +32,6 @@ public:
                 const unsigned short midi_channel = 0,
 	            const unsigned short tone_number = 0,
 	            const std::string tone_name = "INIT TONE");
-	virtual ~preferences();
 
 	inline unsigned int get_midi_port_number() const {return midi_port_number;};
 	inline unsigned short get_midi_channel() const {return midi_channel;};

@@ -41,6 +41,7 @@
 #include "about.h"
 #include "bulkdump.h"
 #include "bulkdump_exception.h"
+#include "tonechooser.h"
 
 mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
@@ -876,6 +877,7 @@ void mks70_window::on_action_file_load()
 	Gtk::MessageDialog* message = 0;
 	int result;
 	mks70_bulkdump* dump = nullptr;
+	unsigned short tone_number;
 
 	dialog = new Gtk::FileChooserDialog("Load bulk dump",
 	                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
@@ -892,7 +894,13 @@ void mks70_window::on_action_file_load()
 	if (result == Gtk::RESPONSE_OK) {
 		try {
 			dump = new mks70_bulkdump(filename);
+
 			// Choose tone
+			ToneChooser *tone_chooser = new ToneChooser(dump);
+			tone_chooser->set_transient_for(*this);
+			int tone_result = tone_chooser->run();
+			if (tone_result == Gtk::RESPONSE_OK) tone_number = tone_chooser->get_tone_number();
+			delete tone_chooser;
 
 			delete dump;
 		}

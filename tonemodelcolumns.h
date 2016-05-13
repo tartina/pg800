@@ -1,6 +1,6 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * bulkdump.h
+ * tonemodelcolumn.h
  * Copyright (C) 2016 Guido Aulisi <guido.aulisi@gmail.com>
  *
  * pg800 is free software: you can redistribute it and/or modify it
@@ -17,32 +17,19 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _BULKDUMP_H_
-#define _BULKDUMP_H_
+#ifndef _TONEMODELCOLUMN_H_
+#define _TONEMODELCOLUMN_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <gtkmm.h>
 
-#include <iostream>
-#include <fstream>
-#include <string>
-
-class mks70_bulkdump
+class ToneModelColumns : public Gtk::TreeModelColumnRecord
 {
 public:
-	mks70_bulkdump(const std::string& file_name);
-	virtual ~mks70_bulkdump();
-	mks70_bulkdump(const mks70_bulkdump& other) = delete;
-	mks70_bulkdump& operator=(const mks70_bulkdump& other) = delete;
-	const std::string& get_tone_name(unsigned short index) const;
-	const unsigned short get_tone_number() const {return 50; }
 
-	static const std::string INVALID_TONE_NAME;
+	ToneModelColumns() { add(m_col_number); add(m_col_text); }
 
-private:
-	char *dump; // The dump buffer 10234 bytes
-	std::string *tone_name[50]; // A dump contains 50 tones
+	Gtk::TreeModelColumn<int> m_col_number;
+	Gtk::TreeModelColumn<Glib::ustring> m_col_text;
 };
 
-#endif // _BULKDUMP_H_
+#endif // _TONEMODELCOLUMN_H_

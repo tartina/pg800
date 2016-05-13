@@ -26,7 +26,6 @@ class about : public Gtk::AboutDialog
 {
 public:
 	about();
-	virtual ~about() {};
 private:
 	const std::vector<Glib::ustring> authors;
 };

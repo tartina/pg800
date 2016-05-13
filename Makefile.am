@@ -2,7 +2,8 @@ ACLOCAL_AMFLAGS = -I m4
 
 bin_PROGRAMS = pg800
 pg800_SOURCES = main.cc window.cc window.h tone.cc tone.h preferences.cc \
-	preferences.h about.cc about.h bulkdump.cc bulkdump.h bulkdump_exception.h
+	preferences.h about.cc about.h bulkdump.cc bulkdump.h bulkdump_exception.h \
+	tonechooser.cc tonechooser.h tonemodelcolumn.h
 
 pg800_CPPFLAGS=$(gtkmm_CFLAGS) $(librtmidi_CFLAGS) $(rtmidi_CFLAGS) $(libxml_CFLAGS)
 pg800_CXXFLAGS=-Wall

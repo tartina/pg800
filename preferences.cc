@@ -90,8 +90,6 @@ preferences::preferences(const std::vector<std::string>& midi_port_name,
 	show_all_children();
 }
 
-preferences::~preferences() {}
-
 void preferences::on_midi_channel_value_changed()
 {
 	midi_channel = sb_midi_channel.get_value() - 1;
