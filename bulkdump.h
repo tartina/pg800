@@ -35,9 +35,11 @@ public:
 	virtual ~mks70_bulkdump();
 	mks70_bulkdump(const mks70_bulkdump& other) = delete;
 	mks70_bulkdump& operator=(const mks70_bulkdump& other) = delete;
-	const std::string& get_tone_name(unsigned short index) const;
-	const unsigned short get_tone_number() const {return 50; }
 
+	const std::string& get_tone_name(unsigned short index) const;
+	const unsigned short get_dco_range(unsigned short tone, unsigned short dco) const;
+
+	static const unsigned short TONE_NUMBER;
 	static const std::string INVALID_TONE_NAME;
 
 private:

@@ -17,6 +17,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef HAVE_DEBUG
+#include <iostream>
+#endif
+
 #include "tonechooser.h"
 
 ToneChooser::ToneChooser(mks70_bulkdump * dump)
@@ -27,14 +35,14 @@ ToneChooser::ToneChooser(mks70_bulkdump * dump)
 
 	this->dump = dump;
 
-	set_default_size(300, 200);
+	set_default_size(300, 240);
 	set_border_width(6);
 	add_button("Ok", Gtk::RESPONSE_OK);
 	add_button("Cancel", Gtk::RESPONSE_CANCEL);
 
 	refListStore = Gtk::ListStore::create(m_Columns);
 	// Fill data
-	for (unsigned short i = 0; i < dump->get_tone_number(); ++i) {
+	for (unsigned short i = 0; i < mks70_bulkdump::TONE_NUMBER; ++i) {
 		it = refListStore->append();
 		row = *it;
 		row[m_Columns.m_col_number] = i + 1;
@@ -59,10 +67,14 @@ ToneChooser::ToneChooser(mks70_bulkdump * dump)
 	show_all_children();
 }
 
-ToneChooser::on_selection_changed()
+void ToneChooser::on_selection_changed()
 {
-	TreeModel::iterator iter = refTreeSelection->get_selected();
+	Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
 	if(iter) {
-		TreeModel::Row row = *iter;
+		Gtk::TreeModel::Row row = *iter;
+		tone_number = row.get_value(m_Columns.m_col_number) - 1;
+#ifdef HAVE_DEBUG
+		std::cout << "Selected tone: " << tone_number << std::endl;
+#endif
 	}
 }

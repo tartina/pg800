@@ -873,13 +873,11 @@ void mks70_window::on_action_file_open()
 
 void mks70_window::on_action_file_load()
 {
-	Gtk::FileChooserDialog* dialog = 0;
-	Gtk::MessageDialog* message = 0;
 	int result;
 	mks70_bulkdump* dump = nullptr;
-	unsigned short tone_number;
+	unsigned short tone_number = 0;
 
-	dialog = new Gtk::FileChooserDialog("Load bulk dump",
+	auto dialog = new Gtk::FileChooserDialog("Load bulk dump",
 	                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog->set_transient_for(*this);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
@@ -889,26 +887,34 @@ void mks70_window::on_action_file_load()
 
 	result = dialog->run();
 	if (result == Gtk::RESPONSE_OK) filename = dialog->get_filename();
-	delete dialog;
+	delete dialog; dialog = nullptr;
 
 	if (result == Gtk::RESPONSE_OK) {
 		try {
 			dump = new mks70_bulkdump(filename);
 
 			// Choose tone
-			ToneChooser *tone_chooser = new ToneChooser(dump);
+			auto *tone_chooser = new ToneChooser(dump);
 			tone_chooser->set_transient_for(*this);
 			int tone_result = tone_chooser->run();
-			if (tone_result == Gtk::RESPONSE_OK) tone_number = tone_chooser->get_tone_number();
-			delete tone_chooser;
+			if (tone_result == Gtk::RESPONSE_OK) {
+				tone_number = tone_chooser->get_tone_number();
+			}
+			delete tone_chooser; tone_chooser = nullptr;
+
+			tone->set_from_dump(dump, tone_number);
+
+			reset_controllers();
+			update_status_bar();
+			update_window_title();
 
 			delete dump;
 		}
 		catch (mks70_bulkdump_exception& bulk_dump_exception) {
-			message = new Gtk::MessageDialog(*this, bulk_dump_exception.what(), false, Gtk::MESSAGE_ERROR,
+			auto message = new Gtk::MessageDialog(*this, bulk_dump_exception.what(), false, Gtk::MESSAGE_ERROR,
 			                                 Gtk::BUTTONS_OK, true);
 			message->run();
-			delete message;
+			delete message; message = nullptr;
 		}
 	}
 }

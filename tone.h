@@ -26,6 +26,7 @@
 
 #include <string>
 #include "RtMidi.h"
+#include "bulkdump.h"
 
 class mks70_tone
 {
@@ -163,6 +164,7 @@ public:
 
 	void save_to_file(const std::string& file_name) const;
 	bool load_from_file(const std::string& file_name);
+	void set_from_dump(const mks70_bulkdump* const dump, const unsigned short tone_number);
 
 	// Get methods
 	unsigned short get_dco_range(unsigned short dco);

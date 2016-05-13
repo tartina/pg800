@@ -37,7 +37,6 @@
 #define BULKDUMP_SIZE 10234
 #define TONE_DUMP_START 6784
 #define TONE_DUMP_SIZE 69
-#define TONE_NUMBER 50
 
 mks70_bulkdump::mks70_bulkdump(const std::string& file_name)
 {
@@ -56,12 +55,6 @@ mks70_bulkdump::mks70_bulkdump(const std::string& file_name)
 		file.close();
 	}
 
-#ifdef HAVE_DEBUG
-	std::cout << "Bulk dump: " << std::hex;
-	for (i = 0; i < BULKDUMP_SIZE; ++i) std::cout << (+dump[i] & 0xFF) << " ";
-	std::cout << std::endl;
-#endif
-
 	// Do some checks on dump
 	if (dump[0] != '\xf0' || dump[1] != '\x41' || dump[2] != '\x37')
 		throw mks70_bulkdump_exception("Wrong file header  format");
@@ -74,9 +67,9 @@ mks70_bulkdump::mks70_bulkdump(const std::string& file_name)
 
 #ifdef HAVE_DEBUG
 		std::cout << "i: " << i << ", tone index: " << tone_index << std::endl;
-		std::cout << "Tone dump: " << std::hex;
-		for (unsigned short k = tone_index; k < tone_index + TONE_DUMP_SIZE; ++k) std::cout << (+dump[k] & 0xFF) << " ";
-		std::cout << std::endl;
+		std::cout << "Tone dump" << std::hex << std::endl;
+		for (unsigned short k = 0; k < TONE_DUMP_SIZE; ++k)
+			std::cout << k << ": " << (+dump[k + tone_index] & 0xFF) << std::endl;
 #endif
 		// Check
 		if (dump[tone_index] != '\xf0' || dump[tone_index + 1] != '\x41' || dump[tone_index + 2] != '\x37' ||
@@ -87,9 +80,6 @@ mks70_bulkdump::mks70_bulkdump(const std::string& file_name)
 
 		// Construct tone name
 		tone_name[i] = new std::string(&dump[tone_index + 9], 10);
-#ifdef HAVE_DEBUG
-		std::cout << "Tone " << i << " name: " << *tone_name[i] << std::endl;
-#endif
 	}
 }
 
@@ -101,8 +91,17 @@ mks70_bulkdump::~mks70_bulkdump()
 
 const std::string& mks70_bulkdump::get_tone_name(unsigned short index) const
 {
-	if (index < 50) return *tone_name[index];
+	if (index < TONE_NUMBER) return *tone_name[index];
 	return INVALID_TONE_NAME;
 }
 
+const unsigned short mks70_bulkdump::get_dco_range(unsigned short tone, unsigned short dco) const
+{
+	if (tone < TONE_NUMBER && dco < 2) {
+		auto tone_index = TONE_DUMP_START + TONE_DUMP_SIZE * tone;
+		return dump[tone_index + 9 + 11 + 5 * dco] / 32;
+	} else return 0;
+}
+
+const unsigned short mks70_bulkdump::TONE_NUMBER = 50;
 const std::string mks70_bulkdump::INVALID_TONE_NAME = "[INVALID NAME]";

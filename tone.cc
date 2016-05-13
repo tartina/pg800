@@ -1960,6 +1960,14 @@ std::cout << "Value: " << text_value << std::endl;
 	return load_ok;
 }
 
+void mks70_tone::set_from_dump(const mks70_bulkdump* const dump, const unsigned short tone_number)
+{
+	set_name(dump->get_tone_name(tone_number));
+	for (unsigned short i = 0; i < 2; ++i) {
+		set_dco_range(i, dump->get_dco_range(tone_number, i));
+	}
+}
+
 // Get methods
 unsigned short mks70_tone::get_dco_range(unsigned short dco)
 {
