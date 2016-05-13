@@ -39,6 +39,8 @@
 #include "window.h"
 #include "preferences.h"
 #include "about.h"
+#include "bulkdump.h"
+#include "bulkdump_exception.h"
 
 mks70_window::mks70_window()
 	: m_Application_Box(Gtk::ORIENTATION_VERTICAL),
@@ -163,6 +165,8 @@ mks70_window::mks70_window()
 		sigc::mem_fun(*this, &mks70_window::on_action_file_new) );
 	m_refActionGroup->add( Gtk::Action::create("Open", "_Open"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_open) );
+	m_refActionGroup->add( Gtk::Action::create("Load", "Bulk _load"),
+		sigc::mem_fun(*this, &mks70_window::on_action_file_load) );
 	m_refActionGroup->add( Gtk::Action::create("Save", "_Save"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_save) );
 	m_refActionGroup->add( Gtk::Action::create("Saveas", "Save as"),
@@ -187,6 +191,7 @@ mks70_window::mks70_window()
 		"    <menu action='MenuFile'>"
 		"      <menuitem action='New'/>"
 		"      <menuitem action='Open'/>"
+		"      <menuitem action='Load'/>"
 		"      <menuitem action='Save'/>"
 		"      <menuitem action='Saveas'/>"
 		"      <menuitem action='Send'/>"
@@ -749,6 +754,10 @@ mks70_window::mks70_window()
 	filter = Gtk::FileFilter::create();
 	filter->set_name("Roland MKS70 Patch");
 	filter->add_pattern("*.mks70");
+	filter_bulk_dump = Gtk::FileFilter::create();
+	filter_bulk_dump->set_name("Roland MKS70 Bulk Dump");
+	filter_bulk_dump->add_pattern("*.SYX");
+	filter_bulk_dump->add_pattern("*.syx");
 	filter_any = Gtk::FileFilter::create();
 	filter_any->set_name("Any files");
 	filter_any->add_pattern("*");
@@ -853,7 +862,42 @@ void mks70_window::on_action_file_open()
 			update_window_title();
 		}
 		else {
-			message = new Gtk::MessageDialog("Load failed!", false, Gtk::MESSAGE_ERROR,
+			message = new Gtk::MessageDialog(*this, "Load failed!", false, Gtk::MESSAGE_ERROR,
+			                                 Gtk::BUTTONS_OK, true);
+			message->run();
+			delete message;
+		}
+	}
+}
+
+void mks70_window::on_action_file_load()
+{
+	Gtk::FileChooserDialog* dialog = 0;
+	Gtk::MessageDialog* message = 0;
+	int result;
+	mks70_bulkdump* dump = nullptr;
+
+	dialog = new Gtk::FileChooserDialog("Load bulk dump",
+	                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
+	dialog->set_transient_for(*this);
+	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog->add_button("Load", Gtk::RESPONSE_OK);
+	dialog->add_filter(filter_bulk_dump);
+	dialog->add_filter(filter_any);
+
+	result = dialog->run();
+	if (result == Gtk::RESPONSE_OK) filename = dialog->get_filename();
+	delete dialog;
+
+	if (result == Gtk::RESPONSE_OK) {
+		try {
+			dump = new mks70_bulkdump(filename);
+			// Choose tone
+
+			delete dump;
+		}
+		catch (mks70_bulkdump_exception& bulk_dump_exception) {
+			message = new Gtk::MessageDialog(*this, bulk_dump_exception.what(), false, Gtk::MESSAGE_ERROR,
 			                                 Gtk::BUTTONS_OK, true);
 			message->run();
 			delete message;

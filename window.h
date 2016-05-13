@@ -180,8 +180,9 @@ class mks70_window : public Gtk::ApplicationWindow
 		Gtk::RadioButton rb_chorus[3];
 
 		// Signal handlers
-		void on_action_file_open();
 		void on_action_file_new();
+		void on_action_file_open();
+		void on_action_file_load();
 		void on_action_file_save();
 		void on_action_file_save_as();
 		void on_action_file_send();
@@ -235,6 +236,7 @@ class mks70_window : public Gtk::ApplicationWindow
 		std::vector<std::string> midi_port_name;
 
 		Glib::RefPtr<Gtk::FileFilter> filter;
+		Glib::RefPtr<Gtk::FileFilter> filter_bulk_dump;
 		Glib::RefPtr<Gtk::FileFilter> filter_any;
 
 		std::string filename;
