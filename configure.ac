@@ -19,6 +19,7 @@ AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 LT_INIT
 PKG_PROG_PKG_CONFIG
+AX_CXX_COMPILE_STDCXX(11,,[mandatory])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
@@ -34,7 +35,6 @@ BOOST_STRING_ALGO
 old_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="${rtmidi_CFLAGS} ${libxml_CFLAGS} $CPPFLAGS"
 AC_LANG_PUSH([C++])
-AX_CXX_COMPILE_STDCXX_11([ext],[optional])
 AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/algorithm/string/predicate.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
 AC_CHECK_HEADERS(RtMidi.h, [], [AC_MSG_ERROR(RtMidi.h not found)])
 AC_CHECK_HEADERS(libxml++/libxml++.h, [], [AC_MSG_ERROR(libxml++.h not found)])
