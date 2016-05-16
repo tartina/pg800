@@ -36,8 +36,45 @@ public:
 	mks70_bulkdump(const mks70_bulkdump& other) = delete;
 	mks70_bulkdump& operator=(const mks70_bulkdump& other) = delete;
 
+	// Getter functions
 	const std::string& get_tone_name(unsigned short index) const;
 	const unsigned short get_dco_range(unsigned short tone, unsigned short dco) const;
+	const unsigned short get_dco_waveform(unsigned short tone, unsigned short dco) const;
+	const unsigned short get_dco2_crossmod(unsigned short tone) const;
+	const unsigned short get_dco_tune(unsigned short tone, unsigned short dco) const;
+	const unsigned short get_dco2_fine_tune(unsigned short tone) const;
+	const unsigned short get_dco_lfo_mod_depth(unsigned short tone, unsigned short dco) const;
+	const unsigned short get_dco_lfo_env_depth(unsigned short tone, unsigned short dco) const;
+	const unsigned short get_dco_dynamics(unsigned short tone) const;
+	const unsigned short get_dco_env_mode(unsigned short tone) const;
+	const unsigned short get_mixer_dco(unsigned short tone, unsigned short dco) const;
+	const unsigned short get_mixer_env_mode_depth(unsigned short tone) const;
+	const unsigned short get_mixer_dynamics(unsigned short tone) const;
+	const unsigned short get_mixer_env_mode(unsigned short tone) const;
+	const unsigned short get_hpf_cutoff_freq(unsigned short tone) const;
+	const unsigned short get_vcf_cutoff_freq(unsigned short tone) const;
+	const unsigned short get_vcf_resonance(unsigned short tone) const;
+	const unsigned short get_vcf_lfo_mod_depth(unsigned short tone) const;
+	const unsigned short get_vcf_env_mod_depth(unsigned short tone) const;
+	const unsigned short get_vcf_key_follow(unsigned short tone) const;
+	const unsigned short get_vcf_dynamics(unsigned short tone) const;
+	const unsigned short get_vcf_env_mode(unsigned short tone) const;
+	const unsigned short get_vca_level(unsigned short tone) const;
+	const unsigned short get_vca_dynamics(unsigned short tone) const;
+	const unsigned short get_chorus(unsigned short tone) const;
+	const unsigned short get_lfo_waveform(unsigned short tone) const;
+	const unsigned short get_lfo_delay_time(unsigned short tone) const;
+	const unsigned short get_lfo_rate(unsigned short tone) const;
+	const unsigned short get_env_attack_time(unsigned short tone, unsigned short env) const;
+	const unsigned short get_env_decay_time(unsigned short tone, unsigned short env) const;
+	const unsigned short get_env_sustain_level(unsigned short tone, unsigned short env) const;
+	const unsigned short get_env_release_time(unsigned short tone, unsigned short env) const;
+	const unsigned short get_env_key_follow(unsigned short tone, unsigned short env) const;
+	const unsigned short get_vca_env_mode(unsigned short tone) const;
+
+#ifdef HAVE_DEBUG
+	void dump_tone(unsigned short tone) const;
+#endif
 
 	static const unsigned short TONE_NUMBER;
 	static const std::string INVALID_TONE_NAME;

@@ -788,10 +788,6 @@ void mks70_window::on_dco_range_button_clicked(unsigned short dco)
 {
 	unsigned short i;
 
-#ifdef HAVE_DEBUG
-	std::cout << "on_dco_range_button_clicked CALLED!" << std::endl;
-#endif
-
 	if (dco < 2) for (i = 0; i < 4; i++)
 		if (rb_dco_range[i][dco].get_active()) {
 			tone->set_dco_range(dco, i, midi_channel, midiout, true);
@@ -802,10 +798,6 @@ void mks70_window::on_dco_range_button_clicked(unsigned short dco)
 void mks70_window::on_dco_waveform_button_clicked(unsigned short dco)
 {
 	unsigned short i;
-
-#ifdef HAVE_DEBUG
-	std::cout << "on_dco_waveform_button_clicked CALLED!" << std::endl;
-#endif
 
 	if (dco < 2) for (i = 0; i < 4; i++)
 		if (rb_dco_waveform[i][dco].get_active()) {

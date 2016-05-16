@@ -1963,9 +1963,47 @@ std::cout << "Value: " << text_value << std::endl;
 void mks70_tone::set_from_dump(const mks70_bulkdump* const dump, const unsigned short tone_number)
 {
 	set_name(dump->get_tone_name(tone_number));
+	set_dco2_crossmod(dump->get_dco2_crossmod(tone_number));
+	set_dco2_ftune(dump->get_dco2_fine_tune(tone_number));
+	set_dco_dyna(dump->get_dco_dynamics(tone_number));
+	set_dco_mode(dump->get_dco_env_mode(tone_number));
+	set_mixer_envelope(dump->get_mixer_env_mode_depth(tone_number));
+	set_mixer_dyna(dump->get_mixer_dynamics(tone_number));
+	set_mixer_mode(dump->get_mixer_env_mode(tone_number));
+	set_vcf_hpf(dump->get_hpf_cutoff_freq(tone_number));
+	set_vcf_cutoff(dump->get_vcf_cutoff_freq(tone_number));
+	set_vcf_resonance(dump->get_vcf_resonance(tone_number));
+	set_vcf_lfo(dump->get_vcf_lfo_mod_depth(tone_number));
+	set_vcf_envelope(dump->get_vcf_env_mod_depth(tone_number));
+	set_vcf_key(dump->get_vcf_key_follow(tone_number));
+	set_vcf_dyna(dump->get_vcf_dynamics(tone_number));
+	set_vcf_env_mode(dump->get_vcf_env_mode(tone_number));
+	set_vca_level(dump->get_vca_level(tone_number));
+	set_vca_dyna(dump->get_vca_dynamics(tone_number));
+	set_chorus(dump->get_chorus(tone_number));
+	set_lfo_waveform(dump->get_lfo_waveform(tone_number));
+	set_lfo_delay_time(dump->get_lfo_delay_time(tone_number));
+	set_lfo_rate(dump->get_lfo_rate(tone_number));
+	set_vca_env_mode(dump->get_vca_env_mode(tone_number));
+
+	// Double parameters
 	for (unsigned short i = 0; i < 2; ++i) {
 		set_dco_range(i, dump->get_dco_range(tone_number, i));
+		set_dco_wave(i, dump->get_dco_waveform(tone_number, i));
+		set_dco_tune(i, dump->get_dco_tune(tone_number, i));
+		set_dco_lfo(i, dump->get_dco_lfo_mod_depth(tone_number, i));
+		set_dco_envelope(i, dump->get_dco_lfo_env_depth(tone_number, i));
+		set_mixer_dco(i, dump->get_mixer_dco(tone_number, i));
+		set_envelope_attack(i, dump->get_env_attack_time(tone_number, i));
+		set_envelope_decay(i, dump->get_env_decay_time(tone_number, i));
+		set_envelope_sustain(i, dump->get_env_sustain_level(tone_number, i));
+		set_envelope_release(i, dump->get_env_release_time(tone_number, i));
+		set_envelope_key_follow(i, dump->get_env_key_follow(tone_number, i));
 	}
+
+#ifdef HAVE_DEBUG
+	dump->dump_tone(tone_number);
+#endif
 }
 
 // Get methods
