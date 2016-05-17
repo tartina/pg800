@@ -30,10 +30,10 @@
 #error We need boost lexical_cast
 #endif
 
-#ifdef HAVE_BOOST_ALGORITHM_STRING_PREDICATE_HPP
-#include <boost/algorithm/string/predicate.hpp>
+#ifdef HAVE_BOOST_ALGORITHM_STRING_HPP
+#include <boost/algorithm/string.hpp>
 #else
-#error We need boost string predicate
+#error We need boost algorithm string
 #endif
 
 #include "window.h"

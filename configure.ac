@@ -35,7 +35,7 @@ BOOST_STRING_ALGO
 old_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="${rtmidi_CFLAGS} ${libxml_CFLAGS} $CPPFLAGS"
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/algorithm/string/predicate.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
+AC_CHECK_HEADERS(boost/lexical_cast.hpp boost/algorithm/string.hpp, [], [AC_MSG_ERROR(You need the Boost libraries.)])
 AC_CHECK_HEADERS(RtMidi.h, [], [AC_MSG_ERROR(RtMidi.h not found)])
 AC_CHECK_HEADERS(libxml++/libxml++.h, [], [AC_MSG_ERROR(libxml++.h not found)])
 AC_LANG_POP([C++])

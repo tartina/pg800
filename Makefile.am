@@ -17,3 +17,18 @@ dist_icon128_DATA = icons/128/pg800.png
 
 desktopdir = $(datadir)/applications
 dist_desktop_DATA = pg800.desktop
+
+icons/48:
+	mkdir -p icons/48
+
+icons/128:
+	mkdir -p icons/128
+
+$(dist_icon48_DATA): icons/pg800-48x48.svg | icons/48
+	inkscape --export-png=$@ icons/pg800-48x48.svg
+
+$(dist_icon128_DATA): icons/pg800-128x128.svg | icons/128
+	inkscape --export-png=$@ icons/pg800-128x128.svg
+
+clean-local:
+	-rm -rf icons/48 icons/128

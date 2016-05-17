@@ -3,12 +3,8 @@
 /* Defined if the requested minimum BOOST version is satisfied */
 #undef HAVE_BOOST
 
-/* Define to 1 if you have <boost/algorithm/string.hpp> */
+/* Define to 1 if you have the <boost/algorithm/string.hpp> header file. */
 #undef HAVE_BOOST_ALGORITHM_STRING_HPP
-
-/* Define to 1 if you have the <boost/algorithm/string/predicate.hpp> header
-   file. */
-#undef HAVE_BOOST_ALGORITHM_STRING_PREDICATE_HPP
 
 /* Define to 1 if you have <boost/cast.hpp> */
 #undef HAVE_BOOST_CAST_HPP
