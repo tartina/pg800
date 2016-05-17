@@ -32,3 +32,5 @@ $(dist_icon128_DATA): icons/pg800-128x128.svg | icons/128
 
 clean-local:
 	-rm -rf icons/48 icons/128
+
+EXTRA_DIST = icons/pg800-48x48.svg icons/pg800-128x128.svg

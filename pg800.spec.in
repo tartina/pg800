@@ -44,7 +44,8 @@ fi
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files
-%doc README COPYING AUTHORS
+%doc README AUTHORS
+%license COPYING
 %{_bindir}/*
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/48x48/apps/%{name}.png
