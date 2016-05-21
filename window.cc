@@ -172,7 +172,7 @@ mks70_window::mks70_window()
 		sigc::mem_fun(*this, &mks70_window::on_action_file_save) );
 	m_refActionGroup->add( Gtk::Action::create("Saveas", "Save as"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_save_as) );
-	m_refActionGroup->add( Gtk::Action::create("Send", "S_end patch"),
+	m_refActionGroup->add( Gtk::Action::create("Send", "S_end tone"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_send) );
 	m_refActionGroup->add( Gtk::Action::create("Preferences", "_Preferences"),
 		sigc::mem_fun(*this, &mks70_window::on_action_file_preferences) );
@@ -929,7 +929,7 @@ void mks70_window::on_action_file_save_as()
 	dialog = new Gtk::FileChooserDialog("Save tone",
 	                                    Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dialog->set_transient_for(*this);
-	dialog->set_current_name("Untitled");
+	dialog->set_current_name(tone->get_name());
 	dialog->set_do_overwrite_confirmation(true);
 	dialog->add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog->add_button("_Save", Gtk::RESPONSE_OK);
