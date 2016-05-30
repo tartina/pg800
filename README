@@ -1,9 +1,14 @@
 pg800 Copyright (C) 2014 Guido Aulisi <guido.aulisi@gmail.com>
 
-pg800 is a midi editor for the Roland MKS-70 Super JX analog
+pg800 is a GTK+ midi editor for the Roland MKS-70 Super JX analog
 synthesizer.
 It can send a single tone parameter or a complete tone.
 Tones can be saved to an XML file, one tone for file.
+Now it can also load a complete SysEx MIDI Bulk Dump, one tone
+at a time from a list of the 50 tones in the dump.
+
+This program has only been tested on GNU/Linux, but it may work
+on other systems where all the required libraries are installed.
 
 To build from git repository you need the following packages:
 
