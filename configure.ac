@@ -23,9 +23,7 @@ AX_CXX_COMPILE_STDCXX(11,,[mandatory])
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gtkmm], [gtkmm-3.0 >= 3.8])
-PKG_CHECK_MODULES([librtmidi], [librtmidi >= 2.1], [AC_DEFINE([HAVE_LIBRTMIDI], [1], [New librtmidi])],
-	[PKG_CHECK_MODULES([rtmidi], [rtmidi >= 1.0], [AC_DEFINE([HAVE_RTMIDI], [1], [Old rtmidi])])]
-)
+PKG_CHECK_MODULES([rtmidi], [rtmidi >= 3.0])
 PKG_CHECK_MODULES([libxml], [libxml++-2.6 >= 2.37])
 BOOST_REQUIRE([1.53.0])
 BOOST_CONVERSION

@@ -132,17 +132,9 @@ mks70_window::mks70_window()
 	tone = new mks70_tone();
 
 	try {
-#ifdef HAVE_LIBRTMIDI
 		midiout = new RtMidiOut(RtMidi::UNSPECIFIED, "pg800");
-#else
-		midiout = new RtMidiOut("pg800");
-#endif
 	}
-#ifdef HAVE_LIBRTMIDI
 	catch ( const RtMidiError &error ) {
-#else
-	catch ( const RtError &error ) {
-#endif
 		// TODO handle error
 #ifdef HAVE_DEBUG
 		error.printMessage();
@@ -989,6 +981,7 @@ void mks70_window::on_action_file_preferences()
 		tone->set_name(pref->get_tone_name());
 		update_status_bar();
 	}
+	pref->hide();
 	delete pref;
 
 	if (midi_port != old_midi_port) {
@@ -996,11 +989,7 @@ void mks70_window::on_action_file_preferences()
 			midiout->closePort();
 			if (midi_port < number_of_ports) midiout->openPort(midi_port);
 		}
-#ifdef HAVE_LIBRTMIDI
 		catch(const RtMidiError& error) {
-#else
-		catch(const RtError& error) {
-#endif
 			// TODO: handle error
 		}
 	}
