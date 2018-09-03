@@ -11,7 +11,7 @@ URL:            @PACKAGE_URL@
 Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  gtkmm30-devel >= 3.8
-BuildRequires:  rtmidi-devel >= 1.0
+BuildRequires:  rtmidi-devel >= 3.0
 BuildRequires:  libxml++-devel >= 2.36
 BuildRequires:  boost-devel >= 1.53
 
@@ -25,23 +25,10 @@ It can save single patches to xml files.
 
 %build
 %configure
-make %{?_smp_mflags}
+%make_build
 
 %install
-rm -rf %{buildroot}
 %make_install
-
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-
-%postun
-if [ $1 -eq 0 ] ; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-fi
-
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files
 %doc README AUTHORS
