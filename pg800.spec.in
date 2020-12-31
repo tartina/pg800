@@ -8,12 +8,15 @@ Vendor:         Heavyware
 
 License:        GPLv3+
 URL:            @PACKAGE_URL@
-Source0:        %{name}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.xz
 
+BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  gtkmm30-devel >= 3.8
 BuildRequires:  rtmidi-devel >= 3.0
 BuildRequires:  libxml++-devel >= 2.36
 BuildRequires:  boost-devel >= 1.53
+BuildRequires:  desktop-file-utils
 
 %description
 @PACKAGE_NAME@ is a MIDI editor for the Roland MKS-70 analog synthesizer.
@@ -29,6 +32,9 @@ It can save single patches to xml files.
 
 %install
 %make_install
+
+# Validate desktop file
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %files
 %doc README AUTHORS
