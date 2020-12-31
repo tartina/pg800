@@ -63,7 +63,7 @@ mks70_bulkdump::mks70_bulkdump(const std::string& file_name)
 
 	// Do some checks on dump
 	if (dump[0] != '\xf0' || dump[1] != '\x41' || dump[2] != '\x37')
-		throw mks70_bulkdump_exception("Wrong file header  format");
+		throw mks70_bulkdump_exception("Wrong file header format");
 	if (dump[BULKDUMP_SIZE - 1] != '\xf7')
 		throw mks70_bulkdump_exception("Wrong file end format");
 
